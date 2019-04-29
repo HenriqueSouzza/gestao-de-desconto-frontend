@@ -1,0 +1,16 @@
+version: '2'
+services:
+  gestao-descontos-frontend:
+    container_name: 'gestao-descontos-frontend'
+    build:
+      context: ./
+      dockerfile: frontend.dockerfile
+    working_dir: /var/www
+    command: bash -c "npm start"
+    ports:
+      - 3000:3000
+    volumes:
+      - ./:/var/www
+volumes:
+  gestao-descontos-frontend:
+    driver: "local"

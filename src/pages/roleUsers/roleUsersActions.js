@@ -70,11 +70,11 @@ export const getListPage = (page) => {
 	return (dispatch) => {
 		dispatch([
 			{
-				type: type.USERS_LOAD,
+				type: type.ROLES_LOAD,
 				payload: true
 			},
 			{
-				type: type.USERS_FETCHED,
+				type: type.ROLE_USERS_FETCHED,
 				payload: request
 			}
 		])

@@ -26,7 +26,7 @@ export default (state = INITIAL_STATE, action) => {
     switch(action.type){
 
         case type.ROLE_USERS_FETCHED:
-            console.log(action.payload);
+
             return { ...state, list: getListTransform(action.payload.data) || INITIAL_STATE.list, loading:false }
 
         case type.ROLE_USERS_DETAIL:

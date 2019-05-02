@@ -50,7 +50,6 @@ class Users extends Component {
     }
 
     getPagination = page => {
-        console.log(page);
         this.props.getListPage(page);
     };
 

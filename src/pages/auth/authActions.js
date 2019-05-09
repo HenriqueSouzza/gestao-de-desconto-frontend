@@ -28,7 +28,6 @@ export function login(values) {
 }
 
 /**
- * 
  * @param {*} values 
  * @param {*} method 
  * @param {*} url 
@@ -71,11 +70,9 @@ export const validateToken = (token) => {
 		delete axios.defaults.headers.common['authorization'];
 		axios.get(`${URL}/user`, { headers: { 'Authorization': `Bearer ${token}` } })
 			.then((response) => {
-
 				dispatch({ type: 'TOKEN_VALIDATED', payload: true });
 			})
 			.catch((e) => {
-				console.log(e)
 				dispatch({ type: 'TOKEN_VALIDATED', payload: false });
 			})
 	}

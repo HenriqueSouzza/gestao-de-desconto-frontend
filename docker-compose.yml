@@ -6,7 +6,7 @@ services:
       context: ./
       dockerfile: frontend.dockerfile
     working_dir: /var/www
-    command: bash -c "npm start"
+    #command: bash -c "npm start"
     ports:
       - 3000:3000
     volumes:

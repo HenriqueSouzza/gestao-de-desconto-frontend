@@ -8,7 +8,7 @@ class RolesList extends Component {
 
     componentWillMount(){
         moment.locale('pt-BR');
-        console.log(this.props.getList());
+        // console.log(this.props.getList());
     }
 
     /**

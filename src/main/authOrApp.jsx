@@ -7,9 +7,11 @@ import axios from 'axios';
 
 import App from './app';
 import Auth from '../pages/auth/auth';
+import Establishment from '../pages/establishment/establishment';
 
 import { validateToken } from '../pages/auth/authActions';
 
+import { ESTABLISHMENT_DATA } from "../config/consts";
 
 class AuthOrApp extends Component {
 
@@ -20,7 +22,7 @@ class AuthOrApp extends Component {
     constructor(props){
 
         super(props);
-        
+
 		axios.defaults.headers.common['Accept'] = 'application/json';
 	}
 
@@ -44,12 +46,20 @@ class AuthOrApp extends Component {
     render() {
 
         const { user, validToken } = this.props.auth;
-    
+        const { selectedEstablishment } = this.props.establishment
+
         if (user && validToken) {
           
             axios.defaults.headers.common['Authorization'] = `Bearer  ${user.access_token}`;
 
-            return <App>{this.props.children}</App>
+            const establishment = localStorage.getItem(ESTABLISHMENT_DATA)
+            if(selectedEstablishment || establishment){
+                return <App>{this.props.children}</App>
+                
+            }else{
+                return <Establishment>{this.props.children}</Establishment>
+
+            }
 
         } else if (! user && ! validToken) {
 
@@ -60,7 +70,6 @@ class AuthOrApp extends Component {
             return false
         }
 
-      
     }
 
 }
@@ -71,7 +80,7 @@ class AuthOrApp extends Component {
  * @param {*} state 
  */
 
-const mapStateToProps = (state) => ({ auth: state.auth });
+const mapStateToProps = (state) => ({ auth: state.auth, establishment: state.establishment });
 
 /**
  * <b>mapDispatchToProps</b> mapeia o disparo de ações para as propriedades. 

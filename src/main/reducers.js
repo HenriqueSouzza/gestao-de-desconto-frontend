@@ -10,6 +10,7 @@ import RolesReducer from '../pages/roles/rolesReducer';
 import PermissionsReducer from '../pages/permissions/permissionsReducer';
 import RoleUsersReducer from '../pages/roleUsers/roleUsersReducer';
 import UsersReducer from '../pages/users/usersReducer';
+import EstablishmentReducer from '../pages/establishment/establishmentReducer';
 
 const rootReducer = combineReducers({
     dashboard:() => ({ test: 1500 }),
@@ -20,7 +21,8 @@ const rootReducer = combineReducers({
     roles: RolesReducer,
     permissions: PermissionsReducer,
     rolesUser: RoleUsersReducer,
-    users: UsersReducer
+    users: UsersReducer,
+    establishment: EstablishmentReducer
 
 });
 

@@ -4,8 +4,7 @@ import React, { Component } from 'react';
 
 import { Route, Router, Redirect } from 'react-router-dom';
 
-import createHashHistory from 'history/createHashHistory';
-
+import { createHashHistory } from 'history';
 
 //importando os componentes que irão possuir rotas
 import Dashboard from '../pages/dashboard/dashboard';

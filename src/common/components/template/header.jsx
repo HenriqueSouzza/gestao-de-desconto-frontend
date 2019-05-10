@@ -6,15 +6,15 @@ export default class Header extends Component {
     render() {
         return (
             <header className='main-header'>
-                <a href='/#/' className='logo'>
-                    <span className='logo-mini'><b>Gestão</b></span>
+                <a href={'/#/'} className='logo'>
+                    <span className='logo-mini'>GD</span>
                     <span className='logo-lg'>
                         <i className='fa fa-money'></i>
                         <b> Gestão </b>Descontos
                     </span>        
                 </a>
                 <nav className='navbar navbar-static-top'>
-                    <a href className='sidebar-toggle' data-toggle='offcanvas'></a>
+                    <a href={'#'} className='sidebar-toggle' data-toggle='offcanvas'></a>
                     <Navbar />
                 </nav>
         </header>

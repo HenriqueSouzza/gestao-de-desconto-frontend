@@ -22,7 +22,6 @@ class Auth extends Component {
     constructor(props) {
         super(props);
         document.title = "Gestão de Descontos | Autenticação";
-       
     }
 
 

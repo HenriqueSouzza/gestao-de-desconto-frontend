@@ -1,6 +1,20 @@
 import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+
+/**
+ * arrayInsert: permite adicionar campos dinamicamente no formulário
+ * arrayRemove:permite excluir campos existentes dinamicamente do formulário
+ */
+
+import { Field, arrayInsert, arrayRemove  } from 'redux-form'; 
+
 import Grid from '../../common/components/layout/grid';
+import If from '../../common/components/operator/if';
 import Row from '../../common/components/layout/row';
+import Select from '../../common/components/form/selectLabel';
+import { InputLabel } from '../../common/components/form/inputLabel';
+import { FORM_RULES } from '../../helpers/validations';
 
 class StudentDiscounts extends Component {
 
@@ -49,20 +63,22 @@ class StudentDiscounts extends Component {
                             <table className='table table-striped'>
                                 <thead>
                                     <th>Valor sem desconto</th>
-                                    <th>Desconto atual</th>
-                                    <th>Percentual</th>
                                     <th>Valor com desconto</th>
                                     <th>Parcela Inicial</th>
                                     <th>Parcela Final</th>
+                                    <th>Percentual</th>
+                                    <th>Desconto atual</th>
                                 </thead>
                                 <tbody>
                                     <tr className='success'>
-                                        <td>R$ 900,00</td>
-                                        <td>Desconto veterano</td>
-                                        <td>20%</td>
+                                        <td>
+                                            900,00 
+                                        </td>
                                         <td>R$ 900,00 - R$ 180,00 = R$ 720,00</td>
-                                        <td>1</td>
-                                        <td>6</td>
+                                        <td><input type="text" name="test"/></td>
+                                        <td><input type="text" name="test"/></td>
+                                        <td><input type="text" name="test"/></td>
+                                        <td><select disabled=""><option>Desconto Veterano</option></select></td>
                                     </tr>
                                 </tbody>
                             </table>

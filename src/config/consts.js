@@ -30,7 +30,7 @@ export const LOGIN_GOOGLE = (
             'grant_type' : 'authorization_code',
             'redirect_uri': 'http://localhost:3000/'
         }
-        :
+    :
         { 
             'client_id' : '560156040921-uo0006igf0kap726nmidjvb80bke3chq.apps.googleusercontent.com',
             'client_secret' : 'Sj6tSCVpP4E9jMBQ03df0dB4',
@@ -42,6 +42,7 @@ export const LOGIN_GOOGLE = (
 
 export const USER_KEY = '_gestaodescontos_user';
 export const USER_TOKEN = '_gestaodescontos_userToken';
+export const ESTABLISHMENT_DATA = '_gestaodescontos_establishmentData';
 
 
 

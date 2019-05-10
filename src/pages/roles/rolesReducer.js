@@ -48,7 +48,7 @@ export default (state = INITIAL_STATE, action) => {
             };
 
         case type.ROLES_DETAIL:
-            console.log(...state)
+            // console.log(...state)
             
 		default: return state;
 	}

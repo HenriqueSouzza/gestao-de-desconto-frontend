@@ -24,7 +24,6 @@
     const tabsToShow = {}
     //para cada item do array ele irá criar um objeto em tabsToShow exemplo : {tabList: true, tabCreate: true}
     tabIds.forEach( e => tabsToShow[e] = true );
-    console.log(tabsToShow);
     return {
         type: 'TAB_SHOWED',
         payload: tabsToShow

@@ -4,6 +4,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
+import _ from 'lodash';
+
 
 import App from './app';
 import Auth from '../pages/auth/auth';
@@ -11,7 +13,8 @@ import Establishment from '../pages/establishment/establishment';
 
 import { validateToken } from '../pages/auth/authActions';
 
-import { ESTABLISHMENT_DATA } from "../config/consts";
+
+import { isNull } from 'util';
 
 class AuthOrApp extends Component {
 
@@ -23,7 +26,8 @@ class AuthOrApp extends Component {
 
         super(props);
 
-		axios.defaults.headers.common['Accept'] = 'application/json';
+        axios.defaults.headers.common['Accept'] = 'application/json';
+
 	}
 
 
@@ -40,26 +44,28 @@ class AuthOrApp extends Component {
 
 			this.props.validateToken(user.access_token);
 		}
-
+        
     }
-
+    
     render() {
-
+        
         const { user, validToken } = this.props.auth;
-        const { selectedEstablishment } = this.props.establishment
 
+        // console.log(this.props.establishment)
+
+        // const establishment = localStorage.getItem(ESTABLISHMENT_DATA)
+        
         if (user && validToken) {
-          
+            
             axios.defaults.headers.common['Authorization'] = `Bearer  ${user.access_token}`;
+            
+            // if(! _.isNull(establishment) && establishment.length > 0){
+            //     return <App>{this.props.children}</App>
+    
+            // }else{
+                return <Establishment />
 
-            const establishment = localStorage.getItem(ESTABLISHMENT_DATA)
-            if(selectedEstablishment || establishment){
-                return <App>{this.props.children}</App>
-                
-            }else{
-                return <Establishment>{this.props.children}</Establishment>
-
-            }
+            // }
 
         } else if (! user && ! validToken) {
 
@@ -80,7 +86,7 @@ class AuthOrApp extends Component {
  * @param {*} state 
  */
 
-const mapStateToProps = (state) => ({ auth: state.auth, establishment: state.establishment });
+const mapStateToProps = (state) => ({ auth: state.auth });
 
 /**
  * <b>mapDispatchToProps</b> mapeia o disparo de ações para as propriedades. 

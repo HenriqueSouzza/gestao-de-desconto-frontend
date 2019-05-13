@@ -4,7 +4,6 @@ import { reducer as toastrReducer } from 'react-redux-toastr'; //redux do compon
 
 
 import AuthReducer from '../pages/auth/authReducer';
-
 import TabReducer from '../common/containers/tab/tabReducer';
 import RolesReducer from '../pages/roles/rolesReducer';
 import PermissionsReducer from '../pages/permissions/permissionsReducer';

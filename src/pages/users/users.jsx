@@ -40,11 +40,13 @@ class Users extends Component {
 
         document.title = 'Gestão de Descontos | Usuários';
 
-        this.props.getList();
-
     }
-
-
+    
+    componentDidMount(){
+        this.props.getList();
+        
+    }
+    
     getNumberItems(n) {
         this.props.getListLimit(n);
     }
@@ -83,7 +85,6 @@ class Users extends Component {
                         number_items={this.props.getListLimit}
                         actions_permissions={["can_see"]} 
                     />
-
                 </div>
             )
         }

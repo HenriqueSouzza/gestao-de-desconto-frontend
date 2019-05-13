@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { logout } from '../../../pages/auth/authActions';
+import { alterEstablishment, getSearch } from '../../../pages/establishment/establishmentActions';
+import establishment from '../../../pages/establishment/establishment';
 
 class Navbar extends Component {
 
@@ -10,7 +12,6 @@ class Navbar extends Component {
         //seta o estado da abertura da navbar para false
         this.state = { open: false }
     }
-
 
     /**
      * <b>changeOpen</b> seta o state de open para true caso ele seja falso 
@@ -22,15 +23,34 @@ class Navbar extends Component {
 
     /**
      * 
+     */
+    changeAlterEstablisment() {
+        this.props.alterEstablishment();
+    }
+
+    /**
      * 
      * onMouseLeave: irá abrir quando o usuário passar o mouse em cima da navbar
      */
     render(){
        const { user } = this.props.auth;
-      
+
         return (
             <div className="navbar-custom-menu">
                 <ul className="nav navbar-nav">
+                    <li className={`dropdown offset-1`}>
+                        <a href={`#`} className="">
+                            <span className="hidden-xs">Faculdade CNEC de Ósório</span>
+                        </a>
+                    </li>
+                    <li  className={`dropdown user user-menu`}>
+                        <a href={"javascript:;"} 
+                            onClick={() => this.changeAlterEstablisment()} 
+                            className="dropdown-toggle">
+                            <i className="fa fa-university"></i>
+                            <span className="hidden-xs">Trocar unidade</span>
+                        </a>
+                    </li>
                     <li onMouseLeave={() => this.changeOpen()}
                         className={`dropdown user user-menu ${this.state.open ? 'open' :
                             ''}`}>
@@ -69,7 +89,8 @@ class Navbar extends Component {
  * @param {*} state 
  */
 const mapStateToProps = (state) => ({
-    auth: state.auth
+    auth: state.auth,
+    establishment: state.establishment
 });
 
 /**
@@ -81,7 +102,7 @@ const mapStateToProps = (state) => ({
  * @param {*} dispatch 
  */
 const mapDispatchToProps = (dispatch) => bindActionCreators({ 
-    logout
+    logout, alterEstablishment, getSearch
 }, dispatch );
      
 /**

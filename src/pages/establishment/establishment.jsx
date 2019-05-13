@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { reduxForm, Form, Field } from "redux-form";
 
 import { FORM_RULES } from '../../helpers/validations';
-
+import { ESTABLISHMENT_DATA } from "../../config/consts";
 
 import { CircularProgress } from 'react-md';
 
@@ -15,7 +15,11 @@ import Row from '../../common/components/layout/row';
 import Grid from '../../common/components/layout/grid';
 import Messages from '../../common/components/messages/messages';
 import Select from '../../common/components/form/selectLabel';
+import If from '../../common/components/operator/if';
 
+import App from '../../main/app';
+
+import { isNull, isUndefined } from 'util';
 
 import { getList, saveEstablishment } from './establishmentActions'
 
@@ -29,8 +33,15 @@ class Establishment extends Component {
     constructor(props) {
         super(props);
         document.title = "Escolha filial | Período letivo";
-        
-        console.log('iniciou')
+
+        const instanceData = new Date();
+        const DateCurrent = instanceData.getDate() + '/' + instanceData.getMonth() + '/' + instanceData.getFullYear();
+
+        this.state = {
+            CodEstablishmentSelected: '',
+            CodModalitySelected: '',
+            DataCurrent: DateCurrent
+        }
     }
 
     /**
@@ -45,34 +56,59 @@ class Establishment extends Component {
     /**
      * <b>onSubmit</b> Método de submit do formulário, que irá ser chamado quando o botão de submit for chamado, 
      * para isso recebe os dados fo formulário
+     * 
      */
-    onSubmit = (values) => { 
+    onSubmit = (values) => {
 
         this.props.saveEstablishment(values);
-       
-     }
+    }
+
+
+    /**
+     * <b>onEstablishmentSelected</b> Pega a unidade selecionada e seta no estado
+     */
+    onEstablishmentSelected = (CodEstablishment) => {
+        this.setState({
+            CodEstablishmentSelected: CodEstablishment
+        })
+    }
+
+    /**
+     * <b>onModalitySelected</b> Pega a modalidade selecionada e seta no estado
+     */
+    onModalitySelected = (CodModality) => {
+        this.setState({
+            CodModalitySelected: CodModality
+        })
+    }
 
 
     render() {
-        
+
         //extrai da action creator do redux form para informar para qual método irá ser submetido os dados do formulário
         const { handleSubmit, establishment } = this.props;
-        
-        
-        //loading
-        if (this.props.establishment.loading) {
-            return <CircularProgress id='establishment' />
-            
-        } else if(establishment.list.length > 0 || establishment.list.length !== undefined) {
-            
-           
+
+        const selected = establishment.selected
+
+        if (selected) {
+            return <App />
+
+        } else {
+
+            //loading
+            if (this.props.establishment.loading) {
+                return <CircularProgress id='establishment' />
+
+            } else if (establishment.list.length > 0 && establishment.list !== undefined) {
+
+
                 const establishmentList = establishment.list.map((item) => ({
                     value: item.CODFILIAL,
                     label: item.NOMEFANTASIA
                 }))
 
                 const period = [
-                    { 
+                    {
                         id: '2018-1',
                         name: '2018-1'
                     },
@@ -90,45 +126,87 @@ class Establishment extends Component {
                     value: item.id,
                     label: item.name
                 }))
-      
 
-            return (
-                <Row>
-                    <Grid cols="12">
-                        <Form role='form' className="login-box-body" onSubmit={handleSubmit(this.onSubmit)} noValidate>
-                            <div className="login-box">
-                                <div className="login-logo"><b> Escolha</b> filial </div>
-                                <div className="login-box-body">
-                                    <Field
-                                        component={Select}
-                                        name="establishment"
-                                        label='Unidade:'
-                                        options={establishmentList}
-                                        cols='12 12 12 12'
-                                        validate={[FORM_RULES.required]}
-                                    />
+                const modality = [
+                    {
+                        id: '1',
+                        name: 'Presencial'
+                    },
+                    {
+                        id: '2',
+                        name: 'Ensino à distâncias'
+                    }
+                ]
+
+                const modalityList = modality.map((item) => ({
+                    value: item.id,
+                    label: item.name
+                }))
+
+                return (
+                    <Row>
+                        <Grid cols="12">
+                            <Form role='form' className="login-box-body" onSubmit={handleSubmit(this.onSubmit)} noValidate>
+                                <div className="login-box">
+                                    <div className="login-logo"><b> Escolha</b> filial </div>
+                                    <div className="login-box-body">
+                                        <Field
+                                            component={Select}
+                                            name="establishment"
+                                            label='Unidade:'
+                                            options={establishmentList}
+                                            onChange={(e) => this.onEstablishmentSelected(e.target.value)}
+                                            cols='12 12 12 12'
+                                            validate={[FORM_RULES.required]}
+                                        />
+                                    </div>
+                                    <If test={this.state.CodEstablishmentSelected == 169}>
+                                        <div className="login-box-body">
+                                            <Field
+                                                component={Select}
+                                                name="modalidade"
+                                                label='Modalidade:'
+                                                options={modalityList}
+                                                onChange={(e) => this.onModalitySelected(e.target.value)}
+                                                cols='12 12 12 12'
+                                                validate={[FORM_RULES.required]}
+                                            />
+                                        </div>
+                                        <If test={this.state.CodModalitySelected == 2}>
+                                            <div className="login-box-body">
+                                                <Field
+                                                    component={Select}
+                                                    name="polo"
+                                                    label='Polo:'
+                                                    options={establishmentList}
+                                                    cols='12 12 12 12'
+                                                    validate={[FORM_RULES.required]}
+                                                />
+                                            </div>
+                                        </If>
+                                    </If>
+                                    <div className="login-box-body">
+                                        <Field
+                                            component={Select}
+                                            name="periodo"
+                                            label='Período Letivo:'
+                                            options={periodList}
+                                            cols='12 12 12 12'
+                                            validate={[FORM_RULES.required]}
+                                        />
+                                    </div>
+                                    <div className="login-box-body">
+                                        <button className={`btn btn-success offset-1`} type="submit">Confirmar</button>
+                                    </div>
                                 </div>
-                                <div className="login-box-body">
-                                    <Field
-                                        component={Select}
-                                        name="periodo"
-                                        label='Período Letivo:'
-                                        options={periodList}
-                                        cols='12 12 12 12'
-                                        validate={[FORM_RULES.required]}
-                                    />
-                                </div>
-                                <div className="login-box-body">
-                                    <button className={`btn btn-success`} type="submit">Confirmar</button>
-                                </div>
-                            </div>
-                        </Form>
-                        <Messages />
-                    </Grid>
-                </Row >
-            )
-        }else{
-            return <CircularProgress id='establishment' /> 
+                            </Form>
+                            <Messages />
+                        </Grid>
+                    </Row >
+                )
+            } else {
+                return <CircularProgress id='establishment' />
+            }
         }
     }
 }
@@ -152,11 +230,7 @@ Establishment = reduxForm({ form: 'establishment' })(Establishment);
  * o state.propriedade vem do registro do reducer no arquivo geral chamado main/reducers.js 
  * @param {*} state 
  */
-const mapStateToProps = (state) => (
-    {
-        establishment: state.establishment
-    }
-)
+const mapStateToProps = (state) => ({ establishment: state.establishment })
 
 
 /**

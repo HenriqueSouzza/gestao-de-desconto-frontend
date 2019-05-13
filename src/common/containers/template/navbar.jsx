@@ -5,6 +5,7 @@ import { logout } from '../../../pages/auth/authActions';
 import { alterEstablishment, getSearch } from '../../../pages/establishment/establishmentActions';
 import establishment from '../../../pages/establishment/establishment';
 import { ESTABLISHMENT_DATA } from '../../../config/consts';
+import IF from '../../components/operator/if';
 
 class Navbar extends Component {
 
@@ -30,7 +31,6 @@ class Navbar extends Component {
     }
 
     /**
-     * 
      * onMouseLeave: irá abrir quando o usuário passar o mouse em cima da navbar
      */
     render(){
@@ -38,13 +38,31 @@ class Navbar extends Component {
        
         const establishment = this.props.establishment.dataEstablishment.nameEstablishment
 
+        const codEstablishment = this.props.establishment.dataEstablishment.values.establishment
+
+        const branch = this.props.establishment.dataEstablishment.nameBranch
+
+        const modality = this.props.establishment.dataEstablishment.values.modality
+
         return (
             <div className="navbar-custom-menu">
                 <ul className="nav navbar-nav">
                     <li className={`dropdown offset-1`}>
-                        <a className="">
-                            <span className="hidden-xs">{establishment}</span>
-                        </a>
+                        <IF test={modality == '2' && codEstablishment == '169'}> 
+                            <a className="">
+                                <span className="hidden-xs">{branch}</span>
+                            </a>
+                        </IF>
+                        <IF test={modality == '1' && codEstablishment == '169'}> 
+                            <a className="">
+                                <span className="hidden-xs">{establishment}</span>
+                            </a>
+                        </IF>
+                        <IF test={codEstablishment !== '169'}>
+                            <a className="">
+                                <span className="hidden-xs">{establishment}</span>
+                            </a>
+                        </IF>
                     </li>
                     <li  className={`dropdown user user-menu`}>
                         <a href={"javascript:;"} 

@@ -2,151 +2,108 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
+import { CircularProgress } from 'react-md';
+import _ from 'lodash';
+import { getList } from './studentDiscountsActions';
+
+import ContentHeader from '../../common/components/template/contentHeader';
+import Content from '../../common/components/template/content';
+
+import Row from '../../common/components/layout/row';
+import Grid from '../../common/components/layout/grid';
+
+import List from './studentDiscountsList';
+
+
 /**
  * arrayInsert: permite adicionar campos dinamicamente no formulário
  * arrayRemove:permite excluir campos existentes dinamicamente do formulário
  */
 
-import { Field, arrayInsert, arrayRemove  } from 'redux-form'; 
+import { reduxForm, Field, arrayInsert, arrayRemove, formValueSelector } from 'redux-form'; 
 
-import Grid from '../../common/components/layout/grid';
-import If from '../../common/components/operator/if';
-import Row from '../../common/components/layout/row';
-import Select from '../../common/components/form/selectLabel';
-import { InputLabel } from '../../common/components/form/inputLabel';
-import { FORM_RULES } from '../../helpers/validations';
 
 class StudentDiscounts extends Component {
 
-    componentWillMount() {
+    componentWillMount(){
 
+        this.props.getList();
     }
 
     render(){
-        return(
-            <div className="container-fluid space-panel">
-                 <div className="panel panel-info">
-                    <div className="panel-heading text text-center">
-                        <Row>
-                            <Grid cols='6'>Nome do Aluno </Grid>
-                            <Grid cols='2'><span className='badge'>Direito</span></Grid>
-                            <Grid cols='2'><span className='badge'>Pré matrículado</span></Grid>
-                            <Grid cols='2'><span className='badge'>Veterano</span></Grid>
-                        </Row>
-                    </div>
-                    <div className="panel-body">
-                        <Grid cols='4'> 
-                            <table className='table table-striped'>
-                                <thead>
-                                    <th>Desconto anterior</th>
-                                    <th>Percentual</th>
-                                    <th>Parcela Inicial</th>
-                                    <th>Parcela Final</th>
-                                </thead>
-                                <tbody>
-                                    <tr className='warning'>
-                                        <td>Acordo empresa</td>
-                                        <td>20%</td>
-                                        <td>1</td>
-                                        <td>6</td>
-                                    </tr>
-                                    <tr className='warning'>
-                                        <td>Desconto Comercial</td>
-                                        <td>10%</td>
-                                        <td>1</td>
-                                        <td>6</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </Grid>
-                        <Grid cols='8'> 
-                            <table className='table table-striped'>
-                                <thead>
-                                    <th>Valor sem desconto</th>
-                                    <th>Valor com desconto</th>
-                                    <th>Parcela Inicial</th>
-                                    <th>Parcela Final</th>
-                                    <th>Percentual</th>
-                                    <th>Desconto atual</th>
-                                </thead>
-                                <tbody>
-                                    <tr className='success'>
-                                        <td>
-                                            900,00 
-                                        </td>
-                                        <td>R$ 900,00 - R$ 180,00 = R$ 720,00</td>
-                                        <td><input type="text" name="test"/></td>
-                                        <td><input type="text" name="test"/></td>
-                                        <td><input type="text" name="test"/></td>
-                                        <td><select disabled=""><option>Desconto Veterano</option></select></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                       </Grid>
-                    </div>
+      
+        const list = this.props.students || [] ;
+        const { handleSubmit } = this.props;
+
+        if (this.props.students.loading ||  _.isUndefined(list.list.content.Resultado)) {
+            return (
+                <div>
+                    <ContentHeader title="Desconto Comercial" />
+                    <Content>
+                        <CircularProgress id="student-discounts" />
+                    </Content>
                 </div>
-
-                <div className="panel panel-info">
-                    <div className="panel-heading text text-center">
-                        <Row>
-                            <Grid cols='6'>Nome do Aluno </Grid>
-                            <Grid cols='2'><span className='badge'>Direito</span></Grid>
-                            <Grid cols='2'><span className='badge'>Pré matrículado</span></Grid>
-                            <Grid cols='2'><span className='badge new-student'>Calouro</span></Grid>
-                        </Row>
+            );
+        } else {
+            console.log(this.props.students);
+            return list.list.content.Resultado.map(student => ( 
+                <div className="container-fluid space-panel">
+                    <div className="panel panel-info">
+                            <div className="panel-heading text text-center">
+                                <Row>
+                                    <Grid cols='6'>{student.ALUNO} | {student.RA}</Grid>
+                                    <Grid cols='2'><span className='badge'>{student.CURSO}</span></Grid>
+                                    <Grid cols='2'><span className='badge'>{student.MODALIDADE}</span></Grid>
+                                    <Grid cols='2'><span className='badge'>{student.TIPO_ALUNO}</span></Grid>
+                                </Row>
+                            </div>
+                            <div className="panel-body">
+                                <Grid cols='3'> 
+                                    <List showBeforeDiscount={true} list={student} />
+                                </Grid>
+                                <Grid cols='9'> 
+                                    <form role='form' onSubmit={handleSubmit}>
+                                        <List showAfterDiscount={true} list={student} />
+                                    </form>
+                                </Grid>
+                            </div>
+                        </div>
                     </div>
-                    <div className="panel-body">
-                        <Grid cols='4'> 
-                            <table className='table table-striped'>
-                                <thead>
-                                    <th>Desconto anterior</th>
-                                    <th>Percentual</th>
-                                    <th>Parcela Inicial</th>
-                                    <th>Parcela Final</th>
-                                </thead>
-                                <tbody>
-                                    <tr className='warning'>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </Grid>
-                        <Grid cols='8'> 
-                            <table className='table table-striped'>
-                                <thead>
-                                    <th>Valor sem desconto</th>
-                                    <th>Desconto atual</th>
-                                    <th>Percentual</th>
-                                    <th>Valor com desconto</th>
-                                    <th>Parcela Inicial</th>
-                                    <th>Parcela Final</th>
-                                </thead>
-                                <tbody>
-                                    <tr className='success'>
-                                        <td>R$ 900,00</td>
-                                        <td>Desconto veterano</td>
-                                        <td>20%</td>
-                                        <td>R$ 900,00 - R$ 180,00 = R$ 720,00</td>
-                                        <td>1</td>
-                                        <td>6</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                       </Grid>
-                    </div>
-                </div>
-
-            </div>
-          
-            
-        )
-    
-
+           
+            ));   
+        }
     }
-
 }
 
-export default StudentDiscounts;
+StudentDiscounts= reduxForm({form: 'studentDiscounts', destroyOnUnmount: false })(StudentDiscounts);
+/**
+ * <b>mapStateToProps</b> Mapeia o estado para as propriedades
+ * recebe o estado (state) como parametro e retira o dado da história(store)
+ * @param {*} state 
+ */
+
+const mapStateToProps = state => ({
+    students: state.students
+  });
+  
+
+/**
+ * <b>mapDispatchToProps</b> mapeia o disparo de ações para as propriedades. 
+ * bindActionCreator: o primeiro objeto são as actions creator e o segundo é o dispatch
+ * O resultado dessa função via de regra é uma action e essa action é passada para os reducers para que ele evolua o estado 
+ * e o component seja renderizado novamente para refletir o estado atual
+ * 
+ * @param {*} dispatch 
+ */
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+    getList
+}, dispatch);
+
+/**
+ * <b>connect</b> utiliza o padrão decorator da ES para que ele possa incluir dentro das propriedades desse component 
+ * para incluir o que foi mapeado no estado(mapStateToProps) e o que foi mapeado nas actions(mapDispatchToProps)
+ */
+export default connect(mapStateToProps, mapDispatchToProps)(StudentDiscounts);
+
+

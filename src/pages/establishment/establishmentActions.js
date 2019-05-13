@@ -44,9 +44,8 @@ export function getList() {
  * Salva a unidade que o usuario escolheu
  * @param {*} values 
  */
-export function saveEstablishment(values) {
+export function saveEstablishment(values, nameEstablishment) {
     return dispatch => {
-       
         dispatch([
             { 
                 type: type.ESTABLISHMENT_LOAD,
@@ -54,7 +53,7 @@ export function saveEstablishment(values) {
             },
             {
                 type: type.ESTABLISHMENT_SAVE,
-                payload: values
+                payload: {values, nameEstablishment}
             }
         ])
     }

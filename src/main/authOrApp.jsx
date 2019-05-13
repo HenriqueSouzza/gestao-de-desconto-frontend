@@ -7,14 +7,11 @@ import axios from 'axios';
 import _ from 'lodash';
 
 
-import App from './app';
 import Auth from '../pages/auth/auth';
 import Establishment from '../pages/establishment/establishment';
 
 import { validateToken } from '../pages/auth/authActions';
 
-
-import { isNull } from 'util';
 
 class AuthOrApp extends Component {
 
@@ -51,21 +48,11 @@ class AuthOrApp extends Component {
         
         const { user, validToken } = this.props.auth;
 
-        // console.log(this.props.establishment)
-
-        // const establishment = localStorage.getItem(ESTABLISHMENT_DATA)
-        
         if (user && validToken) {
             
             axios.defaults.headers.common['Authorization'] = `Bearer  ${user.access_token}`;
             
-            // if(! _.isNull(establishment) && establishment.length > 0){
-            //     return <App>{this.props.children}</App>
-    
-            // }else{
-                return <Establishment />
-
-            // }
+            return <Establishment />
 
         } else if (! user && ! validToken) {
 

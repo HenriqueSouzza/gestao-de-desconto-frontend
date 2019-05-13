@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { logout } from '../../../pages/auth/authActions';
 import { alterEstablishment, getSearch } from '../../../pages/establishment/establishmentActions';
 import establishment from '../../../pages/establishment/establishment';
+import { ESTABLISHMENT_DATA } from '../../../config/consts';
 
 class Navbar extends Component {
 
@@ -33,14 +34,16 @@ class Navbar extends Component {
      * onMouseLeave: irá abrir quando o usuário passar o mouse em cima da navbar
      */
     render(){
-       const { user } = this.props.auth;
+        const { user } = this.props.auth;
+       
+        const establishment = this.props.establishment.dataEstablishment.nameEstablishment
 
         return (
             <div className="navbar-custom-menu">
                 <ul className="nav navbar-nav">
                     <li className={`dropdown offset-1`}>
-                        <a href={`#`} className="">
-                            <span className="hidden-xs">Faculdade CNEC de Ósório</span>
+                        <a className="">
+                            <span className="hidden-xs">{establishment}</span>
                         </a>
                     </li>
                     <li  className={`dropdown user user-menu`}>

@@ -38,9 +38,10 @@ class Establishment extends Component {
         const DateCurrent = instanceData.getDate() + '/' + instanceData.getMonth() + '/' + instanceData.getFullYear();
 
         this.state = {
-            CodEstablishmentSelected: '',
-            CodModalitySelected: '',
-            DataCurrent: DateCurrent
+            codEstablishmentSelected: '',
+            codModalitySelected: '',
+            descriptionEstablishment: '',
+            dataCurrent: DateCurrent
         }
     }
 
@@ -60,25 +61,28 @@ class Establishment extends Component {
      */
     onSubmit = (values) => {
 
-        this.props.saveEstablishment(values);
+        const nameEstablishment = this.state.descriptionEstablishment
+
+        this.props.saveEstablishment(values, nameEstablishment);
     }
 
 
     /**
      * <b>onEstablishmentSelected</b> Pega a unidade selecionada e seta no estado
      */
-    onEstablishmentSelected = (CodEstablishment) => {
+    onEstablishmentSelected = (establishment, codEstablishment ) => {
         this.setState({
-            CodEstablishmentSelected: CodEstablishment
+            descriptionEstablishment: establishment,
+            codEstablishmentSelected: codEstablishment
         })
     }
 
     /**
      * <b>onModalitySelected</b> Pega a modalidade selecionada e seta no estado
      */
-    onModalitySelected = (CodModality) => {
+    onModalitySelected = (codModality) => {
         this.setState({
-            CodModalitySelected: CodModality
+            codModalitySelected: codModality
         })
     }
 
@@ -155,7 +159,7 @@ class Establishment extends Component {
                                             name="establishment"
                                             label='Unidade:'
                                             options={establishmentList}
-                                            onChange={(e) => this.onEstablishmentSelected(e.target.value)}
+                                            onChange={(e) => this.onEstablishmentSelected(e.target.options[e.target.selectedIndex].innerText, e.target.value)}
                                             cols='12 12 12 12'
                                             validate={[FORM_RULES.required]}
                                         />

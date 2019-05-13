@@ -12,7 +12,7 @@ const URL = `${BASE_API}/totvs-queries/query`;
 
 
 /**
- *  
+ *  Busca todas as unidades
  */
 export function getList() {
 
@@ -40,6 +40,10 @@ export function getList() {
     }
 }
 
+/**
+ * Salva a unidade que o usuario escolheu
+ * @param {*} values 
+ */
 export function saveEstablishment(values) {
     return dispatch => {
        
@@ -56,52 +60,43 @@ export function saveEstablishment(values) {
     }
 }
 
-// /**
-//  * @param {*} values 
-//  * @param {*} method 
-//  * @param {*} url 
-//  */
-// function submit(values, method, url){
+/**
+ * Quando o usuario clicar em { trocar de unidade } será chamado essa action para fazer a "exclusão" da unidade atual 
+ */
+export function alterEstablishment() {
+    return dispatch => {
+        dispatch([
+            { 
+                type: type.ESTABLISHMENT_LOAD,
+                payload: true
+            },
+            {
+                type: type.ESTABLISHMENT_DISCARD,
+                payload: {}
+            }
+        ])
+    }
+}
 
-//     return dispatch => {
-       
-//         axios[method](`${url}`, values)
-//         .then(resp => { 
-//             dispatch([
-//                 { type: type.USER_FETCHED, payload: resp.data }
-//             ])
-             
-//         })
-//         .catch(e => {
-         
-           
-//         });
-//     }
-// }
+/**
+ * @param {*} value 
+ * @param {*} field 
+ */
+export const getSearch = (value, field) => {
+    // let request = {};
 
+    const request = axios.get(`${URL}?like=${field},${value}`);
 
-// /**
-//  * 
-//  */
-// export function logout() {
-
-//     return { type: 'TOKEN_VALIDATED', payload: false };
-// }
-
-
-// /**
-//  * @param {*} token 
-//  */
-// export const validateToken = (token) => {
-    
-// 	return dispatch => {
-// 		delete axios.defaults.headers.common['authorization'];
-// 		axios.get(`${URL}/user`, { headers: { 'Authorization': `Bearer ${token}` } })
-// 			.then((response) => {
-// 				dispatch({ type: 'TOKEN_VALIDATED', payload: true });
-// 			})
-// 			.catch((e) => {
-// 				dispatch({ type: 'TOKEN_VALIDATED', payload: false });
-// 			})
-// 	}
-// }
+    return dispatch => {
+        dispatch([
+            {
+                type: type.ESTABLISHMENT_LOAD,
+                payload: true
+            },
+            {
+                type: type.ESTABLISHMENT_SEARCH,
+                payload: request
+            }
+        ]);
+    };
+}

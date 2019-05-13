@@ -23,3 +23,7 @@ button {
     background-color: brown !important;
     border-color: brown;
 }
+
+.reset-margem-left {
+    margin-left: 0;
+}

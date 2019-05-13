@@ -17,7 +17,7 @@ export function getList() {
         parameters : {
             codfilial : 169,
             codcurso : 'GP011',
-            codperlet : '2018-2',
+            codperlet : '2019-1',
             ra : '-1',
             nomealuno : '-1'
             

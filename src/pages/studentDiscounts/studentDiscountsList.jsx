@@ -6,8 +6,6 @@ import SelectLabel from '../../common/components/form/selectLabel';
 import { InputLabel } from '../../common/components/form/inputLabel';
 import { FORM_RULES } from '../../helpers/validations';
 
-
-
 import If from '../../common/components/operator/if';
 
 
@@ -58,7 +56,7 @@ export default class StudentDiscountsList extends Component{
         }));
 
         const {list} = this.props;
-        console.log(list)
+       
         return (
             <table className='table table-striped'>
                 <thead>
@@ -70,37 +68,37 @@ export default class StudentDiscountsList extends Component{
                     <th>Desconto atual</th>
                 </thead>
                 <tbody>
-                    <tr className='success'>
+                    <tr className='success' key={list.RA}>
                         <td>R${list.VALOR_MENSALIDADE}</td>
                         <td>R$ 900,00 - R$ 180,00 = R$ 720,00</td>
                         <td>
                             <Field
                                 component={InputLabel}
-                                type="text"
+                                type="number"
                                 name={`${list.RA}_parcela_inicial`}
-                                placeholder="Parcela inicial"
-                                cols='12 12 9 9'
-                                validate={[FORM_RULES.required]}
+                                placeholder="P Inicial"
+                                cols='7 7 7 7'
+                                validate={[FORM_RULES.required, FORM_RULES.number]}
+                            />
+                        </td>
+                        <td>
+                            <Field
+                                component={InputLabel}
+                                type="number"
+                                name={`${list.RA}_parcela_final`}
+                                placeholder="P Final"
+                                cols='7 7 7 7'
+                                validate={[FORM_RULES.required, FORM_RULES.number]}
                             />
                         </td>
                         <td>
                             <Field
                                 component={InputLabel}
                                 type="text"
-                                name={`${list.RA}_parcela_final`}
-                                placeholder="Parcela Final"
-                                cols='12 12 9 9'
+                                name={`${list.RA}_percentual`}
+                                placeholder="Percentual (%)"
+                                cols='2 12 9 9'
                                 validate={[FORM_RULES.required]}
-                            />
-                        </td>
-                        <td>
-                        <Field
-                            component={InputLabel}
-                            type="text"
-                            name={`${list.RA}_percentual`}
-                            placeholder="Percentual (%)"
-                            cols='12 12 9 9'
-                            validate={[FORM_RULES.required]}
                             />
                         </td>
                         <td>

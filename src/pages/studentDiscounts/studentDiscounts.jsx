@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-
+import { Field } from 'redux-form'; 
+import { FORM_RULES } from '../../helpers/validations';
 import { CircularProgress } from 'react-md';
 import _ from 'lodash';
 import { getList } from './studentDiscountsActions';
 
 import ContentHeader from '../../common/components/template/contentHeader';
 import Content from '../../common/components/template/content';
+import { CheckboxWithoutLabel } from '../../common/components/form/checkBoxWithoutLabel';
 
 import Row from '../../common/components/layout/row';
 import Grid from '../../common/components/layout/grid';
@@ -20,7 +22,7 @@ import List from './studentDiscountsList';
  * arrayRemove:permite excluir campos existentes dinamicamente do formulário
  */
 
-import { reduxForm, Field, arrayInsert, arrayRemove, formValueSelector } from 'redux-form'; 
+import { reduxForm, Form } from 'redux-form'; 
 
 
 class StudentDiscounts extends Component {
@@ -28,6 +30,11 @@ class StudentDiscounts extends Component {
     componentWillMount(){
 
         this.props.getList();
+    }
+
+    onSubmit(values){
+        console.log(values);
+        
     }
 
     render(){
@@ -45,16 +52,22 @@ class StudentDiscounts extends Component {
                 </div>
             );
         } else {
-            console.log(this.props.students);
-            return list.list.content.Resultado.map(student => ( 
+            //console.log(this.props.students);
+            const studentsList =  list.list.content.Resultado.map(student => ( 
                 <div className="container-fluid space-panel">
                     <div className="panel panel-info">
+                        <Field component={CheckboxWithoutLabel} 
+                                name={`${student.RA}_send`}
+                                option={{ label: '', value: true }}
+                                validate={[FORM_RULES.required]}
+                                />
+
                             <div className="panel-heading text text-center">
                                 <Row>
                                     <Grid cols='6'>{student.ALUNO} | {student.RA}</Grid>
                                     <Grid cols='2'><span className='badge'>{student.CURSO}</span></Grid>
                                     <Grid cols='2'><span className='badge'>{student.MODALIDADE}</span></Grid>
-                                    <Grid cols='2'><span className='badge'>{student.TIPO_ALUNO}</span></Grid>
+                                    <Grid cols='2'><span className={`badge ${student.TIPO_ALUNO === 'CALOURO' ? 'new-student' : ''}`}>{student.TIPO_ALUNO}</span></Grid>
                                 </Row>
                             </div>
                             <div className="panel-body">
@@ -62,15 +75,30 @@ class StudentDiscounts extends Component {
                                     <List showBeforeDiscount={true} list={student} />
                                 </Grid>
                                 <Grid cols='9'> 
-                                    <form role='form' onSubmit={handleSubmit}>
-                                        <List showAfterDiscount={true} list={student} />
-                                    </form>
+                                    <List showAfterDiscount={true} list={student} />
                                 </Grid>
                             </div>
                         </div>
                     </div>
            
-            ));   
+            ));
+            
+            return (
+                <div>
+                    <Form role='form' onSubmit={handleSubmit(this.onSubmit)} noValidate>
+                        { studentsList }
+                        <div className='main-footer reset-margem-left'>
+                            <Grid cols='3'> 
+                                <button className={`btn btn-primary btn-block`} type="submit">Salvar</button>
+                            </Grid>
+                            <Grid cols='3'> 
+                                <button className={`btn btn-success btn-block`} type="button">Enviar para o RM</button>
+                            </Grid>
+                         </div> 
+                    </Form> 
+                  
+                </div>
+            )
         }
     }
 }

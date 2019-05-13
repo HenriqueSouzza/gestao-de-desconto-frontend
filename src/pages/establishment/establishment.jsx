@@ -39,8 +39,10 @@ class Establishment extends Component {
 
         this.state = {
             codEstablishmentSelected: '',
-            codModalitySelected: '',
             descriptionEstablishment: '',
+            codBranchSelected: '',
+            descriptionBranch: '',
+            codModalitySelected: '',
             dataCurrent: DateCurrent
         }
     }
@@ -62,8 +64,9 @@ class Establishment extends Component {
     onSubmit = (values) => {
 
         const nameEstablishment = this.state.descriptionEstablishment
+        const nameBranch = this.state.descriptionBranch
 
-        this.props.saveEstablishment(values, nameEstablishment);
+        this.props.saveEstablishment(values, nameEstablishment,nameBranch);
     }
 
 
@@ -83,6 +86,13 @@ class Establishment extends Component {
     onModalitySelected = (codModality) => {
         this.setState({
             codModalitySelected: codModality
+        })
+    }
+
+    onBranchSelected = (branch ,codBranch) => {
+        this.setState({
+            descriptionBranch: branch ,
+            codBranchSelected: codBranch
         })
     }
 
@@ -164,11 +174,11 @@ class Establishment extends Component {
                                             validate={[FORM_RULES.required]}
                                         />
                                     </div>
-                                    <If test={this.state.CodEstablishmentSelected == 169}>
+                                    <If test={this.state.codEstablishmentSelected == 169}>
                                         <div className="login-box-body">
                                             <Field
                                                 component={Select}
-                                                name="modalidade"
+                                                name="modality"
                                                 label='Modalidade:'
                                                 options={modalityList}
                                                 onChange={(e) => this.onModalitySelected(e.target.value)}
@@ -176,13 +186,14 @@ class Establishment extends Component {
                                                 validate={[FORM_RULES.required]}
                                             />
                                         </div>
-                                        <If test={this.state.CodModalitySelected == 2}>
+                                        <If test={this.state.codModalitySelected == 2}>
                                             <div className="login-box-body">
                                                 <Field
                                                     component={Select}
-                                                    name="polo"
+                                                    name="branch"
                                                     label='Polo:'
                                                     options={establishmentList}
+                                                    onChange={(e) => this.onBranchSelected(e.target.options[e.target.selectedIndex].innerText, e.target.value)}
                                                     cols='12 12 12 12'
                                                     validate={[FORM_RULES.required]}
                                                 />
@@ -192,7 +203,7 @@ class Establishment extends Component {
                                     <div className="login-box-body">
                                         <Field
                                             component={Select}
-                                            name="periodo"
+                                            name="period"
                                             label='Período Letivo:'
                                             options={periodList}
                                             cols='12 12 12 12'

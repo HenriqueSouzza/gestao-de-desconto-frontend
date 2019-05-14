@@ -9,7 +9,7 @@ import { getList } from './studentDiscountsActions';
 
 import ContentHeader from '../../common/components/template/contentHeader';
 import Content from '../../common/components/template/content';
-import { CheckboxWithoutLabel } from '../../common/components/form/checkBoxWithoutLabel';
+import { CheckboxLabel }  from '../../common/components/form/checkBoxLabel';
 
 import Row from '../../common/components/layout/row';
 import Grid from '../../common/components/layout/grid';
@@ -56,7 +56,7 @@ class StudentDiscounts extends Component {
             const studentsList =  list.list.content.Resultado.map(student => ( 
                 <div className="container-fluid space-panel">
                     <div className="panel panel-info">
-                        <Field component={CheckboxWithoutLabel} 
+                        <Field component={CheckboxLabel} 
                                 name={`${student.RA}_send`}
                                 option={{ label: '', value: true }}
                                 validate={[FORM_RULES.required]}

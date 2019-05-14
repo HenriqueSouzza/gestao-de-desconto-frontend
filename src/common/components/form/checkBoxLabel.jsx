@@ -7,7 +7,7 @@ import Grid from '../layout/grid';
 import Row from '../layout/row';
 
 
-export class CheckboxWithoutLabel extends Component {
+export class CheckboxLabel extends Component {
     render() {
         const {
             option,
@@ -20,6 +20,7 @@ export class CheckboxWithoutLabel extends Component {
                 <div className={`form-group ${touched && error && "has-error"}`}>
                         <Checkbox
                             id={input.name}
+                            className=''
                             name={input.name}
                             value={option.value}
                             cursor={false}

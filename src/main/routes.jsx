@@ -13,6 +13,7 @@ import PermissionsRoutes from '../pages/permissions/permissionsRoutes';
 import PermissionRolesRoutes from '../pages/permissionRoles/permissionRolesRoutes';
 import RoleUsersRoutes from '../pages/roleUsers/roleUsersRoutes';
 import UsersRoutes from '../pages/users/usersRoutes';
+import StudentDiscounts from '../pages/studentDiscounts/studentDiscounts';
 
 
 export const history = createHashHistory()
@@ -25,11 +26,12 @@ export default class Routes extends Component {
             <div className='content-wrapper'>
                 <Router history={history}>
                     <Route exact path='/' component={Dashboard}/>
-                    <Route pat='/usuarios' component={UsersRoutes} />
+                    <Route path='/usuarios' component={UsersRoutes} />
                     <Route path='/papeis' component={RolesRoutes}/>
                     <Route path='/permissoes' component={PermissionsRoutes} />
                     <Route path='/permissao-papeis' component={PermissionRolesRoutes} />
                     <Route path='/papel-usuarios' component={RoleUsersRoutes} />
+                    <Route path='/desconto-comercial' component={StudentDiscounts} />
                 </Router>
             </div>   
         )

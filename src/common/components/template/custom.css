@@ -14,3 +14,16 @@ button {
     
     width: 150px;
 }
+
+.space-panel {
+    padding-top: 1%;
+}
+
+.new-student {
+    background-color: brown !important;
+    border-color: brown;
+}
+
+.reset-margem-left {
+    margin-left: 0;
+}

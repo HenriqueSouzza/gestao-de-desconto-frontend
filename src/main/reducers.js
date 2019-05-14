@@ -10,6 +10,7 @@ import PermissionsReducer from '../pages/permissions/permissionsReducer';
 import RoleUsersReducer from '../pages/roleUsers/roleUsersReducer';
 import UsersReducer from '../pages/users/usersReducer';
 import EstablishmentReducer from '../pages/establishment/establishmentReducer';
+import StudentDiscountsReducer from '../pages/studentDiscounts/studentDiscountsReducer';
 
 const rootReducer = combineReducers({
     dashboard:() => ({ test: 1500 }),
@@ -21,7 +22,8 @@ const rootReducer = combineReducers({
     permissions: PermissionsReducer,
     rolesUser: RoleUsersReducer,
     users: UsersReducer,
-    establishment: EstablishmentReducer
+    establishment: EstablishmentReducer,
+    students: StudentDiscountsReducer
 
 });
 

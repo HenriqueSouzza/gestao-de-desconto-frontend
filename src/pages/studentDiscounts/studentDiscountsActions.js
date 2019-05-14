@@ -8,7 +8,7 @@ import type from './types';
 
 import { BASE_API } from '../../config/consts';
 
-const URL = `${BASE_API}/totvs-queries/query/`;
+const URL = `${BASE_API}/totvs-queries/query`;
 
 export function getList() {
 
@@ -24,7 +24,7 @@ export function getList() {
         }
     }
 
-    const request = axios.post(`${URL}/`, values);
+    const request = axios.post(`${URL}`, values);
     return dispatch => {
        dispatch([
             {

@@ -27,7 +27,7 @@ export default class App extends Component {
                     <Header />
                     <SideBar />
                     <Routes />
-                    <Footer />
+                    {/* <Footer /> */}
                     <Messages />
                 </div>
             </HashRouter> 

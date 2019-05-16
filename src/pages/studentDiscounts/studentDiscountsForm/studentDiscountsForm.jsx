@@ -16,9 +16,6 @@ class StudentDiscountsForm extends Component
             <form role='form' onSubmit={handleSubmit}>
                 <div className='box-body'>
 
-                    
-
-
                 </div>
             </form>
             )

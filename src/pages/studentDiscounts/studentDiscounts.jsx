@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Field } from 'redux-form'; 
+import { Field, arrayPush, arrayRemove, arrayInsert, formValueSelector } from 'redux-form';
 import { FORM_RULES } from '../../helpers/validations';
 import { CircularProgress } from 'react-md';
 import _ from 'lodash';
@@ -9,7 +9,7 @@ import { getList } from './studentDiscountsActions';
 
 import ContentHeader from '../../common/components/template/contentHeader';
 import Content from '../../common/components/template/content';
-import { CheckboxLabel }  from '../../common/components/form/checkBoxLabel';
+import { CheckboxLabel } from '../../common/components/form/checkBoxLabel';
 
 import Row from '../../common/components/layout/row';
 import Grid from '../../common/components/layout/grid';
@@ -17,32 +17,87 @@ import Grid from '../../common/components/layout/grid';
 import List from './studentDiscountsList';
 
 
+
 /**
  * arrayInsert: permite adicionar campos dinamicamente no formulário
  * arrayRemove:permite excluir campos existentes dinamicamente do formulário
  */
 
-import { reduxForm, Form } from 'redux-form'; 
+import { reduxForm, Form } from 'redux-form';
 
 
 class StudentDiscounts extends Component {
 
-    componentWillMount(){
+    componentWillMount() {
 
         this.props.getList();
     }
 
-    onSubmit(values){
+    onSubmit(values) {
         console.log(values);
-        
     }
 
-    render(){
-      
-        const list = this.props.students || [] ;
-        const { handleSubmit } = this.props;
+    /**
+     * Manipulando as matriculas que foram clicadas, guardando em uma array e retirando quando tirar o click do "check"
+     */
+    studentSelected = (student, status) => {
+        if (status) {
+            this.props.pushArray("studentDiscounts", "students", student)
+        } else {
+            this.props.removeArray("studentDiscounts", "students", this.props.stateForm.values.students.indexOf(student))
+        }
+    }
 
-        if (this.props.students.loading ||  _.isUndefined(list.list.content.Resultado)) {
+    listStudent = (students) => {
+        const { stateForm } = this.props
+
+        return (
+            students.slice(0, 5).map(student => (
+                <div className="container-fluid space-panel">
+                    <div className="panel panel-info">
+                        <div className="panel-heading text text-center">
+                            <Row key={student.RA}>
+                                <Grid cols='1'>
+                                    <Field
+                                        component={CheckboxLabel}
+                                        name={`${student.RA}_send`}
+                                        option={{ label: '', value: [] }}
+                                        onChange={(e) => this.studentSelected(student.RA, e)}
+                                    />
+                                </Grid>
+                                <Grid cols='5'>{student.RA} | {student.ALUNO}</Grid>
+                                <Grid cols='2'><span className='badge'>{student.CURSO}</span></Grid>
+                                <Grid cols='2'><span className='badge'>{student.MODALIDADE}</span></Grid>
+                                <Grid cols='2'><span className='badge'>{student.TIPO_ALUNO}</span></Grid>
+                            </Row>
+                        </div>
+                        <div className="panel-body">
+                            <List showStateForm={stateForm} list={student} />
+                        </div>
+                    </div>
+                </div>
+            ))
+        )
+    }
+
+    render() {
+
+        const list = this.props.students || [];
+
+        const students = list.list.content.Resultado
+
+        const { handleSubmit, stateForm } = this.props;
+
+        //inicialmente será disabilitado o button de {salvar && enviar para RM}
+        let disabled = true
+        
+        //faz as validações do checkbox para liberar os botões
+        if (stateForm && stateForm.values && stateForm.values.students && stateForm.values.students.length > 0) {
+            disabled = false
+        }
+
+
+        if (this.props.students.loading || _.isUndefined(list.list.content.Resultado)) {
             return (
                 <div>
                     <ContentHeader title="Desconto Comercial" />
@@ -52,58 +107,56 @@ class StudentDiscounts extends Component {
                 </div>
             );
         } else {
-            //console.log(this.props.students);
-            const studentsList =  list.list.content.Resultado.map(student => ( 
-                <div className="container-fluid space-panel">
-                    <div className="panel panel-info">
-                        <Field component={CheckboxLabel} 
-                                name={`${student.RA}_send`}
-                                option={{ label: '', value: true }}
-                                validate={[FORM_RULES.required]}
-                                />
 
-                            <div className="panel-heading text text-center">
-                                <Row>
-                                    <Grid cols='6'>{student.ALUNO} | {student.RA}</Grid>
-                                    <Grid cols='2'><span className='badge'>{student.CURSO}</span></Grid>
-                                    <Grid cols='2'><span className='badge'>{student.MODALIDADE}</span></Grid>
-                                    <Grid cols='2'><span className={`badge ${student.TIPO_ALUNO === 'CALOURO' ? 'new-student' : ''}`}>{student.TIPO_ALUNO}</span></Grid>
-                                </Row>
-                            </div>
-                            <div className="panel-body">
-                                <Grid cols='3'> 
-                                    <List showBeforeDiscount={true} list={student} />
-                                </Grid>
-                                <Grid cols='9'> 
-                                    <List showAfterDiscount={true} list={student} />
-                                </Grid>
-                            </div>
-                        </div>
-                    </div>
-           
-            ));
-            
             return (
                 <div>
                     <Form role='form' onSubmit={handleSubmit(this.onSubmit)} noValidate>
-                        { studentsList }
+                        {this.listStudent(students)}
                         <div className='main-footer reset-margem-left'>
-                            <Grid cols='3'> 
-                                <button className={`btn btn-primary btn-block`} type="submit">Salvar</button>
+                            <Grid cols='3'>
+                                <button className={`btn btn-primary btn-block`} disabled={disabled} type="submit">Salvar</button>
                             </Grid>
-                            <Grid cols='3'> 
-                                <button className={`btn btn-success btn-block`} type="button">Enviar para o RM</button>
+                            <Grid cols='3'>
+                                <button className={`btn btn-success btn-block`} disabled={disabled} type="button">Enviar para o RM</button>
                             </Grid>
-                         </div> 
-                    </Form> 
-                  
+                        </div>
+                    </Form>
                 </div>
             )
         }
     }
 }
 
-StudentDiscounts= reduxForm({form: 'studentDiscounts', destroyOnUnmount: false })(StudentDiscounts);
+
+
+StudentDiscounts = reduxForm({ form: 'studentDiscounts', destroyOnUnmount: false })(StudentDiscounts);
+
+
+// const selector = formValueSelector('studentDiscounts')
+
+/**
+ * Retorna o state do formulário, qualquer inserção que estiver em algum input, poderá ser consultado pelo {"this.props.stateForm"}
+ * recurso ultilizado na documentação (formValueSelector)
+ */
+StudentDiscounts = connect(state => {
+
+    // const value = selector(state, 'fieldName')
+
+    /**
+     * Guardando as informações do state do formulario no {stateForm} 
+     */
+    const stateForm = state.form.studentDiscounts
+
+    /**
+     * retorna o valor connectado com o nome atribuído ao formulário
+     */
+    return {
+        stateForm
+    }
+
+})(StudentDiscounts)
+
+
 /**
  * <b>mapStateToProps</b> Mapeia o estado para as propriedades
  * recebe o estado (state) como parametro e retira o dado da história(store)
@@ -112,8 +165,8 @@ StudentDiscounts= reduxForm({form: 'studentDiscounts', destroyOnUnmount: false }
 
 const mapStateToProps = state => ({
     students: state.students
-  });
-  
+});
+
 
 /**
  * <b>mapDispatchToProps</b> mapeia o disparo de ações para as propriedades. 
@@ -125,7 +178,7 @@ const mapStateToProps = state => ({
  */
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-    getList
+    getList, insertArray: arrayInsert, pushArray: arrayPush, removeArray: arrayRemove
 }, dispatch);
 
 /**

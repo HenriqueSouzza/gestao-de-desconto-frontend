@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import {Checkbox} from 'react-md';
 
-
-
 import Grid from '../layout/grid';
-import Row from '../layout/row';
+// import Row from '../layout/row';
 
 
 export class CheckboxLabel extends Component {
+    
     render() {
         const {
             option,
@@ -15,6 +14,8 @@ export class CheckboxLabel extends Component {
             labelStyle,
             meta: { touched, error }
         } = this.props;
+
+
         return (
             <Grid cols={this.props.cols}>
                 <div className={`form-group ${touched && error && "has-error"}`}>

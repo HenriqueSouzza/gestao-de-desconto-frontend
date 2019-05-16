@@ -28,6 +28,11 @@ import { reduxForm, Form } from 'redux-form';
 
 class StudentDiscounts extends Component {
 
+    constructor(props){
+        super(props);
+        document.title = "Gestão de Descontos | Descontos Comerciais";
+    }
+
     componentWillMount() {
 
         this.props.getList();

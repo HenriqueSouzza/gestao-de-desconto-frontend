@@ -10,6 +10,10 @@ import IF from '../../common/components/operator/if';
 
 export default class StudentDiscountsList extends Component {
 
+    add(index) {
+        console.log('add' + index);
+    }
+
     render() {
 
         const discounts = [
@@ -28,7 +32,8 @@ export default class StudentDiscountsList extends Component {
         /**
          * showStateForm, são os stados vindo do formulário  
          */
-        const { list, showStateForm } = this.props;
+        const { list, showStateForm, index } = this.props;
+        console.log(index);
 
         return (
             <table className='table table-striped'>
@@ -44,6 +49,7 @@ export default class StudentDiscountsList extends Component {
                     <th>Parcela Final</th>
                     <th>Percentual</th>
                     <th>Desconto atual</th>
+                    <th>-</th>
                 </thead>
                 <tbody>
                     <tr key={list.RA}>
@@ -58,7 +64,7 @@ export default class StudentDiscountsList extends Component {
                             <Field
                                 component={InputLabel}
                                 type="number"
-                                name={`${list.RA}_parcela_inicial`}
+                                name={`[${list.RA}][${index}].installment_start`}
                                 placeholder="1"
                                 cols='10 10 10 10'
                                 validate={ 
@@ -72,7 +78,7 @@ export default class StudentDiscountsList extends Component {
                             <Field
                                 component={InputLabel}
                                 type="number"
-                                name={`${list.RA}_parcela_final`}
+                                name={`[${list.RA}][${index}].installment_end`}
                                 placeholder="6"
                                 cols='10 10 10 10'
                                 validate={ 
@@ -86,7 +92,7 @@ export default class StudentDiscountsList extends Component {
                             <Field
                                 component={InputLabel}
                                 type="number"
-                                name={`${list.RA}_percentual`}
+                                name={`[${list.RA}][${index}].percent`}
                                 placeholder="%"
                                 cols='2 12 9 9'
                                 validate={ 
@@ -99,7 +105,7 @@ export default class StudentDiscountsList extends Component {
                         <td className='success' width={200}>
                             <Field
                                 component={SelectLabel}
-                                name={`${list.RA}_desconto`}
+                                name={`[${list.RA}][${index}].discount`}
                                 options={discountsList}
                                 cols='12 12 12 12'
                                 validate={ 
@@ -108,6 +114,12 @@ export default class StudentDiscountsList extends Component {
                                     :''
                                 }
                             />
+                        </td>
+                        <td className='success'>
+                            <button type='button' className='btn btn-success'
+                                    onClick={ () => this.add(index + 1)}>
+                                <i className='fa fa-plus'></i>
+                            </button>
                         </td>
                     </tr>
                 </tbody>

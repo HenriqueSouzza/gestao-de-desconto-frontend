@@ -52,15 +52,16 @@ class StudentDiscounts extends Component {
         const { stateForm } = this.props
 
         return (
-            students.slice(0, 5).map(student => (
+            students.slice(0, 5).map((student, index) => (
                 <div className="container-fluid space-panel">
                     <div className="panel panel-info">
                         <div className="panel-heading text text-center">
+                        <h1>{index}</h1>
                             <Row key={student.RA}>
                                 <Grid cols='1'>
                                     <Field
                                         component={CheckboxLabel}
-                                        name={`${student.RA}_send`}
+                                        name={`[${student.RA}]`}
                                         option={{ label: '', value: [] }}
                                         onChange={(e) => this.studentSelected(student.RA, e)}
                                     />
@@ -72,7 +73,7 @@ class StudentDiscounts extends Component {
                             </Row>
                         </div>
                         <div className="panel-body">
-                            <List showStateForm={stateForm} list={student} />
+                            <List showStateForm={stateForm} list={student} index={index} />
                         </div>
                     </div>
                 </div>

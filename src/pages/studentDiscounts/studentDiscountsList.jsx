@@ -14,6 +14,10 @@ export default class StudentDiscountsList extends Component {
         console.log('add' + index);
     }
 
+    remove(index) {
+        console.log(index);
+    }
+
     render() {
 
         const discounts = [
@@ -115,11 +119,17 @@ export default class StudentDiscountsList extends Component {
                                 }
                             />
                         </td>
-                        <td className='success'>
+                        <td className='success '>
                             <button type='button' className='btn btn-success'
                                     onClick={ () => this.add(index + 1)}>
                                 <i className='fa fa-plus'></i>
                             </button>
+
+                            <button type='button' className='btn btn-danger'
+                                   onClick={ () => this.remove(index)}>
+                                <i className='fa fa-trash-o'></i>
+                            </button>
+                            
                         </td>
                     </tr>
                 </tbody>

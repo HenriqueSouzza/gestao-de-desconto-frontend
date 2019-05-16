@@ -10,6 +10,7 @@ import { getList } from './studentDiscountsActions';
 import ContentHeader from '../../common/components/template/contentHeader';
 import Content from '../../common/components/template/content';
 import { CheckboxLabel } from '../../common/components/form/checkBoxLabel';
+import StudentDiscountsForm from './studentDiscountsForm/studentDiscountsForm'
 
 import Row from '../../common/components/layout/row';
 import Grid from '../../common/components/layout/grid';
@@ -115,6 +116,7 @@ class StudentDiscounts extends Component {
 
             return (
                 <div>
+                    {/* <StudentDiscountsForm /> */}
                     <Form role='form' onSubmit={handleSubmit(this.onSubmit)} noValidate>
                         {this.listStudent(students)}
                         <div className='main-footer reset-margem-left'>

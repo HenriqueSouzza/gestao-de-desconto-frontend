@@ -22,10 +22,10 @@ export default (state = INITIAL_STATE, action) => {
             return {...state, loading: action.payload, selected: false}
         case type.ESTABLISHMENT_SAVE:
             localStorage.setItem(ESTABLISHMENT_DATA, JSON.stringify(action.payload));
-            return {...state, dataEstablishment: action.payload, loading: false, selected: true}
+            return {...state, loading: false, selected: true}
         case type.ESTABLISHMENT_DISCARD:
             localStorage.removeItem(ESTABLISHMENT_DATA)
-            return {...state, dataEstablishment: action.payload, loading: false, selected: false}
+            return {...state, loading: false, selected: false}
         default:
             return {...state};
     }

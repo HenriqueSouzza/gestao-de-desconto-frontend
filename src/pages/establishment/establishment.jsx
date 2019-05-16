@@ -104,7 +104,9 @@ class Establishment extends Component {
 
         const selected = establishment.selected
 
-        if (selected) {
+        const selectedEstablishmentLocal = localStorage.getItem(ESTABLISHMENT_DATA)
+
+        if (selected || ( selectedEstablishmentLocal && selectedEstablishmentLocal.length > 0)) {
             return <App />
 
         } else {

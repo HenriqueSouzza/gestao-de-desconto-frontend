@@ -3,8 +3,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { logout } from '../../../pages/auth/authActions';
 import { alterEstablishment, getSearch } from '../../../pages/establishment/establishmentActions';
-import establishment from '../../../pages/establishment/establishment';
 import { ESTABLISHMENT_DATA } from '../../../config/consts';
+import establishment from '../../../pages/establishment/establishment';
 import IF from '../../components/operator/if';
 
 class Navbar extends Component {
@@ -36,13 +36,15 @@ class Navbar extends Component {
     render(){
         const { user } = this.props.auth;
        
-        const establishment = this.props.establishment.dataEstablishment.nameEstablishment
+        const establishmentLocal = JSON.parse(localStorage.getItem(ESTABLISHMENT_DATA))
+        
+        const establishment = establishmentLocal.nameEstablishment ? establishmentLocal.nameEstablishment : ''
 
-        const codEstablishment = this.props.establishment.dataEstablishment.values.establishment
+        const codEstablishment = establishmentLocal.values.establishment ? establishmentLocal.values.establishment : ''
 
-        const branch = this.props.establishment.dataEstablishment.nameBranch
+        const branch = establishmentLocal.nameBranch ? establishmentLocal.nameBranch : ''
 
-        const modality = this.props.establishment.dataEstablishment.values.modality
+        const modality = establishmentLocal.values.modality ? establishmentLocal.values.modality : ''
 
         return (
             <div className="navbar-custom-menu">

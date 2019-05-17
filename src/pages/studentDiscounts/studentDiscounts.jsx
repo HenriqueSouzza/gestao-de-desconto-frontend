@@ -2,19 +2,22 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Field, arrayPush, arrayRemove, arrayInsert, formValueSelector } from 'redux-form';
-import { FORM_RULES } from '../../helpers/validations';
+// import { FORM_RULES } from '../../helpers/validations';
 import { CircularProgress } from 'react-md';
 import _ from 'lodash';
 import { getList } from './studentDiscountsActions';
+import { getCourse } from '../establishment/establishmentActions';
 
 import ContentHeader from '../../common/components/template/contentHeader';
 import Content from '../../common/components/template/content';
 import { CheckboxLabel } from '../../common/components/form/checkBoxLabel';
+import StudentDiscountsForm from './studentDiscountsForm/studentDiscountsForm'
 
 import Row from '../../common/components/layout/row';
 import Grid from '../../common/components/layout/grid';
 
 import List from './studentDiscountsList';
+
 
 
 
@@ -34,8 +37,8 @@ class StudentDiscounts extends Component {
     }
 
     componentWillMount() {
-
         this.props.getList();
+        this.props.getCourse()
     }
 
     onSubmit(values) {
@@ -55,6 +58,8 @@ class StudentDiscounts extends Component {
 
     listStudent = (students) => {
         const { stateForm } = this.props
+
+        const studentsList = students.RA ? [students] : students
 
         return (
             students.slice(0, 5).map((student, index) => (
@@ -103,9 +108,8 @@ class StudentDiscounts extends Component {
             disabled = false
         }
 
-
         if (this.props.students.loading || _.isUndefined(list.list.content.Resultado)) {
-            return (
+            return ( 
                 <div>
                     <ContentHeader title="Desconto Comercial" />
                     <Content>
@@ -114,9 +118,10 @@ class StudentDiscounts extends Component {
                 </div>
             );
         } else {
-
+            console.log('aqui')
             return (
                 <div>
+                    <StudentDiscountsForm />
                     <Form role='form' onSubmit={handleSubmit(this.onSubmit)} noValidate>
                         {this.listStudent(students)}
                         <div className='main-footer reset-margem-left'>
@@ -171,7 +176,8 @@ StudentDiscounts = connect(state => {
  */
 
 const mapStateToProps = state => ({
-    students: state.students
+    students: state.students,
+    establishment: state.establishment
 });
 
 
@@ -185,7 +191,7 @@ const mapStateToProps = state => ({
  */
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-    getList, insertArray: arrayInsert, pushArray: arrayPush, removeArray: arrayRemove
+    getList, getCourse, insertArray: arrayInsert, pushArray: arrayPush, removeArray: arrayRemove
 }, dispatch);
 
 /**

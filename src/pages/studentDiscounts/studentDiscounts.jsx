@@ -73,7 +73,7 @@ class StudentDiscounts extends Component {
                                         component={CheckboxLabel}
                                         name={`${student.RA}_send`}
                                         option={{ label: '', value: [] }}
-                                        // onChange={(e) => this.studentSelected(student.RA, e)}
+                                        onChange={(e) => this.studentSelected(student.RA, e)}
                                     />
                                 </Grid>
                                 <Grid cols='5'>{student.RA} | {student.ALUNO}</Grid>

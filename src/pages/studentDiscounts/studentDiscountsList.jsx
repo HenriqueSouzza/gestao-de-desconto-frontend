@@ -6,12 +6,14 @@ import SelectLabel from '../../common/components/form/selectLabel';
 import { InputLabel } from '../../common/components/form/inputLabel';
 import { FORM_RULES } from '../../helpers/validations';
 
-import IF from '../../common/components/operator/if';
+import If from '../../common/components/operator/if';
 
-export default class StudentDiscountsList extends Component {
+class StudentDiscountsList extends Component {
 
-    add(index) {
-        console.log('add' + index);
+    add(index, item = {}) {
+       console.log('add' + index, item);
+        //console.log(this.props.field);
+       console.log(this.props.arrayInsert('studentDiscounts', `[${item.RA}][${this.props.field}]`, index, item));
     }
 
     remove(index) {
@@ -36,7 +38,7 @@ export default class StudentDiscountsList extends Component {
         /**
          * showStateForm, são os stados vindo do formulário  
          */
-        const { list, showStateForm, index } = this.props;
+        const { field, list, showStateForm, index } = this.props;
         console.log(index);
 
         return (
@@ -68,7 +70,7 @@ export default class StudentDiscountsList extends Component {
                             <Field
                                 component={InputLabel}
                                 type="number"
-                                name={`[${list.RA}][${index}].installment_start`}
+                                name={`[${list.RA}][${field}][${index}].installment_start`}
                                 placeholder="1"
                                 cols='10 10 10 10'
                                 validate={ 
@@ -82,7 +84,7 @@ export default class StudentDiscountsList extends Component {
                             <Field
                                 component={InputLabel}
                                 type="number"
-                                name={`[${list.RA}][${index}].installment_end`}
+                                name={`[${list.RA}][${field}][${index}].installment_end`}
                                 placeholder="6"
                                 cols='10 10 10 10'
                                 validate={ 
@@ -96,7 +98,7 @@ export default class StudentDiscountsList extends Component {
                             <Field
                                 component={InputLabel}
                                 type="number"
-                                name={`[${list.RA}][${index}].percent`}
+                                name={`[${list.RA}][${field}][${index}].percent`}
                                 placeholder="%"
                                 cols='2 12 9 9'
                                 validate={ 
@@ -109,7 +111,7 @@ export default class StudentDiscountsList extends Component {
                         <td className='success' width={200}>
                             <Field
                                 component={SelectLabel}
-                                name={`[${list.RA}][${index}].discount`}
+                                name={`[${list.RA}][${field}][${index}].discount`}
                                 options={discountsList}
                                 cols='12 12 12 12'
                                 validate={ 
@@ -121,7 +123,7 @@ export default class StudentDiscountsList extends Component {
                         </td>
                         <td className='success '>
                             <button type='button' className='btn btn-success'
-                                    onClick={ () => this.add(index + 1)}>
+                                    onClick={ () => this.add(index + 1, list)}>
                                 <i className='fa fa-plus'></i>
                             </button>
 
@@ -137,3 +139,22 @@ export default class StudentDiscountsList extends Component {
         )
     }
 }
+
+
+
+/**
+ * <b>mapDispatchToProps</b> mapeia o disparo de ações para as propriedades. 
+ * bindActionCreator: o primeiro objeto são as actions creator e o segundo é o dispatch
+ * O resultado dessa função via de regra é uma action e essa action é passada para os reducers para que ele evolua o estado 
+ * e o component seja renderizado novamente para refletir o estado atual
+ * 
+ * @param {*} dispatch 
+ */
+
+const mapDispatchToProps = dispatch => bindActionCreators({ arrayInsert, arrayRemove }, dispatch)
+
+/**
+ * <b>connect</b> utiliza o padrão decorator da ES para que ele possa incluir dentro das propriedades desse component 
+ * para incluir o que foi mapeado no estado(mapStateToProps) e o que foi mapeado nas actions(mapDispatchToProps)
+ */
+export default connect(null, mapDispatchToProps)(StudentDiscountsList);

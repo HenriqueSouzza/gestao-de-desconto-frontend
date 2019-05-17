@@ -67,6 +67,7 @@ class StudentDiscounts extends Component {
                                     <Field
                                         component={CheckboxLabel}
                                         name={`[${student.RA}]`}
+                                        value={true}
                                         option={{ label: '', value: [] }}
                                         onChange={(e) => this.studentSelected(student.RA, e)}
                                     />
@@ -78,7 +79,7 @@ class StudentDiscounts extends Component {
                             </Row>
                         </div>
                         <div className="panel-body">
-                            <List showStateForm={stateForm} list={student} index={index} />
+                            <List showStateForm={stateForm} list={student} index={student.RA + 1} field='discounts'/>
                         </div>
                     </div>
                 </div>

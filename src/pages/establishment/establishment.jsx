@@ -63,8 +63,8 @@ class Establishment extends Component {
      */
     onSubmit = (values) => {
 
-        const nameEstablishment = this.state.descriptionEstablishment
-        const nameBranch = this.state.descriptionBranch
+        const nameEstablishment = this.state.descriptionEstablishment ? this.state.descriptionEstablishment : ''
+        const nameBranch = this.state.descriptionBranch ? this.state.descriptionBranch : ''
 
         this.props.saveEstablishment(values, nameEstablishment,nameBranch);
     }

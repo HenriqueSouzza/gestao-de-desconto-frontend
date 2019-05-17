@@ -2,7 +2,7 @@
 // import { toastr } from 'react-redux-toastr';
 
 import axios from 'axios';
-import { BASE_API } from '../../config/consts';
+import { BASE_API, ESTABLISHMENT_DATA } from '../../config/consts';
 
 // import { getDetailTransform } from '../../helpers/transformResponse';
 
@@ -34,6 +34,38 @@ export function getList() {
             },
             {
                 type: type.ESTABLISHMENT_FETCHED,
+                payload: request
+            }
+        ])
+    }
+}
+
+/**
+ * Dados em JSON com os respectivos parametros CODFILIAL, CODTIPOCURSO
+ * @param {*} params 
+ */
+export function getCourse(){
+
+    const dataLocalStorage = JSON.parse(localStorage.getItem(ESTABLISHMENT_DATA))
+
+    const values = {
+        name: 'WEB002',
+        parameters : {
+            codfilial: dataLocalStorage.values.establishment,
+            codtipocurso : 3
+        }
+    }
+
+    const request = axios.post(URL, values);
+
+    return dispatch => {
+        dispatch([
+            { 
+                type: type.ESTABLISHMENT_LOAD,
+                payload: true
+            },
+            {
+                type: type.ESTABLISHMENT_COURSE_FETCHED,
                 payload: request
             }
         ])

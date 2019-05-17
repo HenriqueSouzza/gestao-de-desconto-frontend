@@ -38,33 +38,24 @@ class Navbar extends Component {
        
         const establishmentLocal = JSON.parse(localStorage.getItem(ESTABLISHMENT_DATA))
         
-        const establishment = establishmentLocal.nameEstablishment ? establishmentLocal.nameEstablishment : ''
+        const establishment = establishmentLocal.nameEstablishment != 'null'  ? establishmentLocal.nameEstablishment : ''
 
-        const codEstablishment = establishmentLocal.values.establishment ? establishmentLocal.values.establishment : ''
+        const codEstablishment =  establishmentLocal.values.establishment.length != 'null' ? establishmentLocal.values.establishment : ''
 
-        const branch = establishmentLocal.nameBranch ? establishmentLocal.nameBranch : ''
+        const branch =  establishmentLocal.nameBranch != 'null' ? establishmentLocal.nameBranch.length : ''
 
-        const modality = establishmentLocal.values.modality ? establishmentLocal.values.modality : ''
+        const modality = establishmentLocal.values.modality != 'null' ? establishmentLocal.values.modality : ''
 
         return (
             <div className="navbar-custom-menu">
                 <ul className="nav navbar-nav">
                     <li className={`dropdown offset-1`}>
-                        <IF test={modality == '2' && codEstablishment == '169'}> 
                             <a className="">
-                                <span className="hidden-xs">{branch}</span>
+                                <span className="hidden-xs">{ codEstablishment == '169' && modality == '2' ? branch : establishment }</span>
                             </a>
-                        </IF>
-                        <IF test={modality == '1' && codEstablishment == '169'}> 
-                            <a className="">
-                                <span className="hidden-xs">{establishment}</span>
-                            </a>
-                        </IF>
-                        <IF test={codEstablishment !== '169'}>
-                            <a className="">
-                                <span className="hidden-xs">{establishment}</span>
-                            </a>
-                        </IF>
+                            {/* <a className="">
+                                <span className="hidden-xs">{ codEstablishment !== '169' ? establishment : ''}</span>
+                            </a> */}
                     </li>
                     <li  className={`dropdown user user-menu`}>
                         <a href={"javascript:;"} 

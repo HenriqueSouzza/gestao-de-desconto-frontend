@@ -4,10 +4,10 @@ import _  from 'lodash';
 export const BASE_API = (
 
     process.env.NODE_ENV === 'production' ? 
-    'http://hmlapidescontos.cnec.br'
+    'http://hmlapidescontos.cnec.br/api'
     :
     process.env.NODE_ENV === 'homologation' ?
-        'http://hmlapidescontos.cnec.br'
+        'http://hmlapidescontos.cnec.br/api'
         :
         'http://localhost:8888/api'
 );

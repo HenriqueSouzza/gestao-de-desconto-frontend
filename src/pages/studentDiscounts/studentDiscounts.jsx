@@ -56,14 +56,6 @@ class StudentDiscounts extends Component {
         }
     }
 
-    studentSelectAll = () => {
-        return(
-            <div className="container-fluid space-panel">
-                <button className="btn btn-light" type="button">Selecionar todos os alunos</button>
-            </div>
-        )
-    }
-
     listStudent = (students) => {
         const { stateForm } = this.props
 
@@ -71,11 +63,11 @@ class StudentDiscounts extends Component {
 
         return (
             // studentsList.map( (student) => (
-            studentsList.slice(0, 5).map( (student) => (
+            studentsList.slice(0, 5).map( (student, index) => (
                 <div className="container-fluid space-panel">
                     <div className="panel panel-info">
                         <div className="panel-heading text text-center">
-                        <h1>{index}</h1>
+                        {/* <h1>{index}</h1> */}
                             <Row key={student.RA}>
                                 <Grid cols='1'>
                                     <Field

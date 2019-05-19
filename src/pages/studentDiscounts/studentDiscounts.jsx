@@ -75,11 +75,13 @@ class StudentDiscounts extends Component {
                 <div className="container-fluid space-panel">
                     <div className="panel panel-info">
                         <div className="panel-heading text text-center">
+                        <h1>{index}</h1>
                             <Row key={student.RA}>
                                 <Grid cols='1'>
                                     <Field
                                         component={CheckboxLabel}
-                                        name={`${student.RA}_send`}
+                                        name={`[${student.RA}]`}
+                                        value={true}
                                         option={{ label: '', value: [] }}
                                         onChange={(e) => this.studentSelected(student.RA, e)}
                                     />
@@ -91,7 +93,7 @@ class StudentDiscounts extends Component {
                             </Row>
                         </div>
                         <div className="panel-body">
-                            <List showStateForm={stateForm} list={student} />
+                            <List showStateForm={stateForm} list={student} index={student.RA + 1} field='discounts'/>
                         </div>
                     </div>
                 </div>

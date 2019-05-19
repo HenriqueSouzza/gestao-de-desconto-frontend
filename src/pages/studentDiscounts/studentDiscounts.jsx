@@ -56,14 +56,22 @@ class StudentDiscounts extends Component {
         }
     }
 
+    studentSelectAll = () => {
+        return(
+            <div className="container-fluid space-panel">
+                <button className="btn btn-light" type="button">Selecionar todos os alunos</button>
+            </div>
+        )
+    }
+
     listStudent = (students) => {
         const { stateForm } = this.props
 
         const studentsList = students.RA ? [students] : students
 
         return (
-            studentsList.map( (student) => (
-            // studentsList.slice(0, 5).map( (student) => (
+            // studentsList.map( (student) => (
+            studentsList.slice(0, 5).map( (student) => (
                 <div className="container-fluid space-panel">
                     <div className="panel panel-info">
                         <div className="panel-heading text text-center">
@@ -76,10 +84,10 @@ class StudentDiscounts extends Component {
                                         onChange={(e) => this.studentSelected(student.RA, e)}
                                     />
                                 </Grid>
-                                <Grid cols='5'>{student.RA} | {student.ALUNO}</Grid>
+                                <Grid cols='5'>RA: {student.RA} | {student.ALUNO}</Grid>
                                 <Grid cols='2'><span className='badge'>{student.CURSO}</span></Grid>
                                 <Grid cols='2'><span className='badge'>{student.MODALIDADE}</span></Grid>
-                                <Grid cols='2'><span className='badge'>{student.TIPO_ALUNO}</span></Grid>
+                                <Grid cols='2'><span className={`badge ${student.TIPO_ALUNO === 'CALOURO' ? 'new-student' : ''}`}>{student.TIPO_ALUNO}</span></Grid>
                             </Row>
                         </div>
                         <div className="panel-body">
@@ -117,7 +125,6 @@ class StudentDiscounts extends Component {
                 </div>
             );
         } else {
-            console.log('aqui')
             return (
                 <div>
                     <StudentDiscountsForm />

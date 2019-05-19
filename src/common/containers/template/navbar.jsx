@@ -42,6 +42,8 @@ class Navbar extends Component {
 
         const codEstablishment =  establishmentLocal.values.establishment.length != 'null' ? establishmentLocal.values.establishment : ''
 
+        const PeriodLetivo =  establishmentLocal.values.period.length != 'null' ? establishmentLocal.values.period : ''
+
         const branch =  establishmentLocal.nameBranch != 'null' ? establishmentLocal.nameBranch.length : ''
 
         const modality = establishmentLocal.values.modality != 'null' ? establishmentLocal.values.modality : ''
@@ -49,6 +51,11 @@ class Navbar extends Component {
         return (
             <div className="navbar-custom-menu">
                 <ul className="nav navbar-nav">
+                    <li className={`dropdown offset-1`}>
+                        <a className="">
+                            <span className="hidden-xs">{ PeriodLetivo }</span>
+                        </a>
+                    </li>
                     <li className={`dropdown offset-1`}>
                             <a className="">
                                 <span className="hidden-xs">{ codEstablishment == '169' && modality == '2' ? branch : establishment }</span>

@@ -15,10 +15,9 @@ export class CheckboxLabel extends Component {
             meta: { touched, error }
         } = this.props;
 
-
         return (
-            <Grid cols={this.props.cols}>
-                <div className={`form-group ${touched && error && "has-error"}`}>
+            // <Grid cols={this.props.cols}>
+                // <div className={`form-group ${touched && error && "has-error"}`}>
                         <Checkbox
                             id={input.name}
                             className=''
@@ -28,13 +27,13 @@ export class CheckboxLabel extends Component {
                             checked={input.value}
                             onChange={input.onChange}
                         />
-                        &nbsp;&nbsp;
-                        <label htmlFor={option.label} style={labelStyle}>
-                            {option.label}
-                        </label>
-                        {touched && error && <span className="help-block">{error}</span>}
-                </div>
-            </Grid>
+                        // &nbsp;&nbsp;
+                        // <label htmlFor={option.label} style={labelStyle}>
+                        //     {option.label}
+                        // </label>
+                        // {touched && error && <span className="help-block">{error}</span>}
+                // </div>
+            // </Grid>
         );
     }
 }

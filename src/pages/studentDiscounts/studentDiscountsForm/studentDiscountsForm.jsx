@@ -21,7 +21,16 @@ import { getList } from '../studentDiscountsActions';
 class StudentDiscountsForm extends Component {
 
     onSubmit = (values) => {
+        console.log(values)
         this.props.getList(values)
+    }
+
+    componentDidUpdate(){
+        const codCourse = this.props.establishment.course[0]['CODCURSO']
+        const values = {
+            course: codCourse
+        }
+        // this.props.getList(values)
     }
 
     
@@ -52,7 +61,7 @@ class StudentDiscountsForm extends Component {
                 {/* <ContentHeader title='Papéis' /> */}
                 <Content>
                     <Card>
-                        <CardTitle title='Pesquisar' />
+                        {/* <CardTitle title='Pesquisar' /> */}
                         <CardText>
                             {/* <Form role='form' onSubmit={handleSubmit(this.onSubmit)} noValidate> */}
                             <Form role='form' onSubmit={handleSubmit(this.onSubmit)} noValidate>
@@ -87,7 +96,7 @@ class StudentDiscountsForm extends Component {
                                                 options={courseList}
                                                 cols='12 12 12 12'
                                                 label="Curso"
-                                                // validate={[FORM_RULES.required]}
+                                                validate={[FORM_RULES.required]}
                                                 />
                                         </Grid>
                                     </Row>

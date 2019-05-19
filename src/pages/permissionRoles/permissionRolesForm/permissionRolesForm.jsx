@@ -97,7 +97,6 @@ class PermissionRolesForm extends Component {
                                 <Form role='form' onSubmit={handleSubmit(this.onSubmit)} noValidate>
                                     <div className="box-body">
                                         <Row>
-
                                             <Field
                                                 component={MultiSelect}
                                                 name="permission"

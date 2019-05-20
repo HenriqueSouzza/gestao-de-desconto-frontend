@@ -72,59 +72,55 @@ class StudentDiscountsList extends Component {
                             <Field
                                 component={InputLabel}
                                 type="number"
-                                // name={`[${list.RA}][${field}][${count}].installment_start`}
-                                name={`[ra_${list.RA}][${Field}][${count}][installment_start]`}
+                                name={`[ra_${list.RA}][${field}][${count}][installment_start]`}
                                 placeholder="1"
                                 cols='10 10 10 10'
-                                // validate={ 
-                                //     (showStateForm && showStateForm.values && showStateForm.values.students && showStateForm.values.students.indexOf(list.RA) != -1) ?
-                                //         [FORM_RULES.required, FORM_RULES.number]
-                                //     :''
-                                // }
+                                validate={ 
+                                    (showStateForm && showStateForm.values && showStateForm.values.students && showStateForm.values.students.indexOf(list.RA) != -1) ?
+                                        [FORM_RULES.required, FORM_RULES.number]
+                                    :''
+                                }
                             />
                         </td>
                         <td className='success' width={150}>
                             <Field
                                 component={InputLabel}
                                 type="number"
-                                name={`[ra_${list.RA}][${Field}][${count}][installment_end]`}
-                                // name={`[${list.RA}][${field}][${count}].installment_end`}
+                                name={`[ra_${list.RA}][${field}][${count}][installment_end]`}
                                 placeholder="6"
                                 cols='10 10 10 10'
-                                // validate={ 
-                                //     (showStateForm && showStateForm.values && showStateForm.values.students && showStateForm.values.students.indexOf(list.RA) != -1) ?
-                                //         [FORM_RULES.required, FORM_RULES.number]
-                                //     :''
-                                // }
+                                validate={ 
+                                    (showStateForm && showStateForm.values && showStateForm.values.students && showStateForm.values.students.indexOf(list.RA) != -1) ?
+                                        [FORM_RULES.required, FORM_RULES.number]
+                                    :''
+                                }
                             />
                         </td>
                         <td className='success' width={150}>
                             <Field
                                 component={InputLabel}
                                 type="number"
-                                name={`[ra_${list.RA}][${Field}][${count}][percent]`}
-                                // name={`[${list.RA}][${field}][${count}].percent`}
+                                name={`[ra_${list.RA}][${field}][${count}][percent]`}
                                 placeholder="%"
                                 cols='2 12 9 9'
-                                // validate={ 
-                                //     (showStateForm && showStateForm.values && showStateForm.values.students && showStateForm.values.students.indexOf(list.RA) != -1) ?
-                                //         [FORM_RULES.required]
-                                //     :''
-                                // }
+                                validate={ 
+                                    (showStateForm && showStateForm.values && showStateForm.values.students && showStateForm.values.students.indexOf(list.RA) != -1) ?
+                                        [FORM_RULES.required]
+                                    :''
+                                }
                             />
                         </td>
                         <td className='success' width={200}>
                             <Field
                                 component={SelectLabel}
-                                // name={`[${list.RA}][${field}][${count}].discount`}
-                                name={`[ra_${list.RA}][discounts][${count}][discount]`}
+                                name={`[ra_${list.RA}][${field}][${count}][discount]`}
                                 options={discountsList}
                                 cols='12 12 12 12'
-                                // validate={ 
-                                //     (showStateForm && showStateForm.values && showStateForm.values.students && showStateForm.values.students.indexOf(list.RA) != -1) ?
-                                //         [FORM_RULES.required]
-                                //     :''
-                                // }
+                                validate={ 
+                                    (showStateForm && showStateForm.values && showStateForm.values.students && showStateForm.values.students.indexOf(list.RA) != -1) ?
+                                        [FORM_RULES.required]
+                                    :''
+                                }
                             />
                         </td>
                         <td className='success' width={100}>

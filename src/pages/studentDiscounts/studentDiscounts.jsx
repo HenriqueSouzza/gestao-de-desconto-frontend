@@ -42,6 +42,7 @@ class StudentDiscounts extends Component {
     }
 
     onSubmit(values) {
+        console.log('form')
         console.log(values);
     }
 

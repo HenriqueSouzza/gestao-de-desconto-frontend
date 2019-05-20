@@ -10,10 +10,9 @@ import If from '../../common/components/operator/if';
 
 class StudentDiscountsList extends Component {
 
-    add(index, item = {}) {
-       console.log('add' + index, item);
-        //console.log(this.props.field);
-       console.log(this.props.arrayInsert('studentDiscounts', `[${item.RA}][${this.props.field}]`, index, item));
+    add(count, item = {}) {
+        // console.log('add' + count, item);
+       console.log(this.props.arrayInsert('studentDiscounts', `[${item.RA}][${this.props.field}]`, count, item));
     }
 
     remove(index) {
@@ -39,10 +38,13 @@ class StudentDiscountsList extends Component {
          * showStateForm, são os stados vindo do formulário  
          */
         const { field, list, showStateForm, index } = this.props;
-        console.log(index);
+
+        const values = (showStateForm && showStateForm.values && showStateForm.values.students) ? showStateForm.values.students : ''
+
+        const count = 0;
 
         return (
-            <table className='table table-striped'>
+            <table key={index} className='table table-striped'>
                 <thead>
                     <th>Desconto anterior</th>
                     <th>Percentual</th>
@@ -58,7 +60,7 @@ class StudentDiscountsList extends Component {
                     <th>-</th>
                 </thead>
                 <tbody>
-                    <tr key={list.RA}>
+                    <tr>
                         <td className='warning' width={100}>R${list.VALOR_MENSALIDADE}</td>
                         <td className='warning' width={100}>R${list.VALOR_MENSALIDADE}</td>
                         <td className='warning' width={100}>R${list.VALOR_MENSALIDADE}</td>
@@ -70,60 +72,64 @@ class StudentDiscountsList extends Component {
                             <Field
                                 component={InputLabel}
                                 type="number"
-                                name={`[${list.RA}][${field}][${index}].installment_start`}
+                                // name={`[${list.RA}][${field}][${count}].installment_start`}
+                                name={`[ra_${list.RA}][${Field}][${count}][installment_start]`}
                                 placeholder="1"
                                 cols='10 10 10 10'
-                                validate={ 
-                                    (showStateForm && showStateForm.values && showStateForm.values.students && showStateForm.values.students.indexOf(list.RA) != -1) ?
-                                        [FORM_RULES.required, FORM_RULES.number]
-                                    :''
-                                }
+                                // validate={ 
+                                //     (showStateForm && showStateForm.values && showStateForm.values.students && showStateForm.values.students.indexOf(list.RA) != -1) ?
+                                //         [FORM_RULES.required, FORM_RULES.number]
+                                //     :''
+                                // }
                             />
                         </td>
                         <td className='success' width={150}>
                             <Field
                                 component={InputLabel}
                                 type="number"
-                                name={`[${list.RA}][${field}][${index}].installment_end`}
+                                name={`[ra_${list.RA}][${Field}][${count}][installment_end]`}
+                                // name={`[${list.RA}][${field}][${count}].installment_end`}
                                 placeholder="6"
                                 cols='10 10 10 10'
-                                validate={ 
-                                    (showStateForm && showStateForm.values && showStateForm.values.students && showStateForm.values.students.indexOf(list.RA) != -1) ?
-                                        [FORM_RULES.required, FORM_RULES.number]
-                                    :''
-                                }
+                                // validate={ 
+                                //     (showStateForm && showStateForm.values && showStateForm.values.students && showStateForm.values.students.indexOf(list.RA) != -1) ?
+                                //         [FORM_RULES.required, FORM_RULES.number]
+                                //     :''
+                                // }
                             />
                         </td>
                         <td className='success' width={150}>
                             <Field
                                 component={InputLabel}
                                 type="number"
-                                name={`[${list.RA}][${field}][${index}].percent`}
+                                name={`[ra_${list.RA}][${Field}][${count}][percent]`}
+                                // name={`[${list.RA}][${field}][${count}].percent`}
                                 placeholder="%"
                                 cols='2 12 9 9'
-                                validate={ 
-                                    (showStateForm && showStateForm.values && showStateForm.values.students && showStateForm.values.students.indexOf(list.RA) != -1) ?
-                                        [FORM_RULES.required]
-                                    :''
-                                }
+                                // validate={ 
+                                //     (showStateForm && showStateForm.values && showStateForm.values.students && showStateForm.values.students.indexOf(list.RA) != -1) ?
+                                //         [FORM_RULES.required]
+                                //     :''
+                                // }
                             />
                         </td>
                         <td className='success' width={200}>
                             <Field
                                 component={SelectLabel}
-                                name={`[${list.RA}][${field}][${index}].discount`}
+                                // name={`[${list.RA}][${field}][${count}].discount`}
+                                name={`[ra_${list.RA}][discounts][${count}][discount]`}
                                 options={discountsList}
                                 cols='12 12 12 12'
-                                validate={ 
-                                    (showStateForm && showStateForm.values && showStateForm.values.students && showStateForm.values.students.indexOf(list.RA) != -1) ?
-                                        [FORM_RULES.required]
-                                    :''
-                                }
+                                // validate={ 
+                                //     (showStateForm && showStateForm.values && showStateForm.values.students && showStateForm.values.students.indexOf(list.RA) != -1) ?
+                                //         [FORM_RULES.required]
+                                //     :''
+                                // }
                             />
                         </td>
-                        <td className='success '>
+                        <td className='success' width={100}>
                             <button type='button' className='btn btn-success'
-                                    onClick={ () => this.add(index + 1, list)}>
+                                    onClick={ () => this.add(count + 1, list)}>
                                 <i className='fa fa-plus'></i>
                             </button>
 

@@ -61,19 +61,19 @@ class StudentDiscounts extends Component {
 
         const studentsList = students.RA ? [students] : students
 
+        console.log(stateForm)
+
         return (
             // studentsList.map( (student) => (
-            studentsList.slice(0, 5).map( (student, index) => (
-                <div className="container-fluid space-panel">
+            studentsList.slice(0, 3).map( (student, index) => (
+                <div key={student.RA} className="container-fluid space-panel">
                     <div className="panel panel-info">
                         <div className="panel-heading text text-center">
-                        {/* <h1>{index}</h1> */}
-                            <Row key={student.RA}>
+                            <Row>
                                 <Grid cols='1'>
                                     <Field
                                         component={CheckboxLabel}
-                                        name={`[${student.RA}]`}
-                                        value={true}
+                                        name={`[${student.RA}_send]`}
                                         option={{ label: '', value: [] }}
                                         onChange={(e) => this.studentSelected(student.RA, e)}
                                     />
@@ -85,7 +85,7 @@ class StudentDiscounts extends Component {
                             </Row>
                         </div>
                         <div className="panel-body">
-                            <List showStateForm={stateForm} list={student} index={student.RA + 1} field='discounts'/>
+                            <List showStateForm={stateForm} list={student} index={index} field='discounts'/>
                         </div>
                     </div>
                 </div>

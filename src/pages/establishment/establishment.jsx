@@ -21,7 +21,8 @@ import App from '../../main/app';
 
 import { isNull, isUndefined } from 'util';
 
-import { getList, saveEstablishment } from './establishmentActions'
+import { getList, saveEstablishment, getPeriod } from './establishmentActions'
+import { timingSafeEqual } from 'crypto';
 
 
 class Establishment extends Component {
@@ -74,10 +75,15 @@ class Establishment extends Component {
      * <b>onEstablishmentSelected</b> Pega a unidade selecionada e seta no estado
      */
     onEstablishmentSelected = (establishment, codEstablishment ) => {
+        
         this.setState({
             descriptionEstablishment: establishment,
             codEstablishmentSelected: codEstablishment
         })
+
+        if(codEstablishment != 169){
+            this.props.getPeriod(codEstablishment, this.state.codModalitySelected)
+        }
     }
 
     /**
@@ -87,6 +93,9 @@ class Establishment extends Component {
         this.setState({
             codModalitySelected: codModality
         })
+
+        this.props.getPeriod(this.state.codEstablishmentSelected, codModality)
+
     }
 
     onBranchSelected = (branch ,codBranch) => {
@@ -123,33 +132,22 @@ class Establishment extends Component {
                     label: item.NOMEFANTASIA
                 }))
 
-                const period = [
-                    {
-                        id: '2018-1',
-                        name: '2018-1'
-                    },
-                    {
-                        id: '2018-2',
-                        name: '2018-2'
-                    },
-                    {
-                        id: '2019-1',
-                        name: '2019-1'
-                    }
-                ]
+                let periodList = {}
 
-                const periodList = period.map((item) => ({
-                    value: item.id,
-                    label: item.name
-                }))
+                if(establishment.period.length){
+                    periodList = establishment.period.map( (period) => ({
+                        value: period.id_rm_period_code_concession_period,
+                        label: period.id_rm_period_code_concession_period
+                    }))
+                }
 
                 const modality = [
                     {
-                        id: '1',
+                        id: 'P',
                         name: 'Presencial'
                     },
                     {
-                        id: '2',
+                        id: 'D',
                         name: 'Ensino à distâncias'
                     }
                 ]
@@ -188,7 +186,7 @@ class Establishment extends Component {
                                                 validate={[FORM_RULES.required]}
                                             />
                                         </div>
-                                        <If test={this.state.codModalitySelected == 2}>
+                                        <If test={this.state.codModalitySelected == "D"}>
                                             <div className="login-box-body">
                                                 <Field
                                                     component={Select}
@@ -202,16 +200,18 @@ class Establishment extends Component {
                                             </div>
                                         </If>
                                     </If>
-                                    <div className="login-box-body">
-                                        <Field
-                                            component={Select}
-                                            name="period"
-                                            label='Período Letivo:'
-                                            options={periodList}
-                                            cols='12 12 12 12'
-                                            validate={[FORM_RULES.required]}
-                                        />
-                                    </div>
+                                    <If test={establishment.period.length}>
+                                        <div className="login-box-body">
+                                            <Field
+                                                component={Select}
+                                                name="period"
+                                                label='Período Letivo:'
+                                                options={periodList}
+                                                cols='12 12 12 12'
+                                                validate={[FORM_RULES.required]}
+                                                />
+                                        </div>
+                                    </If>
                                     <div className="login-box-body">
                                         <button className={`btn btn-success offset-1`} type="submit">Confirmar</button>
                                     </div>
@@ -260,7 +260,7 @@ const mapStateToProps = (state) => ({ establishment: state.establishment })
  */
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-    getList, saveEstablishment
+    getList, saveEstablishment, getPeriod
 }, dispatch);
 
 /**

@@ -38,15 +38,15 @@ class Navbar extends Component {
        
         const establishmentLocal = JSON.parse(localStorage.getItem(ESTABLISHMENT_DATA))
         
-        const establishment = establishmentLocal.nameEstablishment != 'null'  ? establishmentLocal.nameEstablishment : ''
+        const establishment = establishmentLocal.nameEstablishment ? establishmentLocal.nameEstablishment : ''
 
-        const codEstablishment =  establishmentLocal.values.establishment.length != 'null' ? establishmentLocal.values.establishment : ''
+        const codEstablishment =  establishmentLocal.values.establishment.length ? establishmentLocal.values.establishment : ''
 
-        const PeriodLetivo =  establishmentLocal.values.period.length != 'null' ? establishmentLocal.values.period : ''
+        const PeriodLetivo =  establishmentLocal.values.period.length ? establishmentLocal.values.period : ''
 
-        const branch =  establishmentLocal.nameBranch != 'null' ? establishmentLocal.nameBranch.length : ''
+        const branch =  establishmentLocal.nameBranch ? establishmentLocal.nameBranch.length : ''
 
-        const modality = establishmentLocal.values.modality != 'null' ? establishmentLocal.values.modality : ''
+        const modality = establishmentLocal.values.modality ? establishmentLocal.values.modality : ''
 
         return (
             <div className="navbar-custom-menu">

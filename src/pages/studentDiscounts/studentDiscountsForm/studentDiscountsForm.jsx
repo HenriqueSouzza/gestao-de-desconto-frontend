@@ -21,19 +21,9 @@ import { getList } from '../studentDiscountsActions';
 class StudentDiscountsForm extends Component {
 
     onSubmit = (values) => {
-        console.log(values)
         this.props.getList(values)
     }
 
-    componentDidUpdate(){
-        const codCourse = this.props.establishment.course[0]['CODCURSO']
-        const values = {
-            course: codCourse
-        }
-        // this.props.getList(values)
-    }
-
-    
     render() {
         
         const discounts = [

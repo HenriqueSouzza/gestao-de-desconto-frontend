@@ -39,7 +39,9 @@ class StudentDiscountsList extends Component {
          */
         const { field, list, showStateForm, index } = this.props;
 
-        const values = (showStateForm && showStateForm.values && showStateForm.values.students) ? showStateForm.values.students : ''
+        const studentRA = 'ra_' + 13000006514 
+
+        const values = (showStateForm && showStateForm.values) ? showStateForm.values : ''
 
         const count = 0;
 
@@ -61,12 +63,14 @@ class StudentDiscountsList extends Component {
                 </thead>
                 <tbody>
                     <tr>
-                        <td className='warning' width={100}>R${list.VALOR_MENSALIDADE}</td>
-                        <td className='warning' width={100}>R${list.VALOR_MENSALIDADE}</td>
-                        <td className='warning' width={100}>R${list.VALOR_MENSALIDADE}</td>
-                        <td className='warning' width={100}>R${list.VALOR_MENSALIDADE}</td>
-                        <td className='success' width={100}>R${list.VALOR_MENSALIDADE}</td>
-                        <td className='success' width={200}>R$ 900,00 - R$ 180,00 = R$ 720,00</td>
+                        <td className='warning' width={100}>{list.BOLSA_ANTERIOR ? list.BOLSA_ANTERIOR : '' }</td>
+                        <td className='warning' width={100}>{list.DESCONTO_ANTERIOR ? list.DESCONTO_ANTERIOR : ''}</td>
+                        <td className='warning' width={100}>{list.PARCELAINICIAL_ANTERIOR ? list.PARCELAINICIAL_ANTERIOR : ''}</td>
+                        <td className='warning' width={100}>{list.PARCELAFINAL_ANTERIOR ? list.PARCELAFINAL_ANTERIOR : ''}</td>
+                        <td className='success' width={100}>R${list.VALOR_MENSALIDADE ? list.VALOR_MENSALIDADE : ''}</td>
+                        <td className='success' width={200}>R${values.studentRA && values.studentRA.discounts ? values.studentRA.discounts.count.percent : ''}</td>
+                        {/* <td className='success' width={200}>R${values + `ra_${list.RA}`}</td> */}
+                        {/* <td className='success' width={200}>R$ 900,00 - R$ 180,00 = R$ 720,00</td> */}
 
                         <td className='success' width={150}>
                             <Field

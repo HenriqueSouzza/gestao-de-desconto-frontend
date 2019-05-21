@@ -11,6 +11,7 @@ import { getCourse } from '../establishment/establishmentActions';
 import ContentHeader from '../../common/components/template/contentHeader';
 import Content from '../../common/components/template/content';
 import { CheckboxLabel } from '../../common/components/form/checkBoxLabel';
+import { CheckboxMultiple } from '../../common/components/form/checkBoxMultiple';
 import StudentDiscountsForm from './studentDiscountsForm/studentDiscountsForm'
 
 import Row from '../../common/components/layout/row';
@@ -27,22 +28,22 @@ import List from './studentDiscountsList';
  */
 
 import { reduxForm, Form } from 'redux-form';
+import If from '../../common/components/operator/if';
 
 
 class StudentDiscounts extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
         document.title = "Gestão de Descontos | Descontos Comerciais";
     }
 
     componentWillMount() {
-        this.props.getList();
-        this.props.getCourse()
+        this.props.getCourse();
+        // this.props.getList();
     }
 
     onSubmit(values) {
-        console.log('form')
         console.log(values);
     }
 
@@ -61,8 +62,6 @@ class StudentDiscounts extends Component {
         const { stateForm } = this.props
 
         const studentsList = students.RA ? [students] : students
-
-        console.log(stateForm)
 
         return (
             // studentsList.map( (student) => (
@@ -96,22 +95,18 @@ class StudentDiscounts extends Component {
 
     render() {
 
-        const list = this.props.students || [];
-
-        const students = list.list.content.Resultado
-
         const { handleSubmit, stateForm } = this.props;
 
         //inicialmente será disabilitado o button de {salvar && enviar para RM}
         let disabled = true
-        
+
         //faz as validações do checkbox para liberar os botões
         if (stateForm && stateForm.values && stateForm.values.students && stateForm.values.students.length > 0) {
             disabled = false
         }
 
-        if (this.props.students.loading || _.isUndefined(list.list.content.Resultado)) {
-            return ( 
+        if (this.props.students.loading || this.props.establishment.loading) {
+            return (
                 <div>
                     <ContentHeader title="Desconto Comercial" />
                     <Content>
@@ -119,21 +114,40 @@ class StudentDiscounts extends Component {
                     </Content>
                 </div>
             );
+
+        } else if (this.props.establishment.course && this.props.establishment.course.length) {
+            return (
+                <div>
+                    
+                    <StudentDiscountsForm />
+
+                    {(this.props.students.list.content.Resultado != undefined) ? 
+                        <Form role='form' onSubmit={handleSubmit(this.onSubmit)} noValidate>
+                            {this.listStudent(this.props.students.list.content.Resultado)}
+                            <div className='main-footer reset-margem-left'>
+                                <Grid cols='3'>
+                                    <button className={`btn btn-primary btn-block`} disabled={disabled} type="submit">Salvar</button>
+                                </Grid>
+                                <Grid cols='3'>
+                                    <button className={`btn btn-success btn-block`} disabled={disabled} type="button">Enviar para o RM</button>
+                                </Grid>
+                            </div>
+                        </Form>
+                    : ''
+                    }
+
+                </div>
+            )
         } else {
             return (
                 <div>
-                    <StudentDiscountsForm />
-                    <Form role='form' onSubmit={handleSubmit(this.onSubmit)} noValidate>
-                        {this.listStudent(students)}
-                        <div className='main-footer reset-margem-left'>
-                            <Grid cols='3'>
-                                <button className={`btn btn-primary btn-block`} disabled={disabled} type="submit">Salvar</button>
-                            </Grid>
-                            <Grid cols='3'>
-                                <button className={`btn btn-success btn-block`} disabled={disabled} type="button">Enviar para o RM</button>
-                            </Grid>
+                    <div className="container-fluid space-panel">
+                        <div className="panel panel-info">
+                            <div className="panel-heading text text-center">
+                                <h1>Não existe curso nenhum curso cadastrado</h1>
+                            </div>
                         </div>
-                    </Form>
+                    </div>
                 </div>
             )
         }

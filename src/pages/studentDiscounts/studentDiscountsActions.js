@@ -33,17 +33,11 @@ export function getList(params = []) {
     const values = {
         name: 'WEB006',
         parameters
-        // parameters : {
-        //     codfilial : 169,
-        //     codcurso : 'GP011',
-        //     codperlet : '2019-1',
-        //     ra : '-1',
-        //     nomealuno : '-1'
-            
-        // }
     }
 
     const request = axios.post(`${URL}`, values);
+
+
     return dispatch => {
        dispatch([
             {

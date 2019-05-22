@@ -38,11 +38,11 @@ class Navbar extends Component {
        
         const establishmentLocal = JSON.parse(localStorage.getItem(ESTABLISHMENT_DATA))
         
-        const establishment = establishmentLocal.nameEstablishment ? establishmentLocal.nameEstablishment : ''
+        const establishment = establishmentLocal ? establishmentLocal.nameEstablishment : ''
 
-        const codEstablishment =  establishmentLocal.values.establishment.length ? establishmentLocal.values.establishment : ''
+        const codEstablishment =  establishmentLocal && establishmentLocal.values ? establishmentLocal.values.establishment : ''
 
-        const PeriodLetivo =  establishmentLocal.values.period.length ? establishmentLocal.values.period : ''
+        const PeriodLetivo =  establishmentLocal && establishmentLocal.values ? establishmentLocal.values.period : ''
 
         const branch =  establishmentLocal.nameBranch ? establishmentLocal.nameBranch.length : ''
 

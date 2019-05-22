@@ -43,6 +43,8 @@ class StudentDiscountsList extends Component {
 
         const values = (showStateForm && showStateForm.values) ? showStateForm.values : ''
 
+        console.log(list)
+
         const count = 0;
 
         return (

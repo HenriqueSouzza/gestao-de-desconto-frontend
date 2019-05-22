@@ -133,7 +133,18 @@ class StudentDiscounts extends Component {
                                 </Grid>
                             </div>
                         </Form>
-                    : ''
+                    :  <div className="container-fluid space-panel">
+                            <div className="panel panel-info">
+                                <div className="panel-heading text text-center">
+                                    <span>
+                                        <h1>Não existe aluno nesse curso</h1>
+                                    </span>
+                                    <span>
+                                        <h1>Selecione outro curso</h1>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
                     }
 
                 </div>
@@ -144,7 +155,9 @@ class StudentDiscounts extends Component {
                     <div className="container-fluid space-panel">
                         <div className="panel panel-info">
                             <div className="panel-heading text text-center">
-                                <h1>Não existe curso nenhum curso cadastrado</h1>
+                                <span>
+                                    <h1>Não existe curso nenhum curso cadastrado</h1>
+                                </span>
                             </div>
                         </div>
                     </div>

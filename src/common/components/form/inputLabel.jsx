@@ -32,6 +32,8 @@ export class InputLabel extends Component {
                         placeholder={this.props.placeholder}
                         readOnly={this.props.readOnly}
                         type={this.props.type}
+                        disabled={this.props.disabled}
+                        value={this.props.value}
                     />
                     {touched && error && <span className="help-block">{error}</span>}
                 </div>

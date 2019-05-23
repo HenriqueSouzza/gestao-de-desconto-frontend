@@ -10,6 +10,10 @@ import { BASE_API, ESTABLISHMENT_DATA } from '../../config/consts';
 
 const URL = `${BASE_API}/totvs-queries/query`;
 
+const URL_BASE_LOCAL = `${BASE_API}/discount-margin-schoolarships/list`;
+
+
+// export const dataLocalStorage = JSON.parse(localStorage.getItem(ESTABLISHMENT_DATA))
 
 /**
  * 
@@ -17,7 +21,7 @@ const URL = `${BASE_API}/totvs-queries/query`;
 export function getList(params = []) {
 
     const dataLocalStorage = JSON.parse(localStorage.getItem(ESTABLISHMENT_DATA))
-
+    
     const course = params.course ? params.course : 'GP011';
     const name = params.name ? params.name : '-1';
     const ra = params.ra ? params.ra : '-1';
@@ -51,6 +55,36 @@ export function getList(params = []) {
        ])
     }
 }
+
+export function getScholarshipLimit(course){
+
+    const dataLocalStorage = JSON.parse(localStorage.getItem(ESTABLISHMENT_DATA))
+    
+    const modality = dataLocalStorage.values.establishment == 169 ? dataLocalStorage.values.modality : "P" 
+
+    const values = {
+        codFilial: dataLocalStorage.values.establishment,
+        modality: modality,
+        codPerlet : dataLocalStorage.values.period,
+        codCurso :  course
+    }
+
+    const request = axios.post(`${URL_BASE_LOCAL}`, values);
+
+    return dispatch => {
+        dispatch([
+             {
+                 type: type.STUDENT_DISCOUNTS_LOAD,
+                 payload: true
+             },
+             {
+                 type: type.STUDENT_DISCOUNTS_SCHOLARSHIP_FETCHED,
+                 payload: request
+             }
+        ])
+     }
+}
+
 
 /**
  * Parametros value(coluna) e field(valor)

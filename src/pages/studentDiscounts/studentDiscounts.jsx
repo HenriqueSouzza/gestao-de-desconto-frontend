@@ -40,7 +40,6 @@ class StudentDiscounts extends Component {
 
     componentWillMount() {
         this.props.getCourse();
-        // this.props.getList();
     }
 
     onSubmit(values) {

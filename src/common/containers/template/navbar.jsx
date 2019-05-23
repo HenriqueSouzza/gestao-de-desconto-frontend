@@ -44,9 +44,9 @@ class Navbar extends Component {
 
         const PeriodLetivo =  establishmentLocal && establishmentLocal.values ? establishmentLocal.values.period : ''
 
-        const branch =  establishmentLocal.nameBranch ? establishmentLocal.nameBranch.length : ''
+        const branch =  establishmentLocal ? establishmentLocal.nameBranch : ''
 
-        const modality = establishmentLocal.values.modality ? establishmentLocal.values.modality : ''
+        const modality = establishmentLocal && establishmentLocal.values && establishmentLocal.values.modality ? establishmentLocal.values.modality : ''
 
         return (
             <div className="navbar-custom-menu">

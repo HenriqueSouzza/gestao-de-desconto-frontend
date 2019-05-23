@@ -5,7 +5,7 @@ import { getListTransform, getDetailTransform } from '../../helpers/transformRes
  * <b>INITIAL_STATE<b/> Estado inicial 
  */
 const INITIAL_STATE = {
-	list: {
+    list: {
         content: [],
         pagination: {
             current_page: 0,
@@ -15,22 +15,26 @@ const INITIAL_STATE = {
             total: 0,
         }
     },
+    scholarship: {},
     detail: {},
-    loading: false
+    loading: false,
 };
 
 export default (state = INITIAL_STATE, action) => {
 
-    switch(action.type){
+    switch (action.type) {
 
+        case type.STUDENT_DISCOUNTS_LOAD:
+            return { ...state, loading: action.payload };
+        
         case type.STUDENT_DISCOUNTS_FETCHED:
             return { ...state, list: getListTransform(action.payload.data) || INITIAL_STATE.list, loading: false }
 
-        case type.STUDENT_DISCOUNTS_LOAD:
-            return {...state, loading: action.payload };
+        case type.STUDENT_DISCOUNTS_SCHOLARSHIP_FETCHED:
+            return { ...state, scholarship: action.payload.data.response.content || INITIAL_STATE.list }
 
         default: return state;
-        
+
 
     }
 

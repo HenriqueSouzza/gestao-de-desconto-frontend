@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Field, arrayInsert, arrayRemove } from 'redux-form';
+import { Field, arrayInsert, arrayRemove, arrayPush } from 'redux-form';
 import SelectLabel from '../../common/components/form/selectLabel';
 import { InputLabel } from '../../common/components/form/inputLabel';
 import { FORM_RULES } from '../../helpers/validations';
+import _ from 'lodash';
 
 import If from '../../common/components/operator/if';
+
+
+
+
 
 class StudentDiscountsList extends Component {
 
@@ -19,33 +24,93 @@ class StudentDiscountsList extends Component {
         console.log(index);
     }
 
+    onChangeDiscount = (scholarship, arrayScholarship, RA) => {
+
+        if(scholarship && scholarship > 0){
+            const bolsa = arrayScholarship.find( (e) => { return e.id_rm_schoolarship_discount_margin_schoolarship == scholarship } )
+            // console.log(bolsa.first_installment_discount_margin_schoolarship, 
+            //             bolsa.last_installment_discount_margin_schoolarship, 
+            //             bolsa.max_value_discount_margin_schoolarship,
+            //             bolsa.is_exact_value_discount_margin_schoolarship)
+            
+            const minInstallment = FORM_RULES.minValue(bolsa.first_installment_discount_margin_schoolarship)
+            const maxInstallment = FORM_RULES.maxValue(bolsa.last_installment_discount_margin_schoolarship)
+            
+            const maxPercent = FORM_RULES.maxValue(30)
+            // const maxPercentExact = FORM_RULES.maxValue(30)
+
+            // if(bolsa.is_exact_value_discount_margin_schoolarship == 0){
+            //     maxPercent = FORM_RULES.maxValue(30)
+            // }
+                // maxPercent = FORM_RULES.maxValue(bolsa.max_value_discount_margin_schoolarship)
+            // }else{
+            //     maxPercent = FORM_RULES.maxValueExact(50)
+                // maxPercent = FORM_RULES.maxValueExact(bolsa.max_value_discount_margin_schoolarship)
+                // valuePercent = bolsa.max_value_discount_margin_schoolarship
+            // }
+            this.props.arrayInsert('studentDiscounts', `validate`, `${RA}`, { maxPercent, minInstallment, maxInstallment, onChange:true})
+
+            
+        // }else{
+
+        //     this.props.arrayInsert('studentDiscounts', `validate`, `${RA}`, { onChange:false})
+
+        }
+
+    }
+
+
     render() {
 
-        const discounts = [
-            { id: 1, name: 'CNEC Veterano' },
-            { id: 2, name: 'Desconto Comercial' },
-            { id: 3, name: 'Desconto Familia' },
-            { id: 4, name: 'Desconto Amigo' },
-
-        ];
-
-        const discountsList = discounts.map((item) => ({
-            value: item.id,
-            label: item.name
-        }));
-
+        const limitDiscountScholarship = this.props.students.scholarship
+        
         /**
          * showStateForm, são os stados vindo do formulário  
          */
         const { field, list, showStateForm, index } = this.props;
-
-        const studentRA = 'ra_' + 13000006514 
-
+        
         const values = (showStateForm && showStateForm.values) ? showStateForm.values : ''
 
-        console.log(list)
-
         const count = 0;
+        
+        let discountsList = [];
+
+        let disabled = '';
+
+        let validate = '';
+
+        let validatePercent = '';
+
+        let valuePercentDefined = '';
+        
+        if(limitDiscountScholarship.length){
+            discountsList = limitDiscountScholarship.map( (index) => ({
+                value: index.id_rm_schoolarship_discount_margin_schoolarship,
+                label: index.id_rm_schoolarship_name_discount_margin_schoolarship
+            })) 
+        }
+
+        // if((showStateForm && showStateForm.values && showStateForm.values.students && showStateForm.values.students.indexOf(list.RA) != -1)){
+        
+        // }
+        // if(! _.isUndefined(values.validate) && values.validate[list.RA] && values.validate[list.RA].onChange) 
+        // {
+        //     validate = [FORM_RULES.required, FORM_RULES.number, values.validate[list.RA].maxInstallment, values.validate[list.RA].minInstallment];
+        //     validatePercent = [FORM_RULES.required, FORM_RULES.number, values.validate[list.RA].maxPercent]
+        //     disabled = false
+        // }
+
+        
+        if(! _.isUndefined(values.validate) && values.validate[list.RA]) 
+        {
+            console.log(values)
+            validate = [FORM_RULES.required, FORM_RULES.number, values.validate[list.RA].maxInstallment, values.validate[list.RA].minInstallment];
+            validatePercent = [FORM_RULES.required, FORM_RULES.number, values.validate[list.RA].maxPercent, values.validate[list.RA].minInstallment]
+            disabled = false
+        }else if(showStateForm && showStateForm.values && showStateForm.values.students && showStateForm.values.students.indexOf(list.RA) != -1){
+            disabled = false
+        }
+        
 
         return (
             <table key={index} className='table table-striped'>
@@ -73,7 +138,6 @@ class StudentDiscountsList extends Component {
                         <td className='success' width={200}>R${values.studentRA && values.studentRA.discounts ? values.studentRA.discounts.count.percent : ''}</td>
                         {/* <td className='success' width={200}>R${values + `ra_${list.RA}`}</td> */}
                         {/* <td className='success' width={200}>R$ 900,00 - R$ 180,00 = R$ 720,00</td> */}
-
                         <td className='success' width={150}>
                             <Field
                                 component={InputLabel}
@@ -81,11 +145,8 @@ class StudentDiscountsList extends Component {
                                 name={`[ra_${list.RA}][${field}][${count}][installment_start]`}
                                 placeholder="1"
                                 cols='10 10 10 10'
-                                validate={ 
-                                    (showStateForm && showStateForm.values && showStateForm.values.students && showStateForm.values.students.indexOf(list.RA) != -1) ?
-                                        [FORM_RULES.required, FORM_RULES.number]
-                                    :''
-                                }
+                                disabled={ disabled }
+                                validate={ validate }
                             />
                         </td>
                         <td className='success' width={150}>
@@ -95,11 +156,8 @@ class StudentDiscountsList extends Component {
                                 name={`[ra_${list.RA}][${field}][${count}][installment_end]`}
                                 placeholder="6"
                                 cols='10 10 10 10'
-                                validate={ 
-                                    (showStateForm && showStateForm.values && showStateForm.values.students && showStateForm.values.students.indexOf(list.RA) != -1) ?
-                                        [FORM_RULES.required, FORM_RULES.number]
-                                    :''
-                                }
+                                disabled={ disabled }
+                                validate={ validate }
                             />
                         </td>
                         <td className='success' width={150}>
@@ -109,11 +167,9 @@ class StudentDiscountsList extends Component {
                                 name={`[ra_${list.RA}][${field}][${count}][percent]`}
                                 placeholder="%"
                                 cols='2 12 9 9'
-                                validate={ 
-                                    (showStateForm && showStateForm.values && showStateForm.values.students && showStateForm.values.students.indexOf(list.RA) != -1) ?
-                                        [FORM_RULES.required]
-                                    :''
-                                }
+                                disabled={ disabled }
+                                // value={valuePercentDefined}
+                                validate={ validatePercent }
                             />
                         </td>
                         <td className='success' width={200}>
@@ -122,6 +178,7 @@ class StudentDiscountsList extends Component {
                                 name={`[ra_${list.RA}][${field}][${count}][discount]`}
                                 options={discountsList}
                                 cols='12 12 12 12'
+                                onChange={(e) => this.onChangeDiscount(e.target.value, limitDiscountScholarship, list.RA)}
                                 validate={ 
                                     (showStateForm && showStateForm.values && showStateForm.values.students && showStateForm.values.students.indexOf(list.RA) != -1) ?
                                         [FORM_RULES.required]
@@ -150,6 +207,11 @@ class StudentDiscountsList extends Component {
 
 
 
+const mapStateToProps = state => ({
+    students: state.students,
+    establishment: state.establishment
+});
+
 /**
  * <b>mapDispatchToProps</b> mapeia o disparo de ações para as propriedades. 
  * bindActionCreator: o primeiro objeto são as actions creator e o segundo é o dispatch
@@ -159,10 +221,10 @@ class StudentDiscountsList extends Component {
  * @param {*} dispatch 
  */
 
-const mapDispatchToProps = dispatch => bindActionCreators({ arrayInsert, arrayRemove }, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({ arrayInsert, arrayRemove, arrayPush }, dispatch)
 
 /**
  * <b>connect</b> utiliza o padrão decorator da ES para que ele possa incluir dentro das propriedades desse component 
  * para incluir o que foi mapeado no estado(mapStateToProps) e o que foi mapeado nas actions(mapDispatchToProps)
  */
-export default connect(null, mapDispatchToProps)(StudentDiscountsList);
+export default connect(mapStateToProps, mapDispatchToProps)(StudentDiscountsList);

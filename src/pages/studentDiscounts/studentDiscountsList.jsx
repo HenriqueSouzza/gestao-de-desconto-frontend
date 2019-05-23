@@ -26,7 +26,7 @@ class StudentDiscountsList extends Component {
 
     onChangeDiscount = (scholarship, arrayScholarship, RA) => {
 
-        if(scholarship && scholarship > 0){
+        if(scholarship && scholarship > 0) {
             const bolsa = arrayScholarship.find( (e) => { return e.id_rm_schoolarship_discount_margin_schoolarship == scholarship } )
             // console.log(bolsa.first_installment_discount_margin_schoolarship, 
             //             bolsa.last_installment_discount_margin_schoolarship, 
@@ -35,26 +35,17 @@ class StudentDiscountsList extends Component {
             
             const minInstallment = FORM_RULES.minValue(bolsa.first_installment_discount_margin_schoolarship)
             const maxInstallment = FORM_RULES.maxValue(bolsa.last_installment_discount_margin_schoolarship)
-            
-            const maxPercent = FORM_RULES.maxValue(30)
-            // const maxPercentExact = FORM_RULES.maxValue(30)
+            const maxPercent = FORM_RULES.maxValue(parseInt(bolsa.max_value_discount_margin_schoolarship))
 
-            // if(bolsa.is_exact_value_discount_margin_schoolarship == 0){
-            //     maxPercent = FORM_RULES.maxValue(30)
-            // }
-                // maxPercent = FORM_RULES.maxValue(bolsa.max_value_discount_margin_schoolarship)
-            // }else{
-            //     maxPercent = FORM_RULES.maxValueExact(50)
-                // maxPercent = FORM_RULES.maxValueExact(bolsa.max_value_discount_margin_schoolarship)
-                // valuePercent = bolsa.max_value_discount_margin_schoolarship
-            // }
-            this.props.arrayInsert('studentDiscounts', `validate`, `${RA}`, { maxPercent, minInstallment, maxInstallment, onChange:true})
+            this.props.arrayPush('studentDiscounts', 'validate', { RA ,maxPercent, minInstallment, maxInstallment})
 
             
-        // }else{
+        } else {
 
-        //     this.props.arrayInsert('studentDiscounts', `validate`, `${RA}`, { onChange:false})
-
+            if(this.props.showStateForm.values){
+                const dataRemove = this.props.showStateForm.values.validate.find( (e) => { return e.RA == RA })
+                this.props.arrayRemove("studentDiscounts", "validate", this.props.showStateForm.values.validate.indexOf(dataRemove))
+            }
         }
 
     }
@@ -75,7 +66,7 @@ class StudentDiscountsList extends Component {
         
         let discountsList = [];
 
-        let disabled = '';
+        let disabled = true;
 
         let validate = '';
 
@@ -90,25 +81,17 @@ class StudentDiscountsList extends Component {
             })) 
         }
 
-        // if((showStateForm && showStateForm.values && showStateForm.values.students && showStateForm.values.students.indexOf(list.RA) != -1)){
-        
-        // }
-        // if(! _.isUndefined(values.validate) && values.validate[list.RA] && values.validate[list.RA].onChange) 
-        // {
-        //     validate = [FORM_RULES.required, FORM_RULES.number, values.validate[list.RA].maxInstallment, values.validate[list.RA].minInstallment];
-        //     validatePercent = [FORM_RULES.required, FORM_RULES.number, values.validate[list.RA].maxPercent]
-        //     disabled = false
-        // }
-
-        
-        if(! _.isUndefined(values.validate) && values.validate[list.RA]) 
+        if(! _.isUndefined(values.validate)) 
         {
-            console.log(values)
-            validate = [FORM_RULES.required, FORM_RULES.number, values.validate[list.RA].maxInstallment, values.validate[list.RA].minInstallment];
-            validatePercent = [FORM_RULES.required, FORM_RULES.number, values.validate[list.RA].maxPercent, values.validate[list.RA].minInstallment]
-            disabled = false
-        }else if(showStateForm && showStateForm.values && showStateForm.values.students && showStateForm.values.students.indexOf(list.RA) != -1){
-            disabled = false
+            
+            const dataValidate = values.validate.find( (e) => { return e.RA == list.RA } )
+
+            if(dataValidate){
+                validate = [FORM_RULES.required, FORM_RULES.number, dataValidate.maxInstallment, dataValidate.minInstallment];
+                validatePercent = [FORM_RULES.required, FORM_RULES.number, dataValidate.maxPercent, dataValidate.minInstallment]
+                disabled= false
+            }
+
         }
         
 
@@ -168,7 +151,6 @@ class StudentDiscountsList extends Component {
                                 placeholder="%"
                                 cols='2 12 9 9'
                                 disabled={ disabled }
-                                // value={valuePercentDefined}
                                 validate={ validatePercent }
                             />
                         </td>

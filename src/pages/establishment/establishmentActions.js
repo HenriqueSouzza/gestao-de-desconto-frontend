@@ -172,3 +172,30 @@ export const getSearch = (value, field) => {
         ]);
     };
 }
+
+/**
+ * 
+ * @param {*} email 
+ */
+
+export const getEstablishmentsUser = (email) => {
+
+    const values = {
+        "name": "WEB008",
+        "parameters" : {
+            "email" : email
+        }
+    }
+
+    const request = axios.post(URL, values);
+
+    return dispatch => {
+        dispatch([
+            {
+                type: type.ESTABLISHMENT_USERS_SHOW,
+                payload: request
+            }
+        ])
+    }
+
+}

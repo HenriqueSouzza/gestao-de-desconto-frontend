@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { reduxForm, Form, Field } from "redux-form";
 
 import { FORM_RULES } from '../../helpers/validations';
-import { ESTABLISHMENT_DATA } from "../../config/consts";
+import { ESTABLISHMENT_DATA, USER_KEY } from "../../config/consts";
 
 import { CircularProgress } from 'react-md';
 
@@ -21,8 +21,11 @@ import App from '../../main/app';
 
 import { isNull, isUndefined } from 'util';
 
-import { getList, saveEstablishment, getPeriod } from './establishmentActions'
+import { getList, saveEstablishment, getPeriod, getEstablishmentsUser } from './establishmentActions'
 import { timingSafeEqual } from 'crypto';
+import { array } from 'prop-types';
+
+
 
 
 class Establishment extends Component {
@@ -55,6 +58,11 @@ class Establishment extends Component {
     componentWillMount() {
         //obtem a lista 
         this.props.getList();
+        //obtem os dados de login do usuário
+        const user = JSON.parse(localStorage.getItem(USER_KEY)).user;
+        //obtem a lista de filiais/unidades que o usuário possui acesso
+        this.props.getEstablishmentsUser(user.email);
+      
     }
 
     /**
@@ -111,9 +119,11 @@ class Establishment extends Component {
         //extrai da action creator do redux form para informar para qual método irá ser submetido os dados do formulário
         const { handleSubmit, establishment } = this.props;
 
-        const selected = establishment.selected
+        const selected = establishment.selected;
 
-        const selectedEstablishmentLocal = localStorage.getItem(ESTABLISHMENT_DATA)
+        const selectedEstablishmentLocal = localStorage.getItem(ESTABLISHMENT_DATA);
+
+        const establishmentListUser = [];
 
         if (selected || ( selectedEstablishmentLocal && selectedEstablishmentLocal.length > 0)) {
             return <App />
@@ -126,14 +136,34 @@ class Establishment extends Component {
 
             } else if (establishment.list.length > 0 && establishment.list !== undefined) {
 
-
                 const establishmentList = establishment.list.map((item) => ({
                     value: item.CODFILIAL,
                     label: item.NOMEFANTASIA
-                }))
+                }));
+                
+                //caso o usuário tenha unidades vinculadas no RM(TOTVS)
+                if( establishment.dataEstablishmentUser.length > 0) {
+                   //percorre as unidades dele
+                    establishment.dataEstablishmentUser.forEach(element => {
+                        //faz um for na lista de unidades
+                        for(let i = 0; i < establishmentList.length; i++ ){
+                           
+                            if(establishmentList[i].value ==  element.CODFILIAL) {
+                                //adiciona a unidade dele na lista que sera apresentada nas options
+                                establishmentListUser.push({
+                                    value: establishmentList[i].value,
+                                    label:  establishmentList[i].label
+                                })
+                            }
+                        }
+                    });
+
+
+                }  
+              
 
                 let periodList = {}
-
+                
                 if(establishment.period.length){
                     periodList = establishment.period.map( (period) => ({
                         value: period.id_rm_period_code_concession_period,
@@ -168,7 +198,7 @@ class Establishment extends Component {
                                             component={Select}
                                             name="establishment"
                                             label='Unidade:'
-                                            options={establishmentList}
+                                            options={establishmentListUser}
                                             onChange={(e) => this.onEstablishmentSelected(e.target.options[e.target.selectedIndex].innerText, e.target.value)}
                                             cols='12 12 12 12'
                                             validate={[FORM_RULES.required]}
@@ -247,7 +277,7 @@ Establishment = reduxForm({ form: 'establishment' })(Establishment);
  * o state.propriedade vem do registro do reducer no arquivo geral chamado main/reducers.js 
  * @param {*} state 
  */
-const mapStateToProps = (state) => ({ establishment: state.establishment })
+const mapStateToProps = (state) => ({ establishment: state.establishment, user: state.users })
 
 
 /**
@@ -260,7 +290,7 @@ const mapStateToProps = (state) => ({ establishment: state.establishment })
  */
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-    getList, saveEstablishment, getPeriod
+    getList, saveEstablishment, getPeriod, getEstablishmentsUser
 }, dispatch);
 
 /**

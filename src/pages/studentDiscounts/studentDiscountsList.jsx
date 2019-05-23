@@ -72,8 +72,6 @@ class StudentDiscountsList extends Component {
 
         let validatePercent = '';
 
-        let valuePercentDefined = '';
-        
         if(limitDiscountScholarship.length){
             discountsList = limitDiscountScholarship.map( (index) => ({
                 value: index.id_rm_schoolarship_discount_margin_schoolarship,
@@ -105,10 +103,10 @@ class StudentDiscountsList extends Component {
                     <th>Valor S/ desconto</th>
                     <th>Valor C/ desconto</th>
 
+                    <th>Desconto atual</th>
                     <th>Parcela Inicial</th>
                     <th>Parcela Final</th>
                     <th>Percentual</th>
-                    <th>Desconto atual</th>
                     <th>-</th>
                 </thead>
                 <tbody>
@@ -121,6 +119,20 @@ class StudentDiscountsList extends Component {
                         <td className='success' width={200}>R${values.studentRA && values.studentRA.discounts ? values.studentRA.discounts.count.percent : ''}</td>
                         {/* <td className='success' width={200}>R${values + `ra_${list.RA}`}</td> */}
                         {/* <td className='success' width={200}>R$ 900,00 - R$ 180,00 = R$ 720,00</td> */}
+                        <td className='success' width={200}>
+                            <Field
+                                component={SelectLabel}
+                                name={`[ra_${list.RA}][${field}][${count}][discount]`}
+                                options={discountsList}
+                                cols='12 12 12 12'
+                                onChange={(e) => this.onChangeDiscount(e.target.value, limitDiscountScholarship, list.RA)}
+                                validate={ 
+                                    (showStateForm && showStateForm.values && showStateForm.values.students && showStateForm.values.students.indexOf(list.RA) != -1) ?
+                                        [FORM_RULES.required]
+                                    :''
+                                }
+                            />
+                        </td>
                         <td className='success' width={150}>
                             <Field
                                 component={InputLabel}
@@ -154,21 +166,7 @@ class StudentDiscountsList extends Component {
                                 validate={ validatePercent }
                             />
                         </td>
-                        <td className='success' width={200}>
-                            <Field
-                                component={SelectLabel}
-                                name={`[ra_${list.RA}][${field}][${count}][discount]`}
-                                options={discountsList}
-                                cols='12 12 12 12'
-                                onChange={(e) => this.onChangeDiscount(e.target.value, limitDiscountScholarship, list.RA)}
-                                validate={ 
-                                    (showStateForm && showStateForm.values && showStateForm.values.students && showStateForm.values.students.indexOf(list.RA) != -1) ?
-                                        [FORM_RULES.required]
-                                    :''
-                                }
-                            />
-                        </td>
-                        <td className='success' width={100}>
+                        {/* <td className='success' width={100}>
                             <button type='button' className='btn btn-success'
                                     onClick={ () => this.add(count + 1, list)}>
                                 <i className='fa fa-plus'></i>
@@ -179,7 +177,7 @@ class StudentDiscountsList extends Component {
                                 <i className='fa fa-trash-o'></i>
                             </button>
                             
-                        </td>
+                        </td> */}
                     </tr>
                 </tbody>
             </table>

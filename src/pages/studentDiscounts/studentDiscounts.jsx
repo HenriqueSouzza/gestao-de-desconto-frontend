@@ -63,7 +63,7 @@ class StudentDiscounts extends Component {
         const studentsList = students.RA ? [students] : students
 
         return (
-            // studentsList.map( (student) => (
+            // studentsList.map( (student, index) => (
             studentsList.slice(0, 3).map( (student, index) => (
                 <div key={student.RA} className="container-fluid space-panel">
                     <div className="panel panel-info">

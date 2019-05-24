@@ -81,6 +81,10 @@ class Establishment extends Component {
 
     /**
      * <b>onEstablishmentSelected</b> Pega a unidade selecionada e seta no estado
+     * @param {*} establishment nome da filial/unidade
+     * @param {*} codEstablishment codigo da filial/unidade
+     * OBS: Caso a filial/unidade selecionada seja Osório terá que seleciona a modalidade de ensino
+     * Caso contrário irá exibir o select option de periodo letivo
      */
     onEstablishmentSelected = (establishment, codEstablishment ) => {
         
@@ -88,7 +92,7 @@ class Establishment extends Component {
             descriptionEstablishment: establishment,
             codEstablishmentSelected: codEstablishment
         })
-
+        //se a unidade selecionada não for Osório exibe o select option de periodo letivo
         if(codEstablishment != 169){
             this.props.getPeriod(codEstablishment, this.state.codModalitySelected)
         }
@@ -96,6 +100,7 @@ class Establishment extends Component {
 
     /**
      * <b>onModalitySelected</b> Pega a modalidade selecionada e seta no estado
+     * @param {*} codModality codigo da modalidade
      */
     onModalitySelected = (codModality) => {
         this.setState({
@@ -106,6 +111,11 @@ class Establishment extends Component {
 
     }
 
+    /**
+     * <b>onBranchSelected</b> Obtem o polo selecionado e guarda o mesmo no estado do componente
+     * @param {*} codBranch (código do polo)
+     * @param {*} branch (nome do polo) 
+     */
     onBranchSelected = (branch ,codBranch) => {
         this.setState({
             descriptionBranch: branch ,

@@ -11,6 +11,7 @@ const INITIAL_STATE = {
     course: {},
     period: {},
     dataEstablishment: {},
+    dataEstablishmentUser: {} ,
     loading: false
 }
 
@@ -32,6 +33,8 @@ export default (state = INITIAL_STATE, action) => {
             return{...state, course: action.payload.data.response.content.Resultado || INITIAL_STATE.course, loading: false, selected: true }
         case type.ESTABLISHMENT_PERIOD_FETCHED:
             return{...state, period: action.payload.data.response.content || INITIAL_STATE.period, loading: false, selected: false }
+        case type.ESTABLISHMENT_USERS_SHOW:
+            return { ...state, dataEstablishmentUser: action.payload.data.response.content.Resultado || INITIAL_STATE.period, loading: false, selected: false }
         default:
             return {...state};
     }

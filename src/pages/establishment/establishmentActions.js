@@ -174,8 +174,9 @@ export const getSearch = (value, field) => {
 }
 
 /**
- * 
- * @param {*} email 
+ * <b>getEstablishmentsUser</b> Action creator responsável por buscar as unidades que 
+ * o usuário possui acesso/designação no RM(TOTVS)
+ * @param {*} email (email do usuário)
  */
 
 export const getEstablishmentsUser = (email) => {

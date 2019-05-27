@@ -68,6 +68,7 @@ class Establishment extends Component {
     /**
      * <b>onSubmit</b> Método de submit do formulário, que irá ser chamado quando o botão de submit for chamado, 
      * para isso recebe os dados fo formulário
+     * @param {*} values (valores enviados no formulario)
      * 
      */
     onSubmit = (values) => {

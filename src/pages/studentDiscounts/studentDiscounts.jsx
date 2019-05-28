@@ -5,7 +5,7 @@ import { Field, arrayPush, arrayRemove, arrayInsert, formValueSelector } from 'r
 // import { FORM_RULES } from '../../helpers/validations';
 import { CircularProgress } from 'react-md';
 import _ from 'lodash';
-import { getList } from './studentDiscountsActions';
+import { getList, create } from './studentDiscountsActions';
 import { getCourse } from '../establishment/establishmentActions';
 
 import ContentHeader from '../../common/components/template/contentHeader';
@@ -17,7 +17,7 @@ import StudentDiscountsForm from './studentDiscountsForm/studentDiscountsForm'
 import Row from '../../common/components/layout/row';
 import Grid from '../../common/components/layout/grid';
 
-import List from './studentDiscountsList';
+import StudentDiscountsList from './studentDiscountsList';
 
 
 
@@ -35,6 +35,7 @@ class StudentDiscounts extends Component {
 
     constructor(props) {
         super(props);
+        this.onSubmit = this.onSubmit.bind(this)
         document.title = "Gestão de Descontos | Descontos Comerciais";
     }
 
@@ -43,7 +44,18 @@ class StudentDiscounts extends Component {
     }
 
     onSubmit(values) {
-        console.log(values);
+        console.log(values)
+
+        //cria o objeto e atribui a história(das rotas) e os parametros da url
+        // const route = {
+        //     router: this.props.history,
+        //     params: this.props.match.params
+        // }
+
+
+        // console.log(values);
+        // console.log(this)
+        // this.props.create(values);
     }
 
     /**
@@ -57,40 +69,47 @@ class StudentDiscounts extends Component {
         }
     }
 
-    listStudent = (students) => {
-        const { stateForm } = this.props
+    // listStudent = (students) => {
+    //     const { stateForm } = this.props
 
-        const studentsList = students.RA ? [students] : students
+    //     const studentsList = students.RA ? [students] : students
+        
+    //     const value = _.groupBy(studentsList, students.RA)
 
-        return (
-            // studentsList.map( (student, index) => (
-            studentsList.slice(0, 3).map( (student, index) => (
-                <div key={student.RA} className="container-fluid space-panel">
-                    <div className="panel panel-info">
-                        <div className="panel-heading text text-center">
-                            <Row>
-                                <Grid cols='1'>
-                                    <Field
-                                        component={CheckboxLabel}
-                                        name={`[${student.RA}_send]`}
-                                        option={{ label: '', value: [] }}
-                                        onChange={(e) => this.studentSelected(student.RA, e)}
-                                    />
-                                </Grid>
-                                <Grid cols='5'>RA: {student.RA} | {student.ALUNO}</Grid>
-                                <Grid cols='2'><span className='badge'>{student.CURSO}</span></Grid>
-                                <Grid cols='2'><span className='badge'>{student.MODALIDADE}</span></Grid>
-                                <Grid cols='2'><span className={`badge ${student.TIPO_ALUNO === 'CALOURO' ? 'new-student' : ''}`}>{student.TIPO_ALUNO}</span></Grid>
-                            </Row>
-                        </div>
-                        <div className="panel-body">
-                            <List showStateForm={stateForm} list={student} index={index} field='discounts'/>
-                        </div>
-                    </div>
-                </div>
-            ))
-        )
-    }
+    //     // console.log(value)
+    //     console.log(studentsList)
+
+    //     // studentsList.map( (student, index) => (
+    //     // ))
+    //     return (
+    //         // studentsList.map( (student, index) => (
+    //         studentsList.slice(0, 3).map( (student, index) => (
+    //             <div key={student.RA} className="container-fluid space-panel">
+    //                 <div className="panel panel-info">
+    //                     <div className="panel-heading text text-center">
+    //                         <Row>
+    //                             <Grid cols='1'>
+    //                                 <Field
+    //                                     component={CheckboxLabel}
+    //                                     name={`[${student.RA}_send]`}
+    //                                     option={{ label: '', value: [] }}
+    //                                     onChange={(e) => this.studentSelected(student.RA, e)}
+    //                                 />
+    //                             </Grid>
+    //                             <Grid cols='5'>RA: {student.RA} | {student.ALUNO}</Grid>
+    //                             <Grid cols='2'><span className='badge'>{student.CURSO}</span></Grid>
+    //                             <Grid cols='2'><span className='badge'>{student.MODALIDADE}</span></Grid>
+    //                             <Grid cols='2'><span className={`badge ${student.TIPO_ALUNO === 'CALOURO' ? 'new-student' : ''}`}>{student.TIPO_ALUNO}</span></Grid>
+    //                         </Row>
+    //                     </div>
+    //                     <div className="panel-body">
+    //                         <List showStateForm={stateForm} list={student} index={index} field='discounts'/>
+    //                     </div>
+    //                 </div>
+    //             </div>
+    //         ))
+    //     )
+    // }
 
     render() {
 
@@ -120,19 +139,22 @@ class StudentDiscounts extends Component {
                     
                     <StudentDiscountsForm />
 
-                    {(this.props.students.list.content.Resultado != undefined) ? 
+                    {(this.props.students.list.content != undefined && this.props.students.list.content.length != 0) ? 
                         <Form role='form' onSubmit={handleSubmit(this.onSubmit)} noValidate>
-                            {this.listStudent(this.props.students.list.content.Resultado)}
+                            {/* {this.listStudent(this.props.students.list.content.Resultado)} */}
+                            <StudentDiscountsList stateForm={this.props.stateForm}/>
+                            {/* <FieldArray name={`${student.RA}.bolsa` } Component={ StudentDiscountsList }/> */}
                             <div className='main-footer reset-margem-left'>
                                 <Grid cols='3'>
-                                    <button className={`btn btn-primary btn-block`} disabled={disabled} type="submit">Salvar</button>
+                                    <button className={`btn btn-primary btn-block`} disabled={false} type="submit">Lançar desconto</button>
                                 </Grid>
                                 <Grid cols='3'>
-                                    <button className={`btn btn-success btn-block`} disabled={disabled} type="button">Enviar para o RM</button>
+                                    <button className={`btn btn-success btn-block`} disabled={disabled} type="button">Conceder desconto no RM</button>
                                 </Grid>
                             </div>
                         </Form>
-                    :  <div className="container-fluid space-panel">
+                    :  
+                        <div className="container-fluid space-panel">
                             <div className="panel panel-info">
                                 <div className="panel-heading text text-center">
                                     <span>
@@ -217,9 +239,7 @@ const mapStateToProps = state => ({
  * @param {*} dispatch 
  */
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-    getList, getCourse, insertArray: arrayInsert, pushArray: arrayPush, removeArray: arrayRemove
-}, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ getList, getCourse, create, arrayInsert, arrayPush, arrayRemove }, dispatch);
 
 /**
  * <b>connect</b> utiliza o padrão decorator da ES para que ele possa incluir dentro das propriedades desse component 

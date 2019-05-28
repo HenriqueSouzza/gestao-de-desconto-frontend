@@ -17,22 +17,20 @@ export class CheckboxLabel extends Component {
 
         return (
             // <Grid cols={this.props.cols}>
-                // <div className={`form-group ${touched && error && "has-error"}`}>
-                        <Checkbox
-                            id={input.name}
-                            className=''
-                            name={input.name}
-                            value={option.value}
-                            cursor={false}
-                            checked={input.value}
-                            onChange={input.onChange}
-                        />
+                //  <div className={`form-group ${touched && error && "has-error"}`}>
+                    <Checkbox
+                        id={input.name}
+                        className=''
+                        name={input.name}
+                        // value={option.value}
+                        cursor={false}
+                        checked={input.value}
+                        onChange={input.onChange}
+                    />
                         // &nbsp;&nbsp;
-                        // <label htmlFor={option.label} style={labelStyle}>
-                        //     {option.label}
-                        // </label>
-                        // {touched && error && <span className="help-block">{error}</span>}
-                // </div>
+                        // <label htmlFor={option.label} style={labelStyle}> {option.label} </label> 
+                        // {touched && error && <span className="help-block">{error}</span>} 
+                //  </div>
             // </Grid>
         );
     }

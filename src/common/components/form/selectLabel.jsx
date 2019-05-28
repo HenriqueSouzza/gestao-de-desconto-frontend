@@ -42,9 +42,9 @@ export default class SelectLabel extends Component {
                             &nbsp;
                             {this.props.label}
                         </label>
-                    ) : (
-                            <label htmlFor={this.props.name}>{this.props.label}</label>
-                        )}
+                        ) : (
+                            this.props.label ? <label htmlFor={this.props.name}>{this.props.label}</label> : ''
+                    )}
                     <select
                         {...this.props.input}
                         name={this.props.name}

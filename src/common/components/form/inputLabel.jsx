@@ -24,7 +24,7 @@ export class InputLabel extends Component {
                             {this.props.label}
                         </label>
                     ) : (
-                            <label htmlFor={this.props.name}>{this.props.label}</label>
+                            this.props.label ? <label htmlFor={this.props.name}>{this.props.label}</label> : ''
                         )}
                     <input
                         {...this.props.input}

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Field, arrayRemove, arrayPush } from 'redux-form';
+import { Field, arrayRemove, arrayPush, change } from 'redux-form';
 import SelectLabel from '../../common/components/form/selectLabel';
 import { InputLabel } from '../../common/components/form/inputLabel';
 import { CheckboxLabel } from '../../common/components/form/checkBoxLabel';
@@ -30,25 +30,134 @@ class StudentDiscountsList extends Component {
         }
     }
 
+
+
     render() {
 
-        const { students, stateForm } = this.props;
+        const { stateForm, students, student, index, change } = this.props;
 
-        const scholarship = students.scholarship;
+        const scholarships = students.scholarship ? students.scholarship : ''
 
-        const studentsList = this.props.student;
+        const studentsList = students.list.content;
 
-        console.log(this.props.index)
+        let discountsList = [];
 
-        // const stateForm = this.props.stateForm;
+        let disabled = false;
+
+        let validate = '';
+
+        let validatePercent = '';
+
+        if (scholarships.length) {
+            discountsList = scholarships.map((item) => ({
+                value: item.id_rm_schoolarship_discount_margin_schoolarship,
+                label: item.id_rm_schoolarship_name_discount_margin_schoolarship
+            }))
+        }
 
         return (
-            <div>
-                
-            </div>
+            <table key={index} className='table table-striped'>
+                <thead>
+                    <tr>
+                        <td className='warning'>
+                            <Row className="hidden-xs">
+                                <label className="col-sm-5 text-center">Desconto anterior</label>
+                                <label className="col-sm-3 text-center">Percentual</label>
+                                <label className="col-sm-2 text-center">Parcela Inicial</label>
+                                <label className="col-sm-2 text-center">Parcela Final</label>
+                            </Row>
+                        </td>
+                        <td className='success'>
+                            <Row className="hidden-xs">
+                                <label className="col-sm-6 text-center">Valor S/ desconto</label>
+                                <label className="col-sm-6 text-center">Valor C/ desconto</label>
+                            </Row>
+                        </td>
+                        <td className='success'>
+                            <Row className="hidden-xs">
+                                <label className="col-sm-5 text-center">Desconto atual</label>
+                                <label className="col-sm-3 text-center">Percentual</label>
+                                <label className="col-sm-2 text-center">Parcela Inicial</label>
+                                <label className="col-sm-2 text-center">Parcela Final</label>
+                            </Row>
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td className='warning'>
+                            {student.bolsas_anteriores.map((studentBefore, i) => (
+                                <Row key={i + 10000}>
+                                    <div className="col-sm-5 text-center">
+                                        <div>{studentBefore.BOLSA}</div>
+                                    </div>
+                                    <div className="col-sm-3 text-center">
+                                        <div>{studentBefore.DESCONTO}</div>
+                                    </div>
+                                    <div className="col-sm-2 text-center">
+                                        <div>{studentBefore.PARCELAINICIAL}</div>
+                                    </div>
+                                    <div className="col-sm-2 text-center">
+                                        <div>{studentBefore.PARCELAFINAL}</div>
+                                    </div>
+                                </Row>
+                            ))}
+                        </td>
+                        <td className='success'>
+                            <Row>
+                                <div className="col-sm-6 text-center">
+                                    <div>R${student.dados.valor_mensalidade}</div>
+                                </div>
+                                <div className="col-sm-6 text-center">
+                                    <div>R${student.dados.valor_mensalidade}</div>
+                                </div>
+                            </Row>
+                        </td>
+                        <td className='success'>
+                            {student.bolsas_atuais.map((studentAfter, i) => (
+                                <Row key={i + 100000}>
+                                    <div className="col-sm-5 text-center">
+                                        <div>{studentAfter.BOLSA}</div>
+                                    </div>
+                                    <div className="col-sm-3 text-center">
+                                        <div>{studentAfter.DESCONTO}</div>
+                                    </div>
+                                    <div className="col-sm-2 text-center">
+                                        <div>{studentAfter.PARCELAINICIAL}</div>
+                                    </div>
+                                    <div className="col-sm-2 text-center">
+                                        <div>{studentAfter.PARCELAFINAL}</div>
+                                    </div>
+                                </Row>
+                            ))}
+
+                            <Row key={index}>
+                                <div className="col-sm-5 text-center">
+                                    <select name={`[${student.dados.ra}]`} onChange={this.handleChange} className="form-control">
+                                        <option value="">--------------</option>
+                                        {discountsList.map( discount =>
+                                            <option key={discount.value} value={discount.value}>{discount.label}</option>
+                                        )}
+                                    </select>
+                                </div>
+                                <div className="col-sm-3 text-center">
+                                    <input type="text" onChange={this.handleChange} className="form-control"/>
+                                </div>
+                                <div className="col-sm-2 text-center">
+                                    <input type="text" onChange={this.handleChange} className="form-control"/>
+                                </div>
+                                <div className="col-sm-2 text-center">
+                                    <input type="text" onChange={this.handleChange} className="form-control"/>
+                                </div> 
+                            </Row>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         )
     }
 }
+
 
 const mapStateToProps = state => ({
     students: state.students,
@@ -65,7 +174,7 @@ const mapStateToProps = state => ({
  * @param {*} dispatch 
  */
 
-const mapDispatchToProps = dispatch => bindActionCreators({ arrayRemove, arrayPush }, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({ change, arrayRemove, arrayPush }, dispatch)
 
 /**
  * <b>connect</b> utiliza o padrão decorator da ES para que ele possa incluir dentro das propriedades desse component 

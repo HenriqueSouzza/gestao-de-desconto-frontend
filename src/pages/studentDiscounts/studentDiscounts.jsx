@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Field, arrayPush, arrayRemove, arrayInsert, formValueSelector } from 'redux-form';
-// import { FORM_RULES } from '../../helpers/validations';
+import { Field, FieldArray ,arrayPush, arrayRemove, arrayInsert, formValueSelector } from 'redux-form';
 import { CircularProgress } from 'react-md';
 import _ from 'lodash';
 import { getList, create } from './studentDiscountsActions';
@@ -11,16 +10,15 @@ import { getCourse } from '../establishment/establishmentActions';
 import ContentHeader from '../../common/components/template/contentHeader';
 import Content from '../../common/components/template/content';
 import { CheckboxLabel } from '../../common/components/form/checkBoxLabel';
-import { CheckboxMultiple } from '../../common/components/form/checkBoxMultiple';
 import StudentDiscountsForm from './studentDiscountsForm/studentDiscountsForm'
+import SelectLabel from '../../common/components/form/selectLabel';
+import { FORM_RULES } from '../../helpers/validations';
+import { InputLabel } from '../../common/components/form/inputLabel';
 
 import Row from '../../common/components/layout/row';
 import Grid from '../../common/components/layout/grid';
 
 import StudentDiscountsList from './studentDiscountsList';
-
-
-
 
 /**
  * arrayInsert: permite adicionar campos dinamicamente no formulário
@@ -29,6 +27,7 @@ import StudentDiscountsList from './studentDiscountsList';
 
 import { reduxForm, Form } from 'redux-form';
 import If from '../../common/components/operator/if';
+
 
 
 class StudentDiscounts extends Component {
@@ -63,9 +62,9 @@ class StudentDiscounts extends Component {
      */
     studentSelected = (student, status) => {
         if (status) {
-            this.props.pushArray("studentDiscounts", "students", student)
+            this.props.arrayPush("studentDiscounts", "students", student)
         } else {
-            this.props.removeArray("studentDiscounts", "students", this.props.stateForm.values.students.indexOf(student))
+            this.props.arrayRemove("studentDiscounts", "students", this.props.stateForm.values.students.indexOf(student))
         }
     }
 
@@ -93,7 +92,7 @@ class StudentDiscounts extends Component {
     //                                     component={CheckboxLabel}
     //                                     name={`[${student.RA}_send]`}
     //                                     option={{ label: '', value: [] }}
-    //                                     onChange={(e) => this.studentSelected(student.RA, e)}
+                                        // onChange={(e) => this.studentSelected(student.RA, e)}
     //                                 />
     //                             </Grid>
     //                             <Grid cols='5'>RA: {student.RA} | {student.ALUNO}</Grid>
@@ -111,9 +110,209 @@ class StudentDiscounts extends Component {
     //     )
     // }
 
+    onChangeDiscount = (scholarship, arrayScholarship, RA) => {
+
+        if(scholarship && scholarship > 0) {
+            const bolsa = arrayScholarship.find( (e) => { return e.id_rm_schoolarship_discount_margin_schoolarship == scholarship } )
+            
+            const minInstallment = FORM_RULES.minValue(bolsa.first_installment_discount_margin_schoolarship)
+            const maxInstallment = FORM_RULES.maxValue(bolsa.last_installment_discount_margin_schoolarship)
+            const maxPercent = FORM_RULES.maxValue(parseInt(bolsa.max_value_discount_margin_schoolarship))
+            
+            // this.props.arrayPush('studentDiscounts', 'validate', { RA ,maxPercent, minInstallment, maxInstallment})
+
+        } else {
+            if(this.props.stateForm && this.props.stateForm.values && this.props.stateForm.values.validate){
+                const dataRemove = this.props.stateForm.values.validate.find( (e) => { return e.RA == RA })
+                // this.props.arrayRemove("studentDiscounts", "validate", this.props.stateForm.values.validate.indexOf(dataRemove))
+            }
+        }
+
+    }
+
+
+    listStudent = (students) => {
+
+        const { stateForm } = this.props;
+
+        const scholarships = students.scholarship ? students.scholarship : ''
+
+        let discountsList = [];
+
+        let disabled = false;
+
+        console.log(stateForm)
+
+        let validate = '';
+
+        let validatePercent = '';
+
+        if(scholarships.length){
+            discountsList = scholarships.map( (item) => ({
+                value: item.id_rm_schoolarship_discount_margin_schoolarship,
+                label: item.id_rm_schoolarship_name_discount_margin_schoolarship
+            })) 
+        }
+
+        const studentsList = students.list.content;
+
+        return(
+            <div className="container-fluid space-panel">
+                {Object.values(studentsList).slice(0,105).map( (student, i) => (
+                    <div key={student.dados.ra} className="panel panel-info">
+                        <div className="panel-heading text text-center">
+                            <Row>
+                                <Grid cols='1'>
+                                    <Field
+                                        component={CheckboxLabel}
+                                        name={`${student.dados.ra}_checked`}
+                                        value={false}
+                                        option={{ label: '' }}
+                                        // onChange={(e) => this.studentSelected(student.dados.ra, e)}
+                                    />
+                                    <FieldArray name="discounts" component={} />
+                                </Grid>
+                                <Grid cols='5'>RA: {student.dados.ra} | {student.dados.aluno}</Grid>
+                                <Grid cols='2'><span className='badge'>{student.dados.curso}</span></Grid>
+                                <Grid cols='2'><span className='badge'>{student.dados.modalidade}</span></Grid>
+                                <Grid cols='2'><span className={`badge ${student.dados.tipo_aluno === 'CALOURO' ? 'new-student' : ''}`}>{student.dados.tipo_aluno}</span></Grid>
+                            </Row>
+                        </div>
+                        <div className="panel-body">
+                        <table className='table table-striped'>
+                            <thead>
+                                <tr>
+                                    <td className='warning'>
+                                        <Row className="hidden-xs">
+                                            <label className="col-sm-5 text-center">Desconto anterior</label>
+                                            <label className="col-sm-3 text-center">Percentual</label>
+                                            <label className="col-sm-2 text-center">Parcela Inicial</label>
+                                            <label className="col-sm-2 text-center">Parcela Final</label>
+                                        </Row>
+                                    </td>
+                                    <td className='success'>
+                                        <Row className="hidden-xs">
+                                            <label className="col-sm-6 text-center">Valor S/ desconto</label>
+                                            <label className="col-sm-6 text-center">Valor C/ desconto</label>
+                                        </Row>
+                                    </td>
+                                    <td className='success'>
+                                        <Row className="hidden-xs">
+                                            <label className="col-sm-5 text-center">Desconto atual</label>
+                                            <label className="col-sm-3 text-center">Percentual</label>
+                                            <label className="col-sm-2 text-center">Parcela Inicial</label>
+                                            <label className="col-sm-2 text-center">Parcela Final</label>
+                                        </Row>
+                                    </td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td className='warning'>
+                                        {student.bolsas_anteriores.map((studentBefore, i) => (
+                                            <Row key={i + 10000}>
+                                                <div className="col-sm-5 text-center">
+                                                    <div>{studentBefore.BOLSA}</div>
+                                                </div>
+                                                <div className="col-sm-3 text-center">
+                                                    <div>{studentBefore.DESCONTO}</div>
+                                                </div>
+                                                <div className="col-sm-2 text-center">
+                                                    <div>{studentBefore.PARCELAINICIAL}</div>
+                                                </div>
+                                                <div className="col-sm-2 text-center">
+                                                    <div>{studentBefore.PARCELAFINAL}</div>
+                                                </div>
+                                            </Row>
+                                        ))}
+                                    </td>
+                                    <td className='success'>
+                                        <Row>
+                                            <div className="col-sm-6 text-center">
+                                                <div>R${student.dados.valor_mensalidade}</div>
+                                            </div>
+                                            <div className="col-sm-6 text-center">
+                                                <div>R${student.dados.valor_mensalidade}</div>
+                                            </div>
+                                        </Row>
+                                    </td>
+                                    <td className='success'>
+                                        {student.bolsas_atuais.map((studentAfter, i) => (
+                                            <Row key={i + 100000}>
+                                                <div className="col-sm-5 text-center">
+                                                    <div>{studentAfter.BOLSA}</div>
+                                                </div>
+                                                <div className="col-sm-3 text-center">
+                                                    <div>{studentAfter.DESCONTO}</div>
+                                                </div>
+                                                <div className="col-sm-2 text-center">
+                                                    <div>{studentAfter.PARCELAINICIAL}</div>
+                                                </div>
+                                                <div className="col-sm-2 text-center">
+                                                    <div>{studentAfter.PARCELAFINAL}</div>
+                                                </div>
+                                            </Row>
+                                        ))}
+                                        <Row>
+                                            <div className="col-sm-5 text-center">
+                                                <Field
+                                                    component={SelectLabel}
+                                                    options={discountsList}
+                                                    name={`[ra_${student.dados.ra}][${i}][scholarship]`}
+                                                    // onChange={(e) => this.onChangeDiscount(e.target.value, scholarships, student.dados.ra)}
+                                                    // validate={ 
+                                                        // (stateForm && stateForm.values && stateForm.values.students && values.students.indexOf(student.dados.ra) != -1) ?
+                                                            // [FORM_RULES.required]
+                                                        // :''
+                                                    // }
+                                                />
+                                            </div>
+                                            <div className="col-sm-3 text-center">
+                                                <Field
+                                                    component={InputLabel}
+                                                    type="number"
+                                                    name={`[ra_${student.dados.ra}][${i}][value]`}
+                                                    placeholder="%"
+                                                    // disabled={ disabled }
+                                                    // validate={ validatePercent }
+                                                />
+                                            </div>
+                                            <div className="col-sm-2 text-center">
+                                                <Field
+                                                    component={InputLabel}
+                                                    type="number"
+                                                    name={`[ra_${student.dados.ra}][${i}][first_installment]`}
+                                                    placeholder="1"
+                                                    // disabled={ disabled }
+                                                    // validate={ validate }
+                                                />
+                                            </div>
+                                            <div className="col-sm-2 text-center">
+                                                <Field
+                                                    component={InputLabel}
+                                                    type="number"
+                                                    name={`[ra_${student.dados.ra}][${i}][last_installment]`}
+                                                    placeholder="6"
+                                                    // disabled={ disabled }
+                                                    // validate={ validate }
+                                                />
+                                            </div> 
+                                        </Row>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        </div>
+                    </div>
+                ))}
+            </div>
+                // <StudentDiscountsList students={students} stateForm={stateForm}/>
+        )
+    }
+
     render() {
 
-        const { handleSubmit, stateForm } = this.props;
+        const { handleSubmit, stateForm, students } = this.props;
 
         //inicialmente será disabilitado o button de {salvar && enviar para RM}
         let disabled = true
@@ -141,12 +340,11 @@ class StudentDiscounts extends Component {
 
                     {(this.props.students.list.content != undefined && this.props.students.list.content.length != 0) ? 
                         <Form role='form' onSubmit={handleSubmit(this.onSubmit)} noValidate>
-                            {/* {this.listStudent(this.props.students.list.content.Resultado)} */}
-                            <StudentDiscountsList stateForm={this.props.stateForm}/>
-                            {/* <FieldArray name={`${student.RA}.bolsa` } Component={ StudentDiscountsList }/> */}
+                            {/* <FieldArray name={`discounts`} component={StudentDiscountsList} /> */}
+                            {this.listStudent(students)}
                             <div className='main-footer reset-margem-left'>
                                 <Grid cols='3'>
-                                    <button className={`btn btn-primary btn-block`} disabled={false} type="submit">Lançar desconto</button>
+                                    <button className={`btn btn-primary btn-block`} disabled={disabled} type="submit">Lançar desconto</button>
                                 </Grid>
                                 <Grid cols='3'>
                                     <button className={`btn btn-success btn-block`} disabled={disabled} type="button">Conceder desconto no RM</button>
@@ -190,7 +388,7 @@ class StudentDiscounts extends Component {
 
 
 
-StudentDiscounts = reduxForm({ form: 'studentDiscounts', destroyOnUnmount: false })(StudentDiscounts);
+StudentDiscounts = reduxForm({ form: 'studentDiscounts' })(StudentDiscounts);
 
 
 // const selector = formValueSelector('studentDiscounts')
@@ -239,7 +437,7 @@ const mapStateToProps = state => ({
  * @param {*} dispatch 
  */
 
-const mapDispatchToProps = dispatch => bindActionCreators({ getList, getCourse, create, arrayInsert, arrayPush, arrayRemove }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ getList, getCourse, create, arrayPush, arrayRemove }, dispatch);
 
 /**
  * <b>connect</b> utiliza o padrão decorator da ES para que ele possa incluir dentro das propriedades desse component 

@@ -12,6 +12,7 @@ export class CheckboxLabel extends Component {
             option,
             input,
             labelStyle,
+            value,
             meta: { touched, error }
         } = this.props;
 
@@ -23,8 +24,9 @@ export class CheckboxLabel extends Component {
                         className=''
                         name={input.name}
                         // value={option.value}
-                        cursor={false}
-                        checked={input.value}
+                        // cursor={false}
+                        label={option.label}
+                        checked={value}
                         onChange={input.onChange}
                     />
                         // &nbsp;&nbsp;

@@ -26,7 +26,6 @@ import StudentDiscountsList from './studentDiscountsList';
  */
 
 import { reduxForm, Form } from 'redux-form';
-import If from '../../common/components/operator/if';
 
 
 
@@ -36,15 +35,109 @@ class StudentDiscounts extends Component {
         super(props);
         document.title = "Gestão de Descontos | Descontos Comerciais";
     }
-
+    
     componentWillMount() {
         this.props.getCourse();
     }
+    
+    onChangeCheckbox(status, student){
+        
+        const verificationDiscounts = this.props.students.discounts.find( e => { return e.ra == student.dados.ra})
 
-    onSubmit = (values) => {
-        console.log(values)
+        const verificationValidate = this.props.students.validate.find( e => { return e.ra == student.dados.ra})
+
+        const verificationValue = this.props.students.valueForm.find( e => { return e.ra == student.dados.ra})
+
+        const verificatiofirstInstallment = this.props.students.firstInstallmentForm.find( e => { return e.ra == student.dados.ra})
+
+        const verificationlastInstallmentForm = this.props.students.lastInstallmentForm.find( e => { return e.ra == student.dados.ra})
+
+        if(status){
+            
+            if(verificationValidate.ra && student.dados.ra == verificationValidate.ra){
+                this.props.students.discounts.push({
+                    ra : student.dados.ra,
+                    establishment: student.dados.codfilial,
+                    scholarship: verificationValidate.bolsa,
+                    scholarship_ordem: 1,
+                    value: verificationValue.value,
+                    service: 's',
+                    firstInstallment: verificatiofirstInstallment.value,
+                    lastInstallment: verificationlastInstallmentForm.value,
+                    period: student.dados.idperlet,
+                    periodCod: student.dados.codperlet,
+                    contract: student.dados.codContrato,
+                    habilitation: student.dados.habilitacao,
+                    modality_major: student.dados.modalidade,
+                    course_type: 3,
+                    detail: 'sem detalhes',
+                    send_rm: 0,
+                    active: 0
+                })
+            }
+        }else{
+            this.props.students.discounts.splice(this.props.students.validate.indexOf(verificationDiscounts))
+        }
     }
 
+    onChangeData(name, value, ra){
+
+        if(name == 'value'){
+            const verificationValue = this.props.students.valueForm.find( e => { return e.ra == ra})
+            
+            if(verificationValue){
+                this.props.students.valueForm.splice(this.props.students.valueForm.indexOf(verificationValue))
+            }
+            
+            this.props.students.valueForm.push({
+                ra: ra,
+                value: value                
+            })
+        }
+        if(name == 'firstInstallment'){
+            const verificationfirstInstallment = this.props.students.firstInstallmentForm.find( e => { return e.ra == ra})
+
+            if(verificationfirstInstallment){
+                this.props.students.firstInstallmentForm.splice(this.props.students.firstInstallmentForm.indexOf(verificationfirstInstallment))
+            }
+
+            this.props.students.firstInstallmentForm.push({
+                ra: ra,
+                value: value                
+            })
+        }
+        if(name == 'lastInstallment'){
+
+            const verificationlastInstallment = this.props.students.lastInstallmentForm.find( e => { return e.ra == ra})
+
+            if(verificationlastInstallment){
+                this.props.students.lastInstallmentForm.splice(this.props.students.lastInstallmentForm.indexOf(verificationlastInstallment))
+            }
+            this.props.students.lastInstallmentForm.push({
+                ra: ra,
+                value: value                
+            })
+        }
+    }
+
+    onChangeScholarship(value, ra){
+        
+        const verificationValidate = this.props.students.validate.find( e => { return e.ra == ra})
+
+        if(verificationValidate){
+            this.props.students.validate.splice(this.props.students.validate.indexOf(verificationValidate))
+        }
+             
+        this.props.students.validate.push({
+            ra: ra,
+            bolsa: value
+        })
+    }
+
+    onSubmit = () => {
+        console.log(this.props.students.discounts)
+    }
+    
     listStudent = (student) => {
         const { stateForm, students } = this.props
 
@@ -68,7 +161,7 @@ class StudentDiscounts extends Component {
                         <div className="panel-heading text text-center">
                             <Row>
                                 <Grid cols='1'>
-                                    <input type="checkbox" />
+                                    <input type="checkbox" onChange={ (e) => this.onChangeCheckbox(e.target.checked,student)}/>
                                 </Grid>
                                 <Grid cols='5'>RA: {student.dados.ra} | {student.dados.aluno}</Grid>
                                 <Grid cols='2'><span className='badge'>{student.dados.curso}</span></Grid>
@@ -153,7 +246,7 @@ class StudentDiscounts extends Component {
                                             ))}
                                             <Row>
                                                 <div className="col-sm-5 text-center">
-                                                    <select name={`scholarship`} className="form-control">
+                                                    <select name={`scholarship`} onChange={ (e) => this.onChangeScholarship(e.target.value, student.dados.ra)} className="form-control">
                                                         <option value="">--------------</option>
                                                         {discountsList.map(discount =>
                                                             <option key={discount.value} value={discount.value}>{discount.label}</option>
@@ -161,15 +254,13 @@ class StudentDiscounts extends Component {
                                                     </select>
                                                 </div>
                                                 <div className="col-sm-3 text-center">
-                                                    <input name={`discounts[][ra]`} type="hidden" className="form-control" />
-
-                                                    <input name={`discounts[][value]`} type="text" className="form-control" />
+                                                    <input name={`value`} onChange={(e) => this.onChangeData(e.target.name, e.target.value, student.dados.ra)} type="text" className="form-control" />
                                                 </div>
                                                 <div className="col-sm-2 text-center">
-                                                    <input name={`discounts[][firstInstallment]`} type="text" className="form-control" />
+                                                    <input name={`firstInstallment`} onChange={(e) => this.onChangeData(e.target.name, e.target.value, student.dados.ra)} type="text" className="form-control" />
                                                 </div>
                                                 <div className="col-sm-2 text-center">
-                                                    <input name={`discounts[][lastInstallment]`} type="text" className="form-control" />
+                                                    <input name={`lastInstallment`} onChange={(e) => this.onChangeData(e.target.name, e.target.value, student.dados.ra)} type="text" className="form-control" />
                                                 </div>
                                             </Row>
                                         </td>
@@ -205,9 +296,9 @@ class StudentDiscounts extends Component {
 
     render() {
 
-        console.log(this.props.stateForm)
-
         const { handleSubmit, stateForm, pristine, submitting, students } = this.props;
+
+        console.log(this.props.students)
 
         //inicialmente será disabilitado o button de {salvar && enviar para RM}
         let disabled = true

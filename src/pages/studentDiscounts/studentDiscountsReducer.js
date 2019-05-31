@@ -18,6 +18,11 @@ const INITIAL_STATE = {
     scholarship: {},
     detail: {},
     loading: false,
+    validate: [],
+    valueForm: [],
+    firstInstallmentForm: [],
+    lastInstallmentForm: [],
+    discounts: []
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -32,6 +37,9 @@ export default (state = INITIAL_STATE, action) => {
 
         case type.STUDENT_DISCOUNTS_SCHOLARSHIP_FETCHED:
             return { ...state, scholarship: action.payload.data.response.content || INITIAL_STATE.list }
+            
+        case type.STUDENT_DISCOUNTS_SET_FORM:
+            return { ...state, discounts: action.payload || INITIAL_STATE.list }
 
         default: return state;
 

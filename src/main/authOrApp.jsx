@@ -24,7 +24,8 @@ class AuthOrApp extends Component {
         super(props);
 
         axios.defaults.headers.common['Accept'] = 'application/json';
-
+        //Alterando o header com o estilo de X-Requested-With
+        axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 	}
 
 
@@ -50,7 +51,7 @@ class AuthOrApp extends Component {
 
         if (user && validToken) {
             
-            axios.defaults.headers.common['Authorization'] = `Bearer  ${user.access_token}`;
+            axios.defaults.headers.common['Authorization'] = `Bearer ${user.access_token}`;
             
             return <Establishment />
 

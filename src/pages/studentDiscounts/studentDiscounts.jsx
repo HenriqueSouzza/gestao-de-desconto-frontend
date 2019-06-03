@@ -14,6 +14,7 @@ import StudentDiscountsForm from './studentDiscountsForm/studentDiscountsForm'
 import SelectLabel from '../../common/components/form/selectLabel';
 import { FORM_RULES } from '../../helpers/validations';
 import { InputLabel } from '../../common/components/form/inputLabel';
+import { InputWithOutReduxForm } from '../../common/components/form/inputWithOutReduxForm';
 
 import Row from '../../common/components/layout/row';
 import Grid from '../../common/components/layout/grid';
@@ -40,6 +41,15 @@ class StudentDiscounts extends Component {
         this.props.getCourse();
     }
     
+    handleChange(event) {
+        // this.setState({title: event.target.value})
+        console.log(event);
+    }
+
+    handleFocus(event) {
+        console.log(event);
+    }
+
     onChangeCheckbox(status, student){
         
         const verificationDiscounts = this.props.students.discounts.find( e => { return e.ra == student.dados.ra})
@@ -254,7 +264,14 @@ class StudentDiscounts extends Component {
                                                     </select>
                                                 </div>
                                                 <div className="col-sm-3 text-center">
-                                                    <input name={`value`} onChange={(e) => this.onChangeData(e.target.name, e.target.value, student.dados.ra)} type="text" className="form-control" />
+                                                    {/* <input name={`value`} onChange={(e) => this.onChangeData(e.target.name, e.target.value, student.dados.ra)} type="text" className="form-control" /> */}
+                                                    {/* <input name={`value`} onChange={this.handleChange.bind(this)} onFocus={this.handleFocus.bind(this)} type="text" className="form-control" /> */}
+                                                     <InputWithOutReduxForm 
+                                                        name='test'
+                                                        type='text'
+                                                        validate={[FORM_RULES.required, FORM_RULES.maxValue(6)]}
+                                                        value='6'
+                                                     />       
                                                 </div>
                                                 <div className="col-sm-2 text-center">
                                                     <input name={`firstInstallment`} onChange={(e) => this.onChangeData(e.target.name, e.target.value, student.dados.ra)} type="text" className="form-control" />

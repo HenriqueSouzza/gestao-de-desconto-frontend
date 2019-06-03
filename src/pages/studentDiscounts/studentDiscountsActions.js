@@ -51,8 +51,7 @@ export function getList(params = []) {
     // }
 
     const request = axios.post(`${URL_SAVE}`, parameters);
-
-
+    
     return dispatch => {
        dispatch([
             {

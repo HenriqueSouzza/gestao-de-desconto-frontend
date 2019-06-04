@@ -9,7 +9,7 @@
   * a mensagem de erro em caso de "falha"
   */
 export const FORM_RULES = {
-    required: value => (value ? undefined : 'Esse campo é obrigatório'),
+    required: value => value ? undefined : 'Esse campo é obrigatório',
     max: max => value => value && value.length > max ? `Esse campo deve possuir no máximo ${max} caracteres` : undefined,
     min: min => value => value && value.length < min ? `Esse campo deve possuir no minimo ${min} caracteres` : undefined,
     number: value => value && isNaN(Number(value)) ? 'Este campo só aceita números' : undefined,

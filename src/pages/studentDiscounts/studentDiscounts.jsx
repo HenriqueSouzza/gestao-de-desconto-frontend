@@ -264,13 +264,11 @@ class StudentDiscounts extends Component {
                                                     </select>
                                                 </div>
                                                 <div className="col-sm-3 text-center">
-                                                    {/* <input name={`value`} onChange={(e) => this.onChangeData(e.target.name, e.target.value, student.dados.ra)} type="text" className="form-control" /> */}
-                                                    {/* <input name={`value`} onChange={this.handleChange.bind(this)} onFocus={this.handleFocus.bind(this)} type="text" className="form-control" /> */}
                                                      <InputWithOutReduxForm 
-                                                        name='test'
-                                                        type='text'
-                                                        validate={[FORM_RULES.required, FORM_RULES.maxValue(6)]}
-                                                        value='6'
+                                                        name={`${student.dados.ra}['value']`}
+                                                        type='number'
+                                                        validate={[FORM_RULES.required, FORM_RULES.minValue(1), FORM_RULES.maxValue(6)]}
+                                                        value={this.props.value}
                                                      />       
                                                 </div>
                                                 <div className="col-sm-2 text-center">

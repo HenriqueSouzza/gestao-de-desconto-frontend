@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Grid from '../layout/grid';
+import _ from 'lodash';
 
 /**
  * 
@@ -10,23 +11,58 @@ export class InputWithOutReduxForm extends Component {
         super(props);
 
         this.state = {
-            touched: '',
-            error: '',
+            touched: false,
+            error: false,
+            field: '',
         }
     }
 
     inputChange(event){
-        console.log('change');
+        // // console.log('change');
+        const { validate } = this.props;
+        const input = event.target.name;
+        const value = event.target.value;
+
+        this.validation(validate, input, value);
     }
 
     inputBlur(event){
-        console.log(event.target.value, event);
+       
+        const { validate } = this.props;
+        const input = event.target.name;
+        const value = event.target.value;
+        this.validation(validate, input, value);
+       
+        
     }
 
-    validation(validates){
-        validates.forEach(validate => {
-            console.log(validate(this.props.value));
-       });
+    /**
+     * 
+     * @param {*} validates 
+     * @param {*} input 
+     * @param {*} value 
+     */
+    validation(validates, input, value){
+            let result = [];
+            let i;
+            for(i in validates){
+                result[i] = validates[i](value);
+                if(!_.isUndefined(result[i])){
+                    this.setState({
+                        error: result[i],
+                        touched: true,
+                        field: input
+                    });
+                    break;
+                }
+
+                this.setState({
+                    error: false,
+                    touched: false,
+                    field: input
+                });
+            }
+         
     }
 
     
@@ -36,7 +72,6 @@ export class InputWithOutReduxForm extends Component {
     render() {
        
         const { touched, error } = this.state;
-        const { validate } = this.props;
         return (
             <Grid cols={this.props.cols} style={this.props.style}>
              <div className={`form-group ${touched && error && "has-error"}`}>
@@ -54,11 +89,12 @@ export class InputWithOutReduxForm extends Component {
                     name={this.props.name}
                     type={this.props.type}
                     value={this.props.value}
-                    validation={this.validation(validate)}
+                    // validation={this.validation(validate)}
                     placeholder={this.props.placeholder}
                     readOnly={this.props.readOnly}
                     disabled={this.props.disabled}
                     onChange={this.inputChange.bind(this)}
+                    // onFocus={this.inputBlur.bind(this)}
                     onBlur={this.inputBlur.bind(this)}
                 />
                 {touched && error && <span className="help-block">{error}</span>} 

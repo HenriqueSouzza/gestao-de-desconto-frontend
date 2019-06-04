@@ -7,33 +7,45 @@ import _ from 'lodash';
  */
 export class InputWithOutReduxForm extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.state = {
             touched: false,
             error: false,
             field: '',
+            //valor
         }
-    }
 
-    inputChange(event){
-        // // console.log('change');
-        const { validate } = this.props;
+    }
+    //metodo que executa a função externamente 
+    inputChange(event) {
+        const { validate, ra } = this.props;
         const input = event.target.name;
         const value = event.target.value;
 
-        this.validation(validate, input, value);
-    }
+        this.validation(validate, input, value, ra);
 
-    inputBlur(event){
-       
-        const { validate } = this.props;
+    }
+    
+    inputBlur(event) {
+        const { validate, ra } = this.props;
         const input = event.target.name;
         const value = event.target.value;
-        this.validation(validate, input, value);
-       
         
+        this.validation(validate, input, value, ra);
+    }
+
+    saveValue(index) {
+        const { touched, error, field } = this.state;
+        
+        let array = this.props.arrValue
+
+        if(field && !error && !touched && array){
+           
+            array[index] = {...array[index], [field.name]: field.value}
+            this.props.saveData(array)
+        }
     }
 
     /**
@@ -42,40 +54,49 @@ export class InputWithOutReduxForm extends Component {
      * @param {*} input 
      * @param {*} value 
      */
-    validation(validates, input, value){
-            let result = [];
-            let i;
-            for(i in validates){
-                result[i] = validates[i](value);
-                if(!_.isUndefined(result[i])){
-                    this.setState({
-                        error: result[i],
-                        touched: true,
-                        field: input
-                    });
-                    break;
-                }
-
+    validation(validates, input, value, ra) {
+        let result = [];
+        let i;
+        for (i in validates) {
+            result[i] = validates[i](value);
+            if (!_.isUndefined(result[i])) {
                 this.setState({
-                    error: false,
-                    touched: false,
-                    field: input
+                    error: result[i],
+                    touched: true,
+                    field: {
+                        ra: ra,
+                        name: input,
+                        value: value
+                    }
                 });
+                break; 
             }
-         
-    }
-
-    
-
-    
-
-    render() {
+            this.setState({
+                error: false,
+                touched: false,
+                //valor
+                field: {
+                    ra: ra,
+                    name: input,
+                    value: value
+                }
+            });
+           
+        }
        
+    }
+    
+    render() {
+        
         const { touched, error } = this.state;
+        const { index } = this.props;
+
+        const teste = this.saveValue(index)
+
         return (
             <Grid cols={this.props.cols} style={this.props.style}>
-             <div className={`form-group ${touched && error && "has-error"}`}>
-                  {touched && error ? (
+                <div className={`form-group ${touched && error && "has-error"}`}>
+                    {touched && error ? (
                         <label className="control-label">
                             <i className="fa fa-times-circle-o" />
                             &nbsp;
@@ -84,22 +105,21 @@ export class InputWithOutReduxForm extends Component {
                     ) : (
                             this.props.label ? <label htmlFor={this.props.name}>{this.props.label}</label> : ''
                         )}
-                <input
-                    className='form-control'
-                    name={this.props.name}
-                    type={this.props.type}
-                    value={this.props.value}
-                    // validation={this.validation(validate)}
-                    placeholder={this.props.placeholder}
-                    readOnly={this.props.readOnly}
-                    disabled={this.props.disabled}
-                    onChange={this.inputChange.bind(this)}
-                    // onFocus={this.inputBlur.bind(this)}
-                    onBlur={this.inputBlur.bind(this)}
-                />
-                {touched && error && <span className="help-block">{error}</span>} 
-            </div>
-             
+                    <input
+                        className='form-control'
+                        name={this.props.name}
+                        type={this.props.type}
+                        value={this.props.value}
+                        // validation={this.validation(validate)}
+                        placeholder={this.props.placeholder}
+                        readOnly={this.props.readOnly}
+                        disabled={this.props.disabled}
+                        onChange={this.inputChange.bind(this)}
+                        // onBlur={this.inputBlur.bind(this)}
+                    />
+                    {touched && error && <span className="help-block">{error}</span>}
+                </div>
+
             </Grid>
         );
     }

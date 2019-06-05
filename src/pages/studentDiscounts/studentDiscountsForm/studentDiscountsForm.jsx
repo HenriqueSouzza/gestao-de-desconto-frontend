@@ -14,7 +14,7 @@ import SelectLabel from '../../../common/components/form/selectLabel';
 
 import { FORM_RULES } from '../../../helpers/validations';
 
-import { getList, getScholarshipLimit } from '../studentDiscountsActions';
+import { getList, getScholarshipLimit, getProfit } from '../studentDiscountsActions';
 
 
 
@@ -23,6 +23,7 @@ class StudentDiscountsForm extends Component {
     onSubmit = (values) => {
         this.props.getList(values)
         this.props.getScholarshipLimit(values);
+        this.props.getProfit(values);
     }
 
     render() {
@@ -112,8 +113,9 @@ const mapStateToProps = state => ({
 StudentDiscountsForm = reduxForm({ form: 'StudentDiscountsForm', destroyOnUnmount: false })(StudentDiscountsForm);
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-    getList, getScholarshipLimit
+    getList, getScholarshipLimit, getProfit
 }, dispatch);
+
 /**
  * <b>connect</b> utiliza o padrão decorator da ES para que ele possa incluir dentro das propriedades desse component 
  * para incluir o que foi mapeado no estado(mapStateToProps) e o que foi mapeado nas actions(mapDispatchToProps)

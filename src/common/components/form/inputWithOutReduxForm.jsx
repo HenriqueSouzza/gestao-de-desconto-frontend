@@ -7,6 +7,10 @@ import _ from 'lodash';
  */
 export class InputWithOutReduxForm extends Component {
 
+    /**
+     * 
+     * @param {*} props 
+     */
     constructor(props) {
         super(props);
 
@@ -14,37 +18,43 @@ export class InputWithOutReduxForm extends Component {
             touched: false,
             error: false,
             field: '',
-            //valor
         }
-
     }
-    //metodo que executa a função externamente 
+
+    /**
+     * 
+     * @param {*} event 
+     */
     inputChange(event) {
-        const { validate, ra } = this.props;
-        const input = event.target.name;
-        const value = event.target.value;
+        const { validate } = this.props;
 
-        this.validation(validate, input, value, ra);
+        const { name, value } = event.target;
 
+        this.validation(validate, name, value);
     }
-    
-    inputBlur(event) {
-        const { validate, ra } = this.props;
-        const input = event.target.name;
-        const value = event.target.value;
-        
-        this.validation(validate, input, value, ra);
-    }
+
+    // /**
+    //  * 
+    //  * @param {*} event 
+    //  */
+    // inputBlur(event) {
+
+    //     const { validate } = this.props;
+    //     const input = event.target.name;
+    //     const value = event.target.value;
+
+    //     this.validation(validate, input, value);
+    // }
 
     saveValue() {
         const { touched, error, field } = this.state;
         const { index, saveData } = this.props;
-        
+
         let array = this.props.arrValue
 
-        if(field && !error && !touched && array){
-            array[index] = {...array[index], [field.name]: field.value}
-            saveData({...array});
+        if (field && !error && !touched && array) {
+            array[index] = { ...array[index], [field.name]: field.value }
+            saveData({ ...array });
         }
     }
 
@@ -54,7 +64,7 @@ export class InputWithOutReduxForm extends Component {
      * @param {*} input 
      * @param {*} value 
      */
-    validation(validates, input, value, ra) {
+    validation(validates, input, value) {
         let result = [];
         let i;
         for (i in validates) {
@@ -64,34 +74,32 @@ export class InputWithOutReduxForm extends Component {
                     error: result[i],
                     touched: true,
                     field: {
-                        ra: ra,
                         name: input,
                         value: value
                     }
                 });
-                break; 
+                break;
             }
             this.setState({
                 error: false,
                 touched: false,
                 //valor
                 field: {
-                    ra: ra,
                     name: input,
                     value: value
                 }
             });
-           
+
         }
-       
+
     }
-    
+
     render() {
-        
+
         const { touched, error } = this.state;
 
         this.saveValue()
-        
+
         return (
             <Grid cols={this.props.cols} style={this.props.style}>
                 <div className={`form-group ${touched && error && "has-error"}`}>
@@ -114,7 +122,7 @@ export class InputWithOutReduxForm extends Component {
                         readOnly={this.props.readOnly}
                         disabled={this.props.disabled}
                         onChange={this.inputChange.bind(this)}
-                        // onBlur={this.inputBlur.bind(this)}
+                    // onBlur={this.inputBlur.bind(this)}
                     />
                     {touched && error && <span className="help-block">{error}</span>}
                 </div>

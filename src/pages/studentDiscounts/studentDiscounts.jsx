@@ -2,15 +2,17 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Field, FieldArray, arrayPush, arrayRemove, arrayInsert, formValueSelector } from 'redux-form';
+import { reduxForm, Form } from 'redux-form';
 import { CircularProgress } from 'react-md';
 import _ from 'lodash';
-import { getList, create, saveForm } from './studentDiscountsActions';
+import { getList, create, saveForm, saveCheckedForm } from './studentDiscountsActions';
 import { getCourse } from '../establishment/establishmentActions';
 
 import ContentHeader from '../../common/components/template/contentHeader';
 import Content from '../../common/components/template/content';
+// import { CheckboxLabel } from '../../common/components/form/checkBoxLabel';
 import StudentDiscountsForm from './studentDiscountsForm/studentDiscountsForm'
-import SelectLabel from '../../common/components/form/selectLabel';
+// import SelectLabel from '../../common/components/form/selectLabel';
 import { FORM_RULES } from '../../helpers/validations';
 import { InputLabel } from '../../common/components/form/inputLabel';
 import { CheckboxWithOutReduxForm }  from '../../common/components/form/checkboxWithOutReduxForm';
@@ -18,15 +20,9 @@ import { InputWithOutReduxForm } from '../../common/components/form/inputWithOut
 
 import Row from '../../common/components/layout/row';
 import Grid from '../../common/components/layout/grid';
-
+import ValueBox from '../../common/components/widget/valueBox';
 import StudentDiscountsList from './studentDiscountsList';
-
-/**
- * arrayInsert: permite adicionar campos dinamicamente no formulário
- * arrayRemove:permite excluir campos existentes dinamicamente do formulário
- */
-
-import { reduxForm, Form } from 'redux-form';
+import { Card } from 'react-md';
 
 
 
@@ -49,6 +45,17 @@ class StudentDiscounts extends Component {
     onSubmit = () => {
         console.log(this.props.students.valueForm)
     }
+
+    /**
+     * <b><formatValueProfit/b> Recebe um valor monetário que será formatado para o valor em moeda pt-br
+     * @param {*} number
+     * @return convertNumber
+     */
+    formatValueProfit = (number) => {
+
+        let convertNumber = parseFloat(number);
+        return convertNumber.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
+    }
     
     listStudent = (student) => {
         const { students } = this.props
@@ -66,9 +73,11 @@ class StudentDiscounts extends Component {
 
         const studentsList = student.RA ? [student] : student
 
+        let arrCheckedValue = []
         let arrValue = []
 
         Object.values(studentsList).map((student, index) => {
+            arrCheckedValue[index] = '';
             arrValue[index] = {
                 ra : student.dados.ra,
                 establishment: student.dados.codfilial,
@@ -100,7 +109,10 @@ class StudentDiscounts extends Component {
                                     <CheckboxWithOutReduxForm 
                                         id={`${index}`}
                                         name={`checkbox`}
-                                        option={{label:'', value: []}}
+                                        saveChecked={this.props.saveCheckedForm}
+                                        arrCheckedValue={arrCheckedValue}
+                                        label=""
+                                        value=""
                                     />
                                 </Grid>
                                 <Grid cols='5'>RA: {student.dados.ra} | {student.dados.aluno}</Grid>
@@ -242,6 +254,7 @@ class StudentDiscounts extends Component {
 
         const { handleSubmit, stateForm, submitting, students } = this.props;
 
+        const profit = students.profit.content;
         //inicialmente será disabilitado o button de {salvar && enviar para RM}
         let disabled = true
 
@@ -262,24 +275,31 @@ class StudentDiscounts extends Component {
 
         } else if (this.props.establishment.course && this.props.establishment.course.length) {
             return (
-                <div>
-
+                <Content>
                     <StudentDiscountsForm />
-
                     {(this.props.students.list.content != undefined && this.props.students.list.content.length != 0) ?
-                        <Form role='form' onSubmit={handleSubmit(this.onSubmit)} noValidate>
-
-                            {this.listStudent(students.list.content)}
-
-                            <div className='main-footer reset-margem-left'>
-                                <Grid cols='3'>
-                                    <button className={`btn btn-primary btn-block`} disabled={submitting} type="submit">Lançar desconto</button>
-                                </Grid>
-                                <Grid cols='3'>
-                                    <button className={`btn btn-success btn-block`} disabled={disabled} type="button">Conceder desconto no RM</button>
-                                </Grid>
-                            </div>
-                        </Form>
+                        <div>
+                            <Form role='form' onSubmit={handleSubmit(this.onSubmit)} noValidate>
+                                {this.listStudent(students.list.content)}
+                                <div className='main-footer reset-margem-left'>
+                                    <Row>
+                                        <Grid cols='4'>
+                                            <button className={`btn btn-primary btn-block`} disabled={submitting} type="submit">Lançar desconto</button>
+                                        </Grid>
+                                        <Grid cols='4'>
+                                            <button className={`btn btn-success btn-block`} disabled={disabled} type="button">Conceder desconto no RM</button>
+                                        </Grid>
+                                    <hr/>
+                                    <Card>
+                                        <ValueBox cols='3' color='purple' value={this.formatValueProfit(profit.VALORORIGINAL)}  text='Valor Original' />
+                                        <ValueBox cols='3' color='yellow' value={this.formatValueProfit(profit.VALORDEDUCAO)}   text='Valor Dedução' />
+                                        <ValueBox cols='3' color='lime'   value={this.formatValueProfit(profit.VALORLIQUIDO)}   text='Valor Liquido' />
+                                        <ValueBox cols='3' color='red'    value={this.formatValueProfit(profit.COMPROMETIMENTO)} text='Valor Comprometido' />
+                                    </Card>
+                                    </Row>
+                                </div>
+                            </Form>
+                        </div>
                         :
                         <div className="container-fluid space-panel">
                             <div className="panel panel-info">
@@ -294,8 +314,7 @@ class StudentDiscounts extends Component {
                             </div>
                         </div>
                     }
-
-                </div>
+                </Content>
             )
         } else {
             return (
@@ -320,7 +339,7 @@ class StudentDiscounts extends Component {
 StudentDiscounts = reduxForm({ form: 'studentDiscounts' })(StudentDiscounts);
 
 
-// const selector = formValueSelector('studentDiscounts')
+const selector = formValueSelector('studentDiscounts')
 
 /**
  * Retorna o state do formulário, qualquer inserção que estiver em algum input, poderá ser consultado pelo {"this.props.stateForm"}
@@ -366,7 +385,7 @@ const mapStateToProps = state => ({
  * @param {*} dispatch 
  */
 
-const mapDispatchToProps = dispatch => bindActionCreators({ getList, getCourse, create, saveForm, arrayPush, arrayRemove }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ getList, getCourse, create, saveForm, saveCheckedForm /*arrayPush, arrayRemove*/ }, dispatch);
 
 /**
  * <b>connect</b> utiliza o padrão decorator da ES para que ele possa incluir dentro das propriedades desse component 

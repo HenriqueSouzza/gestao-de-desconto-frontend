@@ -13,19 +13,30 @@ export class CheckboxWithOutReduxForm extends Component {
 
         this.state={
             touched: false,
-            error: ''
+            error: false,
+            value: ''
         }
     }
 
-    inputChange(event){
-        console.log(event)
+    inputClick(event){
+
+        const { touched, error, value } = this.state;
+
+        const { id, saveChecked } = this.props;
+
+        let array = this.props.arrCheckedValue
+        
+        if(value && !error && !touched){
+            array[id] = value
+            saveChecked({...array})
+        }
     }
 
     render() {
 
         const { touched, error } = this.state;
 
-        const { name, option } = this.props;
+        const { id, name, label } = this.props;
         
         return (
             <Grid cols={this.props.cols} style={this.props.style}>
@@ -40,14 +51,14 @@ export class CheckboxWithOutReduxForm extends Component {
                             this.props.label ? <label htmlFor={this.props.name}>{this.props.label}</label> : ''
                     )}
                    <Checkbox
-                        id={name}
+                        id={id}
                         className=''
                         name={name}
-                        // value={option.value}
+                        // value={value}
                         // cursor={false}
-                        label={option.label}
-                        checked={option.value}
-                        onChange={this.inputChange.bind(this)}
+                        label={label}
+                        // checked={value}
+                        onClick={this.inputClick.bind(this)}
                     />
                     {touched && error && <span className="help-block">{error}</span>}
                 </div>

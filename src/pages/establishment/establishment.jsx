@@ -21,7 +21,7 @@ import App from '../../main/app';
 
 import { isNull, isUndefined } from 'util';
 
-import { getList, saveEstablishment, getPeriod, getEstablishmentsUser } from './establishmentActions'
+import { getList, saveEstablishment, getPeriod, getEstablishmentsUser, getBranchesUser } from './establishmentActions'
 import { timingSafeEqual } from 'crypto';
 import { array } from 'prop-types';
 
@@ -62,6 +62,7 @@ class Establishment extends Component {
         const user = JSON.parse(localStorage.getItem(USER_KEY)).user;
         //obtem a lista de filiais/unidades que o usuário possui acesso
         this.props.getEstablishmentsUser(user.email);
+        this.props.getBranchesUser(user.email);
       
     }
 
@@ -145,13 +146,19 @@ class Establishment extends Component {
             if (this.props.establishment.loading) {
                 return <CircularProgress id='establishment' />
 
-            } else if (establishment.list.length > 0 && establishment.list !== undefined) {
+            } else if (establishment.list.length > 0 && establishment.list !== undefined && establishment.dataBranchUser !== undefined) {
 
                 const establishmentList = establishment.list.map((item) => ({
                     value: item.CODFILIAL,
                     label: item.NOMEFANTASIA
                 }));
                 
+                const branchList = establishment.dataBranchUser.map((item) => ({
+                    value: item.CODPOLO,
+                    label: item.POLO
+                }));
+                
+                // const branchList = []
                 //caso o usuário tenha unidades vinculadas no RM(TOTVS)
                 if( establishment.dataEstablishmentUser.length > 0) {
                    //percorre as unidades dele
@@ -233,7 +240,7 @@ class Establishment extends Component {
                                                     component={Select}
                                                     name="branch"
                                                     label='Polo:'
-                                                    options={establishmentList}
+                                                    options={branchList}
                                                     onChange={(e) => this.onBranchSelected(e.target.options[e.target.selectedIndex].innerText, e.target.value)}
                                                     cols='12 12 12 12'
                                                     validate={[FORM_RULES.required]}
@@ -301,7 +308,7 @@ const mapStateToProps = (state) => ({ establishment: state.establishment, user: 
  */
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-    getList, saveEstablishment, getPeriod, getEstablishmentsUser
+    getList, saveEstablishment, getPeriod, getEstablishmentsUser, getBranchesUser
 }, dispatch);
 
 /**

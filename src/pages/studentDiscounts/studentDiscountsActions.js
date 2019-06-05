@@ -31,6 +31,7 @@ export function getList(params = []) {
     const parameters = {
         codcurso: course,
         codfilial: dataLocalStorage.values.establishment,
+        codpolo: dataLocalStorage.values.branch,
         codperlet: dataLocalStorage.values.period,
         ra: ra,
         nomealuno: name
@@ -75,6 +76,7 @@ export function getScholarshipLimit(course){
 
     const values = {
         codFilial: dataLocalStorage.values.establishment,
+        codpolo: dataLocalStorage.values.branch,
         modality: modality,
         codPerlet : dataLocalStorage.values.period,
         codCurso :  course

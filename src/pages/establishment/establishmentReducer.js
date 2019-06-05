@@ -35,6 +35,8 @@ export default (state = INITIAL_STATE, action) => {
             return{...state, period: action.payload.data.response.content || INITIAL_STATE.period, loading: false, selected: false }
         case type.ESTABLISHMENT_USERS_SHOW:
             return { ...state, dataEstablishmentUser: action.payload.data.response.content.Resultado || INITIAL_STATE.period, loading: false, selected: false }
+        case type.BRANCH_USERS_SHOW:            
+            return { ...state, dataBranchUser: action.payload.data.response.content.Resultado || INITIAL_STATE.period, loading: false, selected: false }
         default:
             return {...state};
     }

@@ -22,7 +22,9 @@ const INITIAL_STATE = {
     valueForm: [],
     firstInstallmentForm: [],
     lastInstallmentForm: [],
-    discounts: []
+    discounts: [],
+    profit:{}
+
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -41,6 +43,9 @@ export default (state = INITIAL_STATE, action) => {
         case type.STUDENT_DISCOUNTS_SET_FORM:
             return { ...state, discounts: action.payload || INITIAL_STATE.list }
 
+        case type.STUDENT_DISCOUNTS_GET_PROFIT:
+            return { ...state, profit: getListTransform(action.payload.data) || INITIAL_STATE.list }
+        
         default: return state;
 
 

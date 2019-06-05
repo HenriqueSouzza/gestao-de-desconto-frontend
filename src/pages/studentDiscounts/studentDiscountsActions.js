@@ -1,8 +1,8 @@
 import axios from 'axios';
+import moment  from 'moment';
+import _ from 'lodash';
 import { toastr } from 'react-redux-toastr';
 import { reset as resetForm, initialize } from 'redux-form';
-
-import _ from 'lodash';
 
 import type from './types';
 
@@ -10,7 +10,7 @@ import { BASE_API, ESTABLISHMENT_DATA } from '../../config/consts';
 
 const URL = `${BASE_API}/totvs-queries/query`;
 
-const URL_SAVE = `${BASE_API}/student-schoolarships/list-students`;
+const URL_SAVE = `${BASE_API}/student-schoolarships`;
 
 const URL_BASE_LOCAL = `${BASE_API}/discount-margin-schoolarships/list`;
 
@@ -36,21 +36,7 @@ export function getList(params = []) {
         nomealuno: name
     }
 
-
-    // const parameters = {
-    //     codfilial: dataLocalStorage.values.establishment,
-    //     codcurso: course,
-    //     codperlet: dataLocalStorage.values.period,
-    //     ra: ra,
-    //     nomealuno: name
-    // }
-
-    // const values = {
-    //     name: 'WEB006',
-    //     parameters
-    // }
-
-    const request = axios.post(`${URL_SAVE}`, parameters);
+    const request = axios.post(`${URL_SAVE}/list-students`, parameters);
     
     return dispatch => {
        dispatch([
@@ -95,6 +81,38 @@ export function getScholarshipLimit(course){
      }
 }
 
+/**
+ * 
+ * @param {*} values 
+ */
+export function getProfit(params = []){
+
+    const dataLocalStorage = JSON.parse(localStorage.getItem(ESTABLISHMENT_DATA));
+   
+    const values = {
+        codfilial: dataLocalStorage.values.establishment,
+        codcurso :  params.course,
+        mes: moment().month(),
+        ano: moment().year()
+    }
+
+    const request = axios.post(`${URL_SAVE}/profit`, values);
+
+    return dispatch => {
+        dispatch([
+             {
+                 type: type.STUDENT_DISCOUNTS_LOAD,
+                 payload: true
+             },
+             {
+                 type: type.STUDENT_DISCOUNTS_GET_PROFIT,
+                 payload: request
+             }
+        ])
+     }
+
+
+}
 
 /**
  * 

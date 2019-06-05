@@ -7,6 +7,10 @@ import _ from 'lodash';
  */
 export class InputWithOutReduxForm extends Component {
 
+    /**
+     * 
+     * @param {*} props 
+     */
     constructor(props){
         super(props);
 
@@ -17,6 +21,10 @@ export class InputWithOutReduxForm extends Component {
         }
     }
 
+    /**
+     * 
+     * @param {*} event 
+     */
     inputChange(event){
         // // console.log('change');
         const { validate } = this.props;
@@ -26,6 +34,10 @@ export class InputWithOutReduxForm extends Component {
         this.validation(validate, input, value);
     }
 
+    /**
+     * 
+     * @param {*} event 
+     */
     inputBlur(event){
        
         const { validate } = this.props;
@@ -66,9 +78,6 @@ export class InputWithOutReduxForm extends Component {
     }
 
     
-
-    
-
     render() {
        
         const { touched, error } = this.state;

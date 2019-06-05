@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Field, FieldArray, arrayPush, arrayRemove, arrayInsert, formValueSelector } from 'redux-form';
+import { reduxForm, Form } from 'redux-form';
 import { CircularProgress } from 'react-md';
 import _ from 'lodash';
 import { getList, create } from './studentDiscountsActions';
@@ -9,24 +10,18 @@ import { getCourse } from '../establishment/establishmentActions';
 
 import ContentHeader from '../../common/components/template/contentHeader';
 import Content from '../../common/components/template/content';
-import { CheckboxLabel } from '../../common/components/form/checkBoxLabel';
+// import { CheckboxLabel } from '../../common/components/form/checkBoxLabel';
 import StudentDiscountsForm from './studentDiscountsForm/studentDiscountsForm'
-import SelectLabel from '../../common/components/form/selectLabel';
+// import SelectLabel from '../../common/components/form/selectLabel';
 import { FORM_RULES } from '../../helpers/validations';
-import { InputLabel } from '../../common/components/form/inputLabel';
+// import { InputLabel } from '../../common/components/form/inputLabel';
 import { InputWithOutReduxForm } from '../../common/components/form/inputWithOutReduxForm';
 
 import Row from '../../common/components/layout/row';
 import Grid from '../../common/components/layout/grid';
-
+import ValueBox from '../../common/components/widget/valueBox';
 import StudentDiscountsList from './studentDiscountsList';
-
-/**
- * arrayInsert: permite adicionar campos dinamicamente no formulário
- * arrayRemove:permite excluir campos existentes dinamicamente do formulário
- */
-
-import { reduxForm, Form } from 'redux-form';
+import { Card } from 'react-md';
 
 
 
@@ -147,6 +142,17 @@ class StudentDiscounts extends Component {
     onSubmit = () => {
         console.log(this.props.students.discounts)
     }
+
+    /**
+     * <b><formatValueProfit/b> Recebe um valor monetário que será formatado para o valor em moeda pt-br
+     * @param {*} number
+     * @return convertNumber
+     */
+    formatValueProfit = (number) => {
+
+        let convertNumber = parseFloat(number);
+        return convertNumber.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
+    }
     
     listStudent = (student) => {
         const { stateForm, students } = this.props
@@ -265,7 +271,7 @@ class StudentDiscounts extends Component {
                                                 </div>
                                                 <div className="col-sm-3 text-center">
                                                      <InputWithOutReduxForm 
-                                                        name={`${student.dados.ra}['value']`}
+                                                        name={`${student.dados.ra}`}
                                                         type='number'
                                                         validate={[FORM_RULES.required, FORM_RULES.minValue(1), FORM_RULES.maxValue(6)]}
                                                         value={this.props.value}
@@ -289,32 +295,11 @@ class StudentDiscounts extends Component {
         )
     }
 
-    // onChangeDiscount = (scholarship, arrayScholarship, RA) => {
-
-    //     if(scholarship && scholarship > 0) {
-    //         const bolsa = arrayScholarship.find( (e) => { return e.id_rm_schoolarship_discount_margin_schoolarship == scholarship } )
-
-    //         const minInstallment = FORM_RULES.minValue(bolsa.first_installment_discount_margin_schoolarship)
-    //         const maxInstallment = FORM_RULES.maxValue(bolsa.last_installment_discount_margin_schoolarship)
-    //         const maxPercent = FORM_RULES.maxValue(parseInt(bolsa.max_value_discount_margin_schoolarship))
-
-    //         // this.props.arrayPush('studentDiscounts', 'validate', { RA ,maxPercent, minInstallment, maxInstallment})
-
-    //     } else {
-    //         if(this.props.stateForm && this.props.stateForm.values && this.props.stateForm.values.validate){
-    //             const dataRemove = this.props.stateForm.values.validate.find( (e) => { return e.RA == RA })
-    //             // this.props.arrayRemove("studentDiscounts", "validate", this.props.stateForm.values.validate.indexOf(dataRemove))
-    //         }
-    //     }
-
-    // }
-
     render() {
 
-        const { handleSubmit, stateForm, pristine, submitting, students } = this.props;
+        const { handleSubmit, stateForm, submitting, students } = this.props;
 
-        console.log(this.props.students)
-
+        const profit = students.profit.content;
         //inicialmente será disabilitado o button de {salvar && enviar para RM}
         let disabled = true
 
@@ -335,24 +320,31 @@ class StudentDiscounts extends Component {
 
         } else if (this.props.establishment.course && this.props.establishment.course.length) {
             return (
-                <div>
-
+                <Content>
                     <StudentDiscountsForm />
-
                     {(this.props.students.list.content != undefined && this.props.students.list.content.length != 0) ?
-                        <Form role='form' onSubmit={handleSubmit(this.onSubmit)} noValidate>
-
-                            {this.listStudent(students.list.content)}
-
-                            <div className='main-footer reset-margem-left'>
-                                <Grid cols='3'>
-                                    <button className={`btn btn-primary btn-block`} disabled={submitting} type="submit">Lançar desconto</button>
-                                </Grid>
-                                <Grid cols='3'>
-                                    <button className={`btn btn-success btn-block`} disabled={disabled} type="button">Conceder desconto no RM</button>
-                                </Grid>
-                            </div>
-                        </Form>
+                        <div>
+                            <Form role='form' onSubmit={handleSubmit(this.onSubmit)} noValidate>
+                                {this.listStudent(students.list.content)}
+                                <div className='main-footer reset-margem-left'>
+                                    <Row>
+                                        <Grid cols='4'>
+                                            <button className={`btn btn-primary btn-block`} disabled={submitting} type="submit">Lançar desconto</button>
+                                        </Grid>
+                                        <Grid cols='4'>
+                                            <button className={`btn btn-success btn-block`} disabled={disabled} type="button">Conceder desconto no RM</button>
+                                        </Grid>
+                                    <hr/>
+                                    <Card>
+                                        <ValueBox cols='3' color='purple' value={this.formatValueProfit(profit.VALORORIGINAL)}  text='Valor Original' />
+                                        <ValueBox cols='3' color='yellow' value={this.formatValueProfit(profit.VALORDEDUCAO)}   text='Valor Dedução' />
+                                        <ValueBox cols='3' color='lime'   value={this.formatValueProfit(profit.VALORLIQUIDO)}   text='Valor Liquido' />
+                                        <ValueBox cols='3' color='red'    value={this.formatValueProfit(profit.COMPROMETIMENTO)} text='Valor Comprometido' />
+                                    </Card>
+                                    </Row>
+                                </div>
+                            </Form>
+                        </div>
                         :
                         <div className="container-fluid space-panel">
                             <div className="panel panel-info">
@@ -367,8 +359,7 @@ class StudentDiscounts extends Component {
                             </div>
                         </div>
                     }
-
-                </div>
+                </Content>
             )
         } else {
             return (
@@ -393,7 +384,7 @@ class StudentDiscounts extends Component {
 StudentDiscounts = reduxForm({ form: 'studentDiscounts' })(StudentDiscounts);
 
 
-// const selector = formValueSelector('studentDiscounts')
+const selector = formValueSelector('studentDiscounts')
 
 /**
  * Retorna o state do formulário, qualquer inserção que estiver em algum input, poderá ser consultado pelo {"this.props.stateForm"}
@@ -439,7 +430,7 @@ const mapStateToProps = state => ({
  * @param {*} dispatch 
  */
 
-const mapDispatchToProps = dispatch => bindActionCreators({ getList, getCourse, create, arrayPush, arrayRemove }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ getList, getCourse, create, /*arrayPush, arrayRemove*/ }, dispatch);
 
 /**
  * <b>connect</b> utiliza o padrão decorator da ES para que ele possa incluir dentro das propriedades desse component 

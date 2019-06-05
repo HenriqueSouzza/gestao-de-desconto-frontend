@@ -36,15 +36,15 @@ export class InputWithOutReduxForm extends Component {
         this.validation(validate, input, value, ra);
     }
 
-    saveValue(index) {
+    saveValue() {
         const { touched, error, field } = this.state;
+        const { index, saveData } = this.props;
         
         let array = this.props.arrValue
 
         if(field && !error && !touched && array){
-           
             array[index] = {...array[index], [field.name]: field.value}
-            this.props.saveData(array)
+            saveData({...array});
         }
     }
 
@@ -89,10 +89,9 @@ export class InputWithOutReduxForm extends Component {
     render() {
         
         const { touched, error } = this.state;
-        const { index } = this.props;
 
-        const teste = this.saveValue(index)
-
+        this.saveValue()
+        
         return (
             <Grid cols={this.props.cols} style={this.props.style}>
                 <div className={`form-group ${touched && error && "has-error"}`}>

@@ -9,11 +9,11 @@ import { getCourse } from '../establishment/establishmentActions';
 
 import ContentHeader from '../../common/components/template/contentHeader';
 import Content from '../../common/components/template/content';
-import { CheckboxLabel } from '../../common/components/form/checkBoxLabel';
 import StudentDiscountsForm from './studentDiscountsForm/studentDiscountsForm'
 import SelectLabel from '../../common/components/form/selectLabel';
 import { FORM_RULES } from '../../helpers/validations';
 import { InputLabel } from '../../common/components/form/inputLabel';
+import { CheckboxWithOutReduxForm }  from '../../common/components/form/checkboxWithOutReduxForm';
 import { InputWithOutReduxForm } from '../../common/components/form/inputWithOutReduxForm';
 
 import Row from '../../common/components/layout/row';
@@ -35,6 +35,7 @@ class StudentDiscounts extends Component {
     constructor(props) {
         super(props);
         document.title = "Gestão de Descontos | Descontos Comerciais";
+
     }
     
     componentWillMount() {
@@ -42,7 +43,7 @@ class StudentDiscounts extends Component {
     }
     
     onChangeCheckbox(status, ra){
-        
+        console.log(this.props)
     }
 
     onSubmit = () => {
@@ -50,7 +51,7 @@ class StudentDiscounts extends Component {
     }
     
     listStudent = (student) => {
-        const { stateForm, students } = this.props
+        const { students } = this.props
 
         const scholarships = students.scholarship ? students.scholarship : ''
 
@@ -96,7 +97,11 @@ class StudentDiscounts extends Component {
                         <div className="panel-heading text text-center">
                             <Row>
                                 <Grid cols='1'>
-                                    <input type="checkbox" onChange={ (e) => this.onChangeCheckbox(e.target.checked,student)}/>
+                                    <CheckboxWithOutReduxForm 
+                                        id={`${index}`}
+                                        name={`checkbox`}
+                                        option={{label:'', value: []}}
+                                    />
                                 </Grid>
                                 <Grid cols='5'>RA: {student.dados.ra} | {student.dados.aluno}</Grid>
                                 <Grid cols='2'><span className='badge'>{student.dados.curso}</span></Grid>
@@ -235,9 +240,7 @@ class StudentDiscounts extends Component {
 
     render() {
 
-        const { handleSubmit, stateForm, pristine, submitting, students } = this.props;
-
-        console.log(students)
+        const { handleSubmit, stateForm, submitting, students } = this.props;
 
         //inicialmente será disabilitado o button de {salvar && enviar para RM}
         let disabled = true
@@ -330,7 +333,7 @@ StudentDiscounts = connect(state => {
     /**
      * Guardando as informações do state do formulario no {stateForm} 
      */
-    const stateForm = state.form.studentDiscounts
+    const stateForm = state.form.StudentDiscounts
 
     /**
      * retorna o valor connectado com o nome atribuído ao formulário

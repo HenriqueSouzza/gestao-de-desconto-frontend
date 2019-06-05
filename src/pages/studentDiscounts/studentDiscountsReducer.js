@@ -16,12 +16,8 @@ const INITIAL_STATE = {
         }
     },
     scholarship: {},
-    detail: {},
     loading: false,
-    validate: [],
     valueForm: [],
-    firstInstallmentForm: [],
-    lastInstallmentForm: [],
     discounts: []
 };
 
@@ -44,5 +40,6 @@ export default (state = INITIAL_STATE, action) => {
         default: 
             return state;
     }
+
 
 }

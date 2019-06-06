@@ -33,24 +33,11 @@ export class InputWithOutReduxForm extends Component {
         this.validation(validate, name, value);
     }
 
-    // /**
-    //  * 
-    //  * @param {*} event 
-    //  */
-    // inputBlur(event) {
-
-    //     const { validate } = this.props;
-    //     const input = event.target.name;
-    //     const value = event.target.value;
-
-    //     this.validation(validate, input, value);
-    // }
-
     saveValue() {
         const { touched, error, field } = this.state;
-        const { index, saveData } = this.props;
+        const { index, saveData, arrValue } = this.props;
 
-        let array = this.props.arrValue
+        let array = arrValue
 
         if (field && !error && !touched && array) {
             array[index] = { ...array[index], [field.name]: field.value }
@@ -83,7 +70,6 @@ export class InputWithOutReduxForm extends Component {
             this.setState({
                 error: false,
                 touched: false,
-                //valor
                 field: {
                     name: input,
                     value: value
@@ -91,7 +77,6 @@ export class InputWithOutReduxForm extends Component {
             });
 
         }
-
     }
 
     render() {
@@ -117,12 +102,10 @@ export class InputWithOutReduxForm extends Component {
                         name={this.props.name}
                         type={this.props.type}
                         value={this.props.value}
-                        // validation={this.validation(validate)}
                         placeholder={this.props.placeholder}
                         readOnly={this.props.readOnly}
                         disabled={this.props.disabled}
                         onChange={this.inputChange.bind(this)}
-                    // onBlur={this.inputBlur.bind(this)}
                     />
                     {touched && error && <span className="help-block">{error}</span>}
                 </div>

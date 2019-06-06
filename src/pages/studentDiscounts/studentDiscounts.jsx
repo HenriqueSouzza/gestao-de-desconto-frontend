@@ -7,6 +7,8 @@ import { CircularProgress } from 'react-md';
 import _ from 'lodash';
 import { getList, create, saveForm, saveCheckedForm } from './studentDiscountsActions';
 import { getCourse } from '../establishment/establishmentActions';
+import {Checkbox} from 'react-md';
+
 
 import ContentHeader from '../../common/components/template/contentHeader';
 import Content from '../../common/components/template/content';
@@ -23,6 +25,7 @@ import Grid from '../../common/components/layout/grid';
 import ValueBox from '../../common/components/widget/valueBox';
 import StudentDiscountsList from './studentDiscountsList';
 import { Card } from 'react-md';
+import { array } from 'prop-types';
 
 
 
@@ -31,19 +34,33 @@ class StudentDiscounts extends Component {
     constructor(props) {
         super(props);
         document.title = "Gestão de Descontos | Descontos Comerciais";
-
     }
     
     componentWillMount() {
         this.props.getCourse();
     }
-    
-    onChangeCheckbox(status, ra){
-        console.log(this.props)
+
+    mergeData(studentSelected, studentData){
+        let arrayData = []
+
+        let indexSelected = []
+
+        studentSelected.map( (selected, index) => {
+            if(selected){
+                indexSelected = index
+            }
+        })
+
+        console.log(studentData)
+
+        console.log(studentData.indexOf(indexSelected))
+
     }
 
     onSubmit = () => {
-        console.log(this.props.students.valueForm)
+        const { selectRaForm, valueForm } = this.props.students
+
+        this.mergeData(selectRaForm, valueForm)
     }
 
     /**
@@ -73,11 +90,12 @@ class StudentDiscounts extends Component {
 
         const studentsList = student.RA ? [student] : student
 
-        let arrCheckedValue = []
+        let arrChecked = []
+
         let arrValue = []
 
         Object.values(studentsList).map((student, index) => {
-            arrCheckedValue[index] = '';
+            arrChecked[index]=''
             arrValue[index] = {
                 ra : student.dados.ra,
                 establishment: student.dados.codfilial,
@@ -106,13 +124,23 @@ class StudentDiscounts extends Component {
                         <div className="panel-heading text text-center">
                             <Row>
                                 <Grid cols='1'>
-                                    <CheckboxWithOutReduxForm 
+                                    {/* <Checkbox
                                         id={`${index}`}
-                                        name={`checkbox`}
+                                        className=''
+                                        name='checkbox'
+                                        // value={value}
+                                        label=''
+                                        onChange={(e) => this.handleCheckbox(e, index, arrChecked)}
+                                    /> */}
+                                    <CheckboxWithOutReduxForm 
+                                        id={`${student.dados.ra}`}
+                                        name={`checkbox[]`}
+                                        index={`${index}`}
+                                        arrChecked={arrChecked}
                                         saveChecked={this.props.saveCheckedForm}
-                                        arrCheckedValue={arrCheckedValue}
+                                        studentSelected={this.studentSelected}
                                         label=""
-                                        value=""
+                                        value={false}
                                     />
                                 </Grid>
                                 <Grid cols='5'>RA: {student.dados.ra} | {student.dados.aluno}</Grid>

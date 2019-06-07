@@ -200,3 +200,33 @@ export const getEstablishmentsUser = (email) => {
     }
 
 }
+
+
+
+/**
+ * <b>getBranchesUser</b> Action creator responsável por buscar os polos que 
+ * o usuário possui acesso/designação no RM(TOTVS)
+ * @param {*} email (email do usuário)
+ */
+
+export const getBranchesUser = (email) => {
+
+    const values = {
+        "name": "WEB011",
+        "parameters" : {
+            "email" : email
+        }
+    }
+
+    const request = axios.post(URL, values);
+
+    return dispatch => {
+        dispatch([
+            {
+                type: type.BRANCH_USERS_SHOW,
+                payload: request
+            }
+        ])
+    }
+
+}

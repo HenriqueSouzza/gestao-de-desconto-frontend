@@ -95,6 +95,7 @@ export function saveCheckedForm(array){
     }
 
 }
+
 export function saveForm(array){
     
     return dispatch => {
@@ -106,6 +107,19 @@ export function saveForm(array){
         ])
     }
 }
+
+export function saveArrayInInsert(array){
+
+    return dispatch => {
+        dispatch([
+            {
+                type: type.STUDENT_DISCOUNTS_SET_FORM,
+                payload: array
+            }
+        ])
+    }
+}
+
 
 /**
  * 

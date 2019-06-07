@@ -5,7 +5,7 @@ import { Field, FieldArray, arrayPush, arrayRemove, arrayInsert, formValueSelect
 import { reduxForm, Form } from 'redux-form';
 import { CircularProgress } from 'react-md';
 import _ from 'lodash';
-import { getList, create, saveForm, saveCheckedForm } from './studentDiscountsActions';
+import { getList, create, saveForm, saveCheckedForm, saveArrayInInsert } from './studentDiscountsActions';
 import { getCourse } from '../establishment/establishmentActions';
 import {Checkbox} from 'react-md';
 
@@ -47,14 +47,19 @@ class StudentDiscounts extends Component {
 
         studentSelected.map( (selected, index) => {
             if(selected){
-                indexSelected = index
+                indexSelected.push(index)
             }
         })
 
-        console.log(studentData)
+        for(let prop in studentData) {
+            if(studentData.hasOwnProperty(prop)){
+                if(indexSelected.indexOf(parseInt(prop)) != -1){
+                    arrayData.push(studentData[prop])
+                }
+            }
+        }
 
-        console.log(studentData.indexOf(indexSelected))
-
+        this.props.saveArrayInInsert(arrayData)
     }
 
     onSubmit = () => {
@@ -124,14 +129,6 @@ class StudentDiscounts extends Component {
                         <div className="panel-heading text text-center">
                             <Row>
                                 <Grid cols='1'>
-                                    {/* <Checkbox
-                                        id={`${index}`}
-                                        className=''
-                                        name='checkbox'
-                                        // value={value}
-                                        label=''
-                                        onChange={(e) => this.handleCheckbox(e, index, arrChecked)}
-                                    /> */}
                                     <CheckboxWithOutReduxForm 
                                         id={`${student.dados.ra}`}
                                         name={`checkbox[]`}
@@ -413,7 +410,7 @@ const mapStateToProps = state => ({
  * @param {*} dispatch 
  */
 
-const mapDispatchToProps = dispatch => bindActionCreators({ getList, getCourse, create, saveForm, saveCheckedForm /*arrayPush, arrayRemove*/ }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ getList, getCourse, create, saveForm, saveCheckedForm, saveArrayInInsert /*arrayPush, arrayRemove*/ }, dispatch);
 
 /**
  * <b>connect</b> utiliza o padrão decorator da ES para que ele possa incluir dentro das propriedades desse component 

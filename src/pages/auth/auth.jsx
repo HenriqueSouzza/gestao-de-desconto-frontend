@@ -21,7 +21,7 @@ class Auth extends Component {
      */
     constructor(props) {
         super(props);
-        document.title = "Gestão de Descontos | Autenticação";
+        document.title = "Sistema de Gerenciamento de Política Comercial | Autenticação";
     }
 
 
@@ -32,7 +32,7 @@ class Auth extends Component {
             <Row>
                  <Grid cols="12">
                     <div className="login-box">
-                        <div className="login-logo"><b> Gestão</b> Descontos </div>
+                        <div className="login-logo"><b> SPOCM </b></div>
                         <div className="login-box-body">
                             <p className="login-box-msg">Bem vindo!</p>
                                 <GoogleLogin

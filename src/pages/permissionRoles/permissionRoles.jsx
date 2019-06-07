@@ -46,7 +46,7 @@ class PermissionRoles extends Component {
     constructor(props) {
         super(props);
 
-        document.title = 'Gestão de descontos | Atribuir Permissão aos Papéis';
+        document.title = 'SPCOM | Atribuir Permissão aos Papéis';
         //obtem a lista 
         this.props.getList();
     }

@@ -33,7 +33,7 @@ class StudentDiscounts extends Component {
 
     constructor(props) {
         super(props);
-        document.title = "Gestão de Descontos | Descontos Comerciais";
+        document.title = "SPCOM | Descontos Comerciais";
     }
     
     componentWillMount() {
@@ -128,7 +128,7 @@ class StudentDiscounts extends Component {
                     <div className="panel panel-info">
                         <div className="panel-heading text text-center">
                             <Row>
-                                <Grid cols='1'>
+                                <Grid cols='1'>                                
                                     <CheckboxWithOutReduxForm 
                                         id={`${student.dados.ra}`}
                                         name={`checkbox[]`}
@@ -140,7 +140,8 @@ class StudentDiscounts extends Component {
                                         value={false}
                                     />
                                 </Grid>
-                                <Grid cols='5'>RA: {student.dados.ra} | {student.dados.aluno}</Grid>
+                                <Grid cols='1'><span className='badge'>{student.bolsas_locais.length > 0 ? 'EM VALIDAÇÂO' : 'CONCEDIDO RM' }</span></Grid>
+                                <Grid cols='4'>RA: {student.dados.ra} | {student.dados.aluno}</Grid>
                                 <Grid cols='2'><span className='badge'>{student.dados.curso}</span></Grid>
                                 <Grid cols='2'><span className='badge'>{student.dados.modalidade}</span></Grid>
                                 <Grid cols='2'><span className={`badge ${student.dados.tipo_aluno === 'CALOURO' ? 'new-student' : ''}`}>{student.dados.tipo_aluno}</span></Grid>

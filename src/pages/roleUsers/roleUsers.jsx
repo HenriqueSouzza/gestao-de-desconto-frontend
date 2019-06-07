@@ -38,7 +38,7 @@ class RoleUsers extends Component {
 
         super(props);
 
-        document.title = 'Gestão de Descontos | Papeis de usuários';
+        document.title = 'SPCOM | Papeis de usuários';
 
         this.props.getListUsers();
 

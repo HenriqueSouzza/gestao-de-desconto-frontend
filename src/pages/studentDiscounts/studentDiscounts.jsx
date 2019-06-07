@@ -1,31 +1,29 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Field, FieldArray, arrayPush, arrayRemove, arrayInsert, formValueSelector } from 'redux-form';
+import { formValueSelector } from 'redux-form';
 import { reduxForm, Form } from 'redux-form';
 import { CircularProgress } from 'react-md';
 import _ from 'lodash';
-import { getList, create, saveForm, saveCheckedForm, saveArrayInInsert, storeDiscount } from './studentDiscountsActions';
+
+import { getList, create, saveForm, saveCheckedForm, saveArrayInInsert, storeDiscount, saveScholarshipDiscount } from './studentDiscountsActions';
+
+
 import { getCourse } from '../establishment/establishmentActions';
-import {Checkbox} from 'react-md';
 
 
 import ContentHeader from '../../common/components/template/contentHeader';
 import Content from '../../common/components/template/content';
-// import { CheckboxLabel } from '../../common/components/form/checkBoxLabel';
 import StudentDiscountsForm from './studentDiscountsForm/studentDiscountsForm'
-// import SelectLabel from '../../common/components/form/selectLabel';
 import { FORM_RULES } from '../../helpers/validations';
-import { InputLabel } from '../../common/components/form/inputLabel';
 import { CheckboxWithOutReduxForm }  from '../../common/components/form/checkboxWithOutReduxForm';
 import { InputWithOutReduxForm } from '../../common/components/form/inputWithOutReduxForm';
+import { SelectLabelWithOutReduxForm } from '../../common/components/form/selectLabelWithOutReduxForm';
 
 import Row from '../../common/components/layout/row';
 import Grid from '../../common/components/layout/grid';
 import ValueBox from '../../common/components/widget/valueBox';
-import StudentDiscountsList from './studentDiscountsList';
 import { Card } from 'react-md';
-import { array } from 'prop-types';
 
 
 
@@ -41,9 +39,11 @@ class StudentDiscounts extends Component {
     }
 
     mergeData(studentSelected, studentData){
-        let arrayData = []
+        let arrayData = [];
 
-        let indexSelected = []
+        let indexSelected = [];
+
+        let prop;
 
         studentSelected.map( (selected, index) => {
             if(selected){
@@ -51,7 +51,7 @@ class StudentDiscounts extends Component {
             }
         })
 
-        for(let prop in studentData) {
+        for(prop in studentData) {
             if(studentData.hasOwnProperty(prop)){
                 if(indexSelected.indexOf(parseInt(prop)) != -1){
                     arrayData.push(studentData[prop])
@@ -86,23 +86,17 @@ class StudentDiscounts extends Component {
 
         const scholarships = students.scholarship ? students.scholarship : ''
 
-        let discountsList = [];
-
-        if (scholarships.length) {
-            discountsList = scholarships.map((item) => ({
-                value: item.id_rm_schoolarship_discount_margin_schoolarship,
-                label: item.id_rm_schoolarship_name_discount_margin_schoolarship
-            }))
-        }
-
         const studentsList = student.RA ? [student] : student
 
         let arrChecked = []
+
+        let arrSelected = []
 
         let arrValue = []
 
         Object.values(studentsList).map((student, index) => {
             arrChecked[index]=''
+            arrSelected[index]=''
             arrValue[index] = {
                 ra : student.dados.ra,
                 establishment: student.dados.codfilial,
@@ -226,12 +220,17 @@ class StudentDiscounts extends Component {
                                             ))}
                                             <Row>
                                                 <div className="col-sm-5 text-center">
-                                                    <select name={`schoolarship`} className="form-control">
-                                                        <option value="">--------------</option>
-                                                        {discountsList.map(discount =>
-                                                            <option key={discount.value} value={discount.value}>{discount.label}</option>
-                                                        )}
-                                                    </select>
+                                                    <SelectLabelWithOutReduxForm
+                                                        name={`select`}
+                                                        index={index}
+                                                        arrValue={arrValue}
+                                                        arrSelected={arrSelected}
+                                                        saveData={this.props.saveForm}
+                                                        scholarshipList={scholarships}
+                                                        selectedScholarship={this.props.saveScholarshipDiscount}
+                                                        validate={[FORM_RULES.required]}
+                                                        value={``}
+                                                    />
                                                 </div>
                                                 <div className="col-sm-3 text-center">
                                                     <InputWithOutReduxForm 
@@ -242,7 +241,8 @@ class StudentDiscounts extends Component {
                                                         saveData={this.props.saveForm}
                                                         validate={[FORM_RULES.required, FORM_RULES.minValue(1), FORM_RULES.maxValue(30)]}
                                                         value={this.props.value}
-                                                        />       
+                                                        // disabled={students.scholarshipSelectedForm.id_rm_schoolarship_discount_margin_schoolarship > 0 ? false : true} 
+                                                    />       
                                                 </div>
                                                 <div className="col-sm-2 text-center">
                                                     <InputWithOutReduxForm 
@@ -253,7 +253,8 @@ class StudentDiscounts extends Component {
                                                         saveData={this.props.saveForm}
                                                         validate={[FORM_RULES.required, FORM_RULES.minValue(1), FORM_RULES.maxValue(6)]}
                                                         value={this.props.value}
-                                                        />
+                                                        // disabled={students.scholarshipSelectedForm.first_installment_discount_margin_schoolarship > 0 ? false : true}
+                                                    />
                                                 </div>
                                                 <div className="col-sm-2 text-center">
                                                     <InputWithOutReduxForm 
@@ -264,6 +265,7 @@ class StudentDiscounts extends Component {
                                                         saveData={this.props.saveForm}
                                                         validate={[FORM_RULES.required, FORM_RULES.minValue(1), FORM_RULES.maxValue(6)]}
                                                         value={this.props.value}
+                                                        // disabled={students.scholarshipSelectedForm.last_installment_discount_margin_schoolarship > 0 ? false : true}
                                                     />
                                                 </div>
                                             </Row>
@@ -283,6 +285,7 @@ class StudentDiscounts extends Component {
         const { handleSubmit, stateForm, submitting, students } = this.props;
 
         const profit = students.profit.content;
+
         //inicialmente será disabilitado o button de {salvar && enviar para RM}
         let disabled = true
 
@@ -413,7 +416,8 @@ const mapStateToProps = state => ({
  * @param {*} dispatch 
  */
 
-const mapDispatchToProps = dispatch => bindActionCreators({ getList, getCourse, create, saveForm, saveCheckedForm, saveArrayInInsert, storeDiscount /*arrayPush, arrayRemove*/ }, dispatch);
+
+const mapDispatchToProps = dispatch => bindActionCreators({ getList, getCourse, create, saveForm, saveCheckedForm, saveArrayInInsert, storeDiscount, saveScholarshipDiscount /*arrayPush, arrayRemove*/ }, dispatch);
 
 /**
  * <b>connect</b> utiliza o padrão decorator da ES para que ele possa incluir dentro das propriedades desse component 

@@ -45,7 +45,7 @@ class Roles extends Component {
    */
   constructor(props) {
     super(props);
-    document.title = "Gestão de Descontos | Papéis";
+    document.title = "SPCOM | Papéis";
    
   }
 

@@ -46,7 +46,7 @@ class Permissions extends Component {
 
         super(props);
 
-        document.title = 'Gestão de Descontos | Permissões';
+        document.title = 'SPCOM | Permissões';
     }
 
     /**

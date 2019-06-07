@@ -38,7 +38,7 @@ class Users extends Component {
 
         super(props);
 
-        document.title = 'Gestão de Descontos | Usuários';
+        document.title = 'SPCOM | Usuários';
 
     }
     

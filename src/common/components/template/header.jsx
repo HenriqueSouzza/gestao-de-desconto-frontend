@@ -10,7 +10,7 @@ export default class Header extends Component {
                     <span className='logo-mini'>GD</span>
                     <span className='logo-lg'>
                         <i className='fa fa-money'></i>
-                        <b> Gestão </b>Descontos
+                        <b> SPCOM </b>
                     </span>        
                 </a>
                 <nav className='navbar navbar-static-top'>

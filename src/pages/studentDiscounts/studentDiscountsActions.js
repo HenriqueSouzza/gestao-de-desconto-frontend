@@ -173,33 +173,33 @@ export function getProfit(params = []){
  */
 export const storeDiscount = (values, router) => {
     
-    let errorMessages = []
+    
     console.log("enviando")
     return (dispatch) => {
         axios.post(`${URL_SAVE}/students`, values)
             .then(
                 (response) =>  {      
                     console.log(response.data) 
-                    for(let key in Object.keys(response.data)){
-                        if(response.data[key] && response.data[key].erro){
-                            console.log(key+" Deu errado")
-                            errorMessages.push(response.data[key].erro)
+                    for(let key in response.data){   
+                                             
+                        if(response.data[key].erro){
+                            toastr.error('Erro', `${key} com problemas: ${response.data[key].erro}`);                            
                         }
                         else{
                             console.log(key+ "Passou tranquilo")
                         }
                     }                                 
-                    console.log(errorMessages);
+                    
                     //dispatch do redux multi
                     dispatch([
                         getList(),
                         // sendErrorMessage(errorMessages)
                     ]); 
     
-                    if (!_.isUndefined(router)) {
-                        //faz o redirect recebe o objeto da história das rotas                        
-                        router.router.push('/desconto-comercial')
-                   }
+                //     if (!_.isUndefined(router)) {
+                //         //faz o redirect recebe o objeto da história das rotas                        
+                //         router.router.push('/desconto-comercial')
+                //    }
                 })
                 .catch((e) => {
                     //exibe mensagens de erro

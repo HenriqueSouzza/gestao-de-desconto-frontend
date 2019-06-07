@@ -15,7 +15,7 @@ export default class Menu extends Component {
                 <MenuTree label='Descontos' icon='money'>
                     <MenuItem label='Desconto Comercial' path='/desconto-comercial' icon='credit-card-alt' />
                 </MenuTree>
-                {/* <MenuTree label='Perfis de Acesso' icon='unlock-alt'>
+                <MenuTree label='Perfis de Acesso' icon='unlock-alt'>
                     <MenuItem path='/usuarios'
                         label='Usuários' icon='users' />
                     <MenuItem path="/papeis"
@@ -26,7 +26,7 @@ export default class Menu extends Component {
                         label='Atribuir Permissão aos Papéis' icon='id-card-o' />
                     <MenuItem path='/papel-usuarios'
                         label='Atribuir Papéis aos usuários' icon='user-plus' />
-                </MenuTree> */}
+                </MenuTree>
                
             </ul>
         )

@@ -42,8 +42,9 @@ class Users extends Component {
 
     }
     
-    componentDidMount(){
-        this.props.getList();
+    componentDidMount(){        
+        // this.props.getList();
+        console.log("OI")
         
     }
     
@@ -73,7 +74,7 @@ class Users extends Component {
 
             return (
                 <div>
-                    <Table 
+                    <Table                         
                         id="table-users"
                         title='Usuários'
                         getPagination={this.getPagination}

@@ -5,7 +5,7 @@ import { Field, FieldArray, arrayPush, arrayRemove, arrayInsert, formValueSelect
 import { reduxForm, Form } from 'redux-form';
 import { CircularProgress } from 'react-md';
 import _ from 'lodash';
-import { getList, create, saveForm, saveCheckedForm, saveArrayInInsert } from './studentDiscountsActions';
+import { getList, create, saveForm, saveCheckedForm, saveArrayInInsert, storeDiscount } from './studentDiscountsActions';
 import { getCourse } from '../establishment/establishmentActions';
 import {Checkbox} from 'react-md';
 
@@ -59,13 +59,15 @@ class StudentDiscounts extends Component {
             }
         }
 
-        this.props.saveArrayInInsert(arrayData)
+        return arrayData;
+        // this.props.saveArrayInInsert(arrayData)
     }
 
     onSubmit = () => {
         const { selectRaForm, valueForm } = this.props.students
-
-        this.mergeData(selectRaForm, valueForm)
+        const aux = this.mergeData(selectRaForm, valueForm)
+        const discounts = {discounts: aux};
+        this.props.storeDiscount(discounts, this.props.history);
     }
 
     /**
@@ -104,20 +106,20 @@ class StudentDiscounts extends Component {
             arrValue[index] = {
                 ra : student.dados.ra,
                 establishment: student.dados.codfilial,
-                scholarship: '',
-                scholarship_ordem: 1,
+                schoolarship: '7',
+                schoolarship_order: 1,
                 value: '',
                 service: 's',
-                firstInstallment: '',
-                lastInstallment: '',
+                first_installment: '',
+                last_installment: '',
                 period: student.dados.idperlet,
-                periodCod: student.dados.codperlet,
+                period_code: student.dados.codperlet,
                 contract: student.dados.codContrato,
-                habilitation: student.dados.habilitacao,
+                habilitation: student.dados.idhabilitacaofilial,
                 modality_major: student.dados.modalidade,
                 course_type: 3,
                 detail: 'sem detalhes',
-                send_rm: 0,
+                send_rm: false,
                 active: 0    
             }
         })
@@ -224,7 +226,7 @@ class StudentDiscounts extends Component {
                                             ))}
                                             <Row>
                                                 <div className="col-sm-5 text-center">
-                                                    <select name={`scholarship`} className="form-control">
+                                                    <select name={`schoolarship`} className="form-control">
                                                         <option value="">--------------</option>
                                                         {discountsList.map(discount =>
                                                             <option key={discount.value} value={discount.value}>{discount.label}</option>
@@ -244,7 +246,7 @@ class StudentDiscounts extends Component {
                                                 </div>
                                                 <div className="col-sm-2 text-center">
                                                     <InputWithOutReduxForm 
-                                                        name={`firstInstallment`}
+                                                        name={`first_installment`}
                                                         type='number'
                                                         index={index}
                                                         arrValue={arrValue}
@@ -255,7 +257,7 @@ class StudentDiscounts extends Component {
                                                 </div>
                                                 <div className="col-sm-2 text-center">
                                                     <InputWithOutReduxForm 
-                                                        name={`lastInstallment`}
+                                                        name={`last_installment`}
                                                         type='number'
                                                         index={index}
                                                         arrValue={arrValue}
@@ -411,7 +413,7 @@ const mapStateToProps = state => ({
  * @param {*} dispatch 
  */
 
-const mapDispatchToProps = dispatch => bindActionCreators({ getList, getCourse, create, saveForm, saveCheckedForm, saveArrayInInsert /*arrayPush, arrayRemove*/ }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ getList, getCourse, create, saveForm, saveCheckedForm, saveArrayInInsert, storeDiscount /*arrayPush, arrayRemove*/ }, dispatch);
 
 /**
  * <b>connect</b> utiliza o padrão decorator da ES para que ele possa incluir dentro das propriedades desse component 

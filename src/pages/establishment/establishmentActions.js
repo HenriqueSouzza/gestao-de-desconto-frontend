@@ -92,7 +92,7 @@ export function getPeriod(Codfilial, Modality){
     const ModalityPreview = Codfilial == 169 ? Modality : "P"
 
     const values = {
-        codFilial: Codfilial,
+        codfilial: Codfilial,
         modality : ModalityPreview
     }
 

@@ -9,7 +9,7 @@ import { BASE_API } from '../../config/consts';
 const URL = `${BASE_API}/users/`;
 
 export const getList = () => {
-    const request = axios.get(URL);
+	const request = axios.get(URL);	
     return (dispatch) => {
         dispatch([
 			{

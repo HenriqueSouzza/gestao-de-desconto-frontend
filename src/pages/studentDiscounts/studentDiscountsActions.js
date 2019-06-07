@@ -15,6 +15,7 @@ const URL_SAVE = `${BASE_API}/student-schoolarships`;
 const URL_BASE_LOCAL = `${BASE_API}/discount-margin-schoolarships/list`;
 
 
+
 // export const dataLocalStorage = JSON.parse(localStorage.getItem(ESTABLISHMENT_DATA))
 
 /**
@@ -96,6 +97,7 @@ export function saveCheckedForm(array){
 
 }
 
+
 export function saveForm(array){
     
     return dispatch => {
@@ -151,6 +153,61 @@ export function getProfit(params = []){
         ])
      }
 }
+
+/**
+ * 
+ * @param {*} values (valores dos formulários)
+ * @param {*} router (objeto do react router)
+ */
+export const storeDiscount = (values, router) => {
+    
+    let errorMessages = []
+    console.log("enviando")
+    return (dispatch) => {
+        axios.post(`${URL_SAVE}/students`, values)
+            .then(
+                (response) =>  {      
+                    console.log(response.data) 
+                    for(let key in Object.keys(response.data)){
+                        if(response.data[key] && response.data[key].erro){
+                            console.log(key+" Deu errado")
+                            errorMessages.push(response.data[key].erro)
+                        }
+                        else{
+                            console.log(key+ "Passou tranquilo")
+                        }
+                    }                                 
+                    console.log(errorMessages);
+                    //dispatch do redux multi
+                    dispatch([
+                        getList(),
+                        // sendErrorMessage(errorMessages)
+                    ]); 
+    
+                    if (!_.isUndefined(router)) {
+                        //faz o redirect recebe o objeto da história das rotas                        
+                        router.router.push('/desconto-comercial')
+                   }
+                })
+                .catch((e) => {
+                    //exibe mensagens de erro
+                    try {
+                        for (const i in e.response.data) {
+                            for (const j in e.response.data[i]) {
+                                toastr.error(i, e.response.data[i][j])
+                            }
+                        }
+                    } catch (error) {
+                        console.log("DEU BOSTA" + e)
+                        // toastr.error('Erro', 'Erro interno no servidor');
+                        // Ta dando errado
+                    }
+                })
+            
+            ;
+    }
+}
+
 
 /**
  * 

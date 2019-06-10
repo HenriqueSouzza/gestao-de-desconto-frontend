@@ -100,17 +100,17 @@ class StudentDiscounts extends Component {
             arrValue[index] = {
                 ra : student.dados.ra,
                 establishment: student.dados.codfilial,
-                schoolarship: '7',
+                schoolarship: student.bolsas_locais[0] ? student.bolsas_locais[0].CODBOLSA :  '',
                 schoolarship_order: 1,
-                value: '',
-                service: 's',
-                first_installment: '',
-                last_installment: '',
+                value: student.bolsas_locais[0] ? parseFloat(student.bolsas_locais[0].DESCONTO.replace(',','.')) :  '',
+                service: 2,
+                first_installment: student.bolsas_locais[0] ? student.bolsas_locais[0].PARCELAINICIAL :  '',
+                last_installment: student.bolsas_locais[0] ? student.bolsas_locais[0].PARCELAINICIAL : '',
                 period: student.dados.idperlet,
                 period_code: student.dados.codperlet,
                 contract: student.dados.codContrato,
                 habilitation: student.dados.idhabilitacaofilial,
-                modality_major: student.dados.modalidade,
+                modality_major: student.dados.modalidade == 'PRESENCIAL' ? 'P' : 'D',
                 course_type: 3,
                 detail: 'sem detalhes',
                 send_rm: false,
@@ -230,7 +230,7 @@ class StudentDiscounts extends Component {
                                                         scholarshipList={scholarships}
                                                         selectedScholarship={this.props.saveScholarshipDiscount}
                                                         validate={[FORM_RULES.required]}
-                                                        value={``}
+                                                        value={student.bolsas_locais[0] ? student.bolsas_locais[0].COLDBOLSA : ''}
                                                     />
                                                 </div>
                                                 <div className="col-sm-3 text-center">
@@ -241,7 +241,7 @@ class StudentDiscounts extends Component {
                                                         arrValue={arrValue}
                                                         saveData={this.props.saveForm}
                                                         validate={[FORM_RULES.required, FORM_RULES.minValue(1), FORM_RULES.maxValue(30)]}
-                                                        value={this.props.value}
+                                                        value={ student.bolsas_locais[0] ? student.bolsas_locais[0].DESCONTO : this.props.value}
                                                         // disabled={students.scholarshipSelectedForm.id_rm_schoolarship_discount_margin_schoolarship > 0 ? false : true} 
                                                     />       
                                                 </div>
@@ -253,7 +253,7 @@ class StudentDiscounts extends Component {
                                                         arrValue={arrValue}
                                                         saveData={this.props.saveForm}
                                                         validate={[FORM_RULES.required, FORM_RULES.minValue(1), FORM_RULES.maxValue(6)]}
-                                                        value={this.props.value}
+                                                        value={ student.bolsas_locais[0] ? student.bolsas_locais[0].PARCELAINICIAL : this.props.value}
                                                         // disabled={students.scholarshipSelectedForm.first_installment_discount_margin_schoolarship > 0 ? false : true}
                                                     />
                                                 </div>
@@ -265,7 +265,7 @@ class StudentDiscounts extends Component {
                                                         arrValue={arrValue}
                                                         saveData={this.props.saveForm}
                                                         validate={[FORM_RULES.required, FORM_RULES.minValue(1), FORM_RULES.maxValue(6)]}
-                                                        value={this.props.value}
+                                                        value={ student.bolsas_locais[0] ? student.bolsas_locais[0].PARCELAFINAL : this.props.value}
                                                         // disabled={students.scholarshipSelectedForm.last_installment_discount_margin_schoolarship > 0 ? false : true}
                                                     />
                                                 </div>
@@ -320,7 +320,7 @@ class StudentDiscounts extends Component {
                                             <button className={`btn btn-primary btn-block`} disabled={submitting} type="submit">Lançar desconto</button>
                                         </Grid>
                                         <Grid cols='4'>
-                                            <button className={`btn btn-success btn-block`} disabled={disabled} type="button">Conceder desconto no RM</button>
+                                            <button className={`btn btn-success btn-block`} disabled={false} type="submit">Conceder desconto no RM</button>
                                         </Grid>
                                     <hr/>
                                     <Card>

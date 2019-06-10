@@ -26,15 +26,14 @@ export function getList(params = []) {
     const dataLocalStorage = JSON.parse(localStorage.getItem(ESTABLISHMENT_DATA))
     
     const course = params.course ? params.course : 'GP011';
-    const polo = params.polo ? params.polo : '-1';
-    const name = params.name ? params.name : '-1';
+    const polo = dataLocalStorage.values.branch ? dataLocalStorage.values.branch : '-1';
+    const name = params.name ? params.name : '-1';    
     const ra = params.ra ? params.ra : '-1';
     
     const parameters = {
         codcurso: course,
         codpolo: polo,
-        codfilial: dataLocalStorage.values.establishment,
-        codpolo: dataLocalStorage.values.branch,
+        codfilial: dataLocalStorage.values.establishment,        
         codperlet: dataLocalStorage.values.period,
         ra: ra,
         nomealuno: name

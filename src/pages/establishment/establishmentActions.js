@@ -58,6 +58,7 @@ export function getCourse(){
         name: "WEB002",
         parameters : {
             codfilial: dataLocalStorage.values.establishment,
+            codpolo: dataLocalStorage.values.branch,
             codtipocurso : 3,
             codperlet: dataLocalStorage.values.period,
             modalidade: modality

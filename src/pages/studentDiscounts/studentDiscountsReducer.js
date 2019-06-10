@@ -42,6 +42,7 @@ export default (state = INITIAL_STATE, action) => {
             return { ...state, discounts: action.payload || INITIAL_STATE.list }
 
         case type.STUDENT_DISCOUNTS_SAVE_VALUE_INPUT:
+            console.log(action.payload)
             return { ...state, valueForm: action.payload || INITIAL_STATE.list }
 
         case type.STUDENT_DISCOUNTS_SAVE_CHECKED_FORM:

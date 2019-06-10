@@ -38,7 +38,7 @@ class StudentDiscounts extends Component {
         this.props.getCourse();
     }
 
-    mergeData(studentSelected, studentData){
+    mergeData(studentSelected, studentData, RmOrApi){
         let arrayData = [];
 
         let indexSelected = [];
@@ -50,11 +50,18 @@ class StudentDiscounts extends Component {
                 indexSelected.push(index)
             }
         })
-
+        
         for(prop in studentData) {
             if(studentData.hasOwnProperty(prop)){
                 if(indexSelected.indexOf(parseInt(prop)) != -1){
-                    arrayData.push(studentData[prop])
+                    let studentDataTmp
+                    if(RmOrApi == 'rm'){
+                        studentDataTmp = {...studentData[prop], send_rm : true }
+                    }else{
+                        studentDataTmp = {...studentData[prop], send_rm : false }
+                    }
+                    arrayData.push(studentDataTmp)
+                    // arrayData.push(studentData[prop])
                 }
             }
         }
@@ -63,11 +70,15 @@ class StudentDiscounts extends Component {
         // this.props.saveArrayInInsert(arrayData)
     }
 
-    onSubmit = () => {
+    onSubmit = (e) => {
+
+        const RmOrApi = e.target.name
+
         const { selectRaForm, valueForm } = this.props.students
-        const aux = this.mergeData(selectRaForm, valueForm)
+        const aux = this.mergeData(selectRaForm, valueForm, RmOrApi)
         const discounts = {discounts: aux};
         this.props.storeDiscount(discounts, this.props.history);
+        e.preventDefault();
     }
 
     /**
@@ -230,7 +241,7 @@ class StudentDiscounts extends Component {
                                                         scholarshipList={scholarships}
                                                         selectedScholarship={this.props.saveScholarshipDiscount}
                                                         validate={[FORM_RULES.required]}
-                                                        value={student.bolsas_locais[0] ? student.bolsas_locais[0].COLDBOLSA : ''}
+                                                        value={''}
                                                     />
                                                 </div>
                                                 <div className="col-sm-3 text-center">
@@ -241,7 +252,7 @@ class StudentDiscounts extends Component {
                                                         arrValue={arrValue}
                                                         saveData={this.props.saveForm}
                                                         validate={[FORM_RULES.required, FORM_RULES.minValue(1), FORM_RULES.maxValue(30)]}
-                                                        value={ student.bolsas_locais[0] ? student.bolsas_locais[0].DESCONTO : this.props.value}
+                                                        value={this.props.value}
                                                         // disabled={students.scholarshipSelectedForm.id_rm_schoolarship_discount_margin_schoolarship > 0 ? false : true} 
                                                     />       
                                                 </div>
@@ -312,15 +323,15 @@ class StudentDiscounts extends Component {
                     <StudentDiscountsForm />
                     {(this.props.students.list.content != undefined && this.props.students.list.content.length != 0) ?
                         <div>
-                            <Form role='form' onSubmit={handleSubmit(this.onSubmit)} noValidate>
+                            <Form role='form' noValidate>
                                 {this.listStudent(students.list.content)}
                                 <div className='main-footer reset-margem-left'>
                                     <Row>
                                         <Grid cols='4'>
-                                            <button className={`btn btn-primary btn-block`} disabled={submitting} type="submit">Lançar desconto</button>
+                                            <button className={`btn btn-primary btn-block`} name={`api`} onClick={(e) => this.onSubmit(e)} disabled={submitting} type="submit">Lançar desconto</button>
                                         </Grid>
                                         <Grid cols='4'>
-                                            <button className={`btn btn-success btn-block`} disabled={false} type="submit">Conceder desconto no RM</button>
+                                            <button className={`btn btn-success btn-block`} name={`rm`} onClick={(e) => this.onSubmit(e)} disabled={false} type="submit">Conceder desconto no RM</button>
                                         </Grid>
                                     <hr/>
                                     <Card>

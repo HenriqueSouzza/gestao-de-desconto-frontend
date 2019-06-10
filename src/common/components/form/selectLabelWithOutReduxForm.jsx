@@ -28,21 +28,23 @@ export class SelectLabelWithOutReduxForm extends Component {
 
         let i;
 
+        let found;
+
         let array = this.state.value;
 
         let arrayStudents = this.state.arrDataStundent;
-        console.log(scholarshipList, value)
+
         if(value) {
-            let found = scholarshipList.find((e)=> e.id_rm_schoolarship_discount_margin_schoolarship == value);                        
-            if(found)
-                array[index] = found            
-            // for(i in scholarshipList) {
-            //     if(scholarshipList.hasOwnProperty(i)){
-            //         if(i == value){
-            //             array[index] = scholarshipList[i]
-            //         }
-            //     }
-            // }
+            // found = scholarshipList.find((e)=> e.id_rm_schoolarship_discount_margin_schoolarship == value);                        
+            // if(found)
+            //     array[index] = found            
+            for(i in scholarshipList) {
+                if(scholarshipList.hasOwnProperty(i)){
+                    if(scholarshipList[i] == value){
+                        array[index] = scholarshipList[i]
+                    }
+                }
+            }
         }
 
         arrayStudents[index] = { ...arrayStudents[index], schoolarship: value }

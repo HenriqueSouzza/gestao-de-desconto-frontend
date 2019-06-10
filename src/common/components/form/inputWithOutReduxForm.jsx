@@ -18,6 +18,7 @@ export class InputWithOutReduxForm extends Component {
             touched: false,
             error: false,
             field: '',
+            list: this.props.arrValue
         }
     }
 
@@ -34,14 +35,13 @@ export class InputWithOutReduxForm extends Component {
     }
 
     saveValue() {
-        const { touched, error, field } = this.state;
-        const { index, saveData, arrValue } = this.props;
+        let { touched, error, field, list } = this.state;
+        let { index, saveData } = this.props;
 
-        let array = arrValue
-
-        if (field && !error && !touched && array) {
-            array[index] = { ...array[index], [field.name]: field.value }
-            saveData({ ...array });
+        if (field && !error && !touched && list) {
+            list[index] = { ...list[index], [field.name]: field.value }
+            console.log(list)
+            saveData({ ...list });
         }
     }
 

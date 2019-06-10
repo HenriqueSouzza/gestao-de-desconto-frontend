@@ -174,13 +174,10 @@ export function getProfit(params = []){
  */
 export const storeDiscount = (values, router) => {
     
-    
-    console.log("enviando")
     return (dispatch) => {
         axios.post(`${URL_SAVE}/students`, values)
             .then(
                 (response) =>  {      
-                    console.log(response.data) 
                     for(let key in response.data){   
                                              
                         if(response.data[key].erro){
@@ -211,9 +208,7 @@ export const storeDiscount = (values, router) => {
                             }
                         }
                     } catch (error) {
-                        console.log("DEU BOSTA" + e)
                         // toastr.error('Erro', 'Erro interno no servidor');
-                        // Ta dando errado
                     }
                 })
             

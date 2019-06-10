@@ -218,6 +218,7 @@ class StudentDiscounts extends Component {
                                                     </div>
                                                 </Row>
                                             ))}
+                                            { student.dados.tipo_aluno != 'CALOURO' ? '' :
                                             <Row>
                                                 <div className="col-sm-5 text-center">
                                                     <SelectLabelWithOutReduxForm
@@ -269,6 +270,7 @@ class StudentDiscounts extends Component {
                                                     />
                                                 </div>
                                             </Row>
+                                            }
                                         </td>
                                     </tr>
                                 </tbody>

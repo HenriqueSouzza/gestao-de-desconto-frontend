@@ -295,7 +295,7 @@ Establishment = reduxForm({ form: 'establishment' })(Establishment);
  * o state.propriedade vem do registro do reducer no arquivo geral chamado main/reducers.js 
  * @param {*} state 
  */
-const mapStateToProps = (state) => ({ establishment: state.establishment, user: state.users })
+const mapStateToProps = (state) => ({ establishment: state.establishment })
 
 
 /**

@@ -21,8 +21,8 @@ const INITIAL_STATE = {
     selectRaForm: "",
     scholarshipSelectedForm: [],
     discounts: [],
-    profit:{}
-
+    profit:{},
+    validation: []
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -42,7 +42,6 @@ export default (state = INITIAL_STATE, action) => {
             return { ...state, discounts: action.payload || INITIAL_STATE.list }
 
         case type.STUDENT_DISCOUNTS_SAVE_VALUE_INPUT:
-            console.log(action.payload)
             return { ...state, valueForm: action.payload || INITIAL_STATE.list }
 
         case type.STUDENT_DISCOUNTS_SAVE_CHECKED_FORM:
@@ -50,6 +49,9 @@ export default (state = INITIAL_STATE, action) => {
 
         case type.STUDENT_DISCOUNTS_SAVE_SCHOLARSHIP_FORM:
             return { ...state, scholarshipSelectedForm: action.payload || INITIAL_STATE.list }
+
+        case type.STUDENT_DISCOUNTS_SAVE_VALIDATION_FORM:
+            return { ...state, validation: action.payload || INITIAL_STATE.list }
 
         case type.STUDENT_DISCOUNTS_GET_PROFIT:
             return { ...state, profit: getListTransform(action.payload.data) || INITIAL_STATE.list }

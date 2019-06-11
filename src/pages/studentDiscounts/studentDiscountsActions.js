@@ -85,6 +85,18 @@ export function getScholarshipLimit(course){
      }
 }
 
+export function saveValidationDiscount(array){
+
+    return dispatch => {
+        dispatch([
+            {
+                type: type.STUDENT_DISCOUNTS_SAVE_VALIDATION_FORM,
+                payload: array
+            }
+        ])
+    }
+}
+
 export function saveScholarshipDiscount(array){
 
     return dispatch => {

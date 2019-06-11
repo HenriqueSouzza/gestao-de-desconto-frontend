@@ -18,7 +18,8 @@ export class InputWithOutReduxForm extends Component {
             touched: false,
             error: false,
             field: '',
-            list: this.props.arrValue
+            list: this.props.arrValue,
+            validationReducer: this.props.validationArray
         }
     }
 
@@ -40,7 +41,6 @@ export class InputWithOutReduxForm extends Component {
 
         if (field && !error && !touched && list) {
             list[index] = { ...list[index], [field.name]: field.value }
-            console.log(list)
             saveData({ ...list });
         }
     }
@@ -52,6 +52,9 @@ export class InputWithOutReduxForm extends Component {
      * @param {*} value 
      */
     validation(validates, input, value) {
+        let { saveValidationReducer, index } = this.props;
+        let { validationReducer } = this.state;
+
         let result = [];
         let i;
         for (i in validates) {
@@ -65,6 +68,8 @@ export class InputWithOutReduxForm extends Component {
                         value: value
                     }
                 });
+                validationReducer[index] = true
+                saveValidationReducer({...validationReducer})
                 break;
             }
             this.setState({
@@ -75,7 +80,8 @@ export class InputWithOutReduxForm extends Component {
                     value: value
                 }
             });
-
+            validationReducer[index] = false
+            saveValidationReducer({...validationReducer})
         }
     }
 

@@ -6,7 +6,7 @@ import { reduxForm, Form } from 'redux-form';
 import { CircularProgress } from 'react-md';
 import _ from 'lodash';
 
-import { getList, create, saveForm, saveCheckedForm, saveArrayInInsert, storeDiscount, saveScholarshipDiscount } from './studentDiscountsActions';
+import { getList, create, saveForm, saveCheckedForm, saveArrayInInsert, storeDiscount, saveScholarshipDiscount, saveValidationDiscount } from './studentDiscountsActions';
 
 
 import { getCourse } from '../establishment/establishmentActions';
@@ -105,7 +105,12 @@ class StudentDiscounts extends Component {
 
         let arrValue = []
 
+        let validationInputAndSelect = []
+
+        console.log(students)
+
         Object.values(studentsList).map((student, index) => {
+            validationInputAndSelect[index]=false
             arrChecked[index]=''
             arrSelected[index]=''
             arrValue[index] = {
@@ -135,17 +140,20 @@ class StudentDiscounts extends Component {
                     <div className="panel panel-info">
                         <div className="panel-heading text text-center">
                             <Row>
-                                <Grid cols='1'>                                
-                                    <CheckboxWithOutReduxForm 
-                                        id={`${student.dados.ra}`}
-                                        name={`checkbox[]`}
-                                        index={`${index}`}
-                                        arrChecked={arrChecked}
-                                        saveChecked={this.props.saveCheckedForm}
-                                        studentSelected={this.studentSelected}
-                                        label=""
-                                        value={false}
-                                    />
+                                <Grid cols='1'>      
+                                    { student.dados.tipo_aluno != 'CALOURO' ? '' :
+                                        <CheckboxWithOutReduxForm 
+                                            id={`${student.dados.ra}`}
+                                            name={`checkbox[]`}
+                                            index={`${index}`}
+                                            arrChecked={arrChecked}
+                                            saveChecked={this.props.saveCheckedForm}
+                                            studentSelected={this.studentSelected}
+                                            label=""
+                                            disabled={Object.keys(students.scholarshipSelectedForm).length > 0 && students.scholarshipSelectedForm[index] != '' ? false : true}
+                                            value={false}
+                                        />
+                                    }
                                 </Grid>
                                 <Grid cols='1'><span className='badge'>{student.bolsas_locais.length > 0 ? 'EM VALIDAÇÂO' : 'CONCEDIDO RM' }</span></Grid>
                                 <Grid cols='4'>RA: {student.dados.ra} | {student.dados.aluno}</Grid>
@@ -239,6 +247,8 @@ class StudentDiscounts extends Component {
                                                         arrSelected={arrSelected}
                                                         saveData={this.props.saveForm}
                                                         scholarshipList={scholarships}
+                                                        validationArray={validationInputAndSelect}
+                                                        saveValidationReducer={this.props.saveValidationDiscount}
                                                         selectedScholarship={this.props.saveScholarshipDiscount}
                                                         validate={[FORM_RULES.required]}
                                                         value={''}
@@ -251,9 +261,15 @@ class StudentDiscounts extends Component {
                                                         index={index}
                                                         arrValue={arrValue}
                                                         saveData={this.props.saveForm}
-                                                        validate={[FORM_RULES.required, FORM_RULES.minValue(1), FORM_RULES.maxValue(30)]}
+                                                        validationArray={validationInputAndSelect}
+                                                        saveValidationReducer={this.props.saveValidationDiscount}
+                                                        validate={
+                                                            [FORM_RULES.required, 
+                                                                FORM_RULES.minValue(1), 
+                                                                FORM_RULES.maxValue(Object.keys(students.scholarshipSelectedForm).length > 0 && students.scholarshipSelectedForm[index] != '' ? students.scholarshipSelectedForm[index].max_value_discount_margin_schoolarship : '')
+                                                            ]}
                                                         value={this.props.value}
-                                                        // disabled={students.scholarshipSelectedForm.id_rm_schoolarship_discount_margin_schoolarship > 0 ? false : true} 
+                                                        disabled={Object.keys(students.scholarshipSelectedForm).length > 0 && students.scholarshipSelectedForm[index] != '' ? false : true}
                                                     />       
                                                 </div>
                                                 <div className="col-sm-2 text-center">
@@ -263,9 +279,15 @@ class StudentDiscounts extends Component {
                                                         index={index}
                                                         arrValue={arrValue}
                                                         saveData={this.props.saveForm}
-                                                        validate={[FORM_RULES.required, FORM_RULES.minValue(1), FORM_RULES.maxValue(6)]}
-                                                        value={ student.bolsas_locais[0] ? student.bolsas_locais[0].PARCELAINICIAL : this.props.value}
-                                                        // disabled={students.scholarshipSelectedForm.first_installment_discount_margin_schoolarship > 0 ? false : true}
+                                                        validationArray={validationInputAndSelect}
+                                                        saveValidationReducer={this.props.saveValidationDiscount}
+                                                        validate={
+                                                            [FORM_RULES.required, 
+                                                                FORM_RULES.minValue(Object.keys(students.scholarshipSelectedForm).length > 0 && students.scholarshipSelectedForm[index] != '' ? students.scholarshipSelectedForm[index].first_installment_discount_margin_schoolarship : ''), 
+                                                                FORM_RULES.maxValue(Object.keys(students.scholarshipSelectedForm).length > 0 && students.scholarshipSelectedForm[index] != '' ? students.scholarshipSelectedForm[index].last_installment_discount_margin_schoolarship : '')
+                                                            ]}
+                                                        value={ this.props.value}
+                                                        disabled={Object.keys(students.scholarshipSelectedForm).length > 0 && students.scholarshipSelectedForm[index] != '' ? false : true}
                                                     />
                                                 </div>
                                                 <div className="col-sm-2 text-center">
@@ -275,9 +297,15 @@ class StudentDiscounts extends Component {
                                                         index={index}
                                                         arrValue={arrValue}
                                                         saveData={this.props.saveForm}
-                                                        validate={[FORM_RULES.required, FORM_RULES.minValue(1), FORM_RULES.maxValue(6)]}
-                                                        value={ student.bolsas_locais[0] ? student.bolsas_locais[0].PARCELAFINAL : this.props.value}
-                                                        // disabled={students.scholarshipSelectedForm.last_installment_discount_margin_schoolarship > 0 ? false : true}
+                                                        validationArray={validationInputAndSelect}
+                                                        saveValidationReducer={this.props.saveValidationDiscount}
+                                                        validate={
+                                                            [FORM_RULES.required, 
+                                                                FORM_RULES.minValue(Object.keys(students.scholarshipSelectedForm).length > 0 && students.scholarshipSelectedForm[index] != '' ? students.scholarshipSelectedForm[index].first_installment_discount_margin_schoolarship : ''), 
+                                                                FORM_RULES.maxValue(Object.keys(students.scholarshipSelectedForm).length > 0 && students.scholarshipSelectedForm[index] != '' ? students.scholarshipSelectedForm[index].last_installment_discount_margin_schoolarship : '')
+                                                            ]}
+                                                        value={ this.props.value}
+                                                        disabled={Object.keys(students.scholarshipSelectedForm).length > 0 && students.scholarshipSelectedForm[index] != '' ? false : true}
                                                     />
                                                 </div>
                                             </Row>
@@ -430,7 +458,7 @@ const mapStateToProps = state => ({
  */
 
 
-const mapDispatchToProps = dispatch => bindActionCreators({ getList, getCourse, create, saveForm, saveCheckedForm, saveArrayInInsert, storeDiscount, saveScholarshipDiscount /*arrayPush, arrayRemove*/ }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ getList, getCourse, create, saveForm, saveCheckedForm, saveArrayInInsert, storeDiscount, saveScholarshipDiscount, saveValidationDiscount /*arrayPush, arrayRemove*/ }, dispatch);
 
 /**
  * <b>connect</b> utiliza o padrão decorator da ES para que ele possa incluir dentro das propriedades desse component 

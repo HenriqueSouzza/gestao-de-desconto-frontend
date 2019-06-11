@@ -16,7 +16,8 @@ export class SelectLabelWithOutReduxForm extends Component {
             touched: false,
             error: '',
             value: this.props.arrSelected,
-            arrDataStundent: this.props.arrValue
+            arrDataStundent: this.props.arrValue,
+            validationReducer: this.props.validationArray
         }
     }
 
@@ -24,38 +25,32 @@ export class SelectLabelWithOutReduxForm extends Component {
     selectChange(event){
         const { value } = event.target;
 
-        const { validate, index, saveData, scholarshipList } = this.props;
+        const { index, saveData, scholarshipList, selectedScholarship, validate } = this.props;
 
         let i;
-
-        let found;
 
         let array = this.state.value;
 
         let arrayStudents = this.state.arrDataStundent;
-
-        if(value) {
-            // found = scholarshipList.find((e)=> e.id_rm_schoolarship_discount_margin_schoolarship == value);                        
-            // if(found)
-            //     array[index] = found            
+        
+        console.log(array)
+        if(value){
             for(i in scholarshipList) {
                 if(scholarshipList.hasOwnProperty(i)){
-                    if(scholarshipList[i] == value){
+                    if(scholarshipList[i].id_rm_schoolarship_discount_margin_schoolarship == value){
                         array[index] = scholarshipList[i]
                     }
                 }
             }
         }
-
+        
         arrayStudents[index] = { ...arrayStudents[index], schoolarship: value }
         
         saveData({ ...arrayStudents });
+        
+        selectedScholarship({...array});
 
-        this.setState({
-            value: array
-        })
-
-        // this.validation(validate, index, array)
+        this.validation(validate, index, value)
 
     }
 
@@ -66,6 +61,9 @@ export class SelectLabelWithOutReduxForm extends Component {
      * @param {*} value 
      */
     validation(validates, index, value) {
+        let { saveValidationReducer } = this.props;
+        let { validationReducer } = this.state;
+
         let result = [];
         let i;
 
@@ -77,6 +75,8 @@ export class SelectLabelWithOutReduxForm extends Component {
                     touched: true,
                     value: value
                 });
+                validationReducer[index] = true
+                saveValidationReducer({...validationReducer})
                 break;
             }
             this.setState({
@@ -84,7 +84,9 @@ export class SelectLabelWithOutReduxForm extends Component {
                 touched: false,
                 value: value
             });
-
+            
+            validationReducer[index] = false
+            saveValidationReducer({...validationReducer})
         }
     }
 
@@ -95,8 +97,6 @@ export class SelectLabelWithOutReduxForm extends Component {
         const { name, scholarshipList, selectedScholarship } = this.props;
 
         let scholarships = [];
-
-        selectedScholarship(value);
 
         if (scholarshipList.length) {
             scholarships = scholarshipList.map( (item) => ({

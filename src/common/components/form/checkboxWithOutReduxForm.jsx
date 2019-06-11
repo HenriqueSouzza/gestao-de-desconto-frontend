@@ -94,6 +94,7 @@ export class CheckboxWithOutReduxForm extends Component {
                         name={name}
                         value={value}
                         label={label}
+                        disabled={this.props.disabled}
                         onClick={(e) => this.checkboxClick(e)}
                     />
                     {touched && error && <span className="help-block">{error}</span>}

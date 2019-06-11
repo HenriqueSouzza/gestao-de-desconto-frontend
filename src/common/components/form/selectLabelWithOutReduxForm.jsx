@@ -28,27 +28,28 @@ export class SelectLabelWithOutReduxForm extends Component {
         const { index, saveData, scholarshipList, selectedScholarship, validate } = this.props;
 
         let i;
-
+        
         let array = this.state.value;
 
         let arrayStudents = this.state.arrDataStundent;
         
-        console.log(array)
         if(value){
             for(i in scholarshipList) {
                 if(scholarshipList.hasOwnProperty(i)){
                     if(scholarshipList[i].id_rm_schoolarship_discount_margin_schoolarship == value){
-                        array[index] = scholarshipList[i]
+                        array[index] = scholarshipList[i] 
                     }
                 }
             }
+        }else{
+            array[index] = ''
         }
         
         arrayStudents[index] = { ...arrayStudents[index], schoolarship: value }
         
         saveData({ ...arrayStudents });
         
-        selectedScholarship({...array});
+        selectedScholarship({...array})
 
         this.validation(validate, index, value)
 
@@ -73,7 +74,7 @@ export class SelectLabelWithOutReduxForm extends Component {
                 this.setState({
                     error: result[i],
                     touched: true,
-                    value: value
+                    // value: value
                 });
                 validationReducer[index] = true
                 saveValidationReducer({...validationReducer})
@@ -82,7 +83,7 @@ export class SelectLabelWithOutReduxForm extends Component {
             this.setState({
                 error: false,
                 touched: false,
-                value: value
+                // value: value
             });
             
             validationReducer[index] = false
@@ -92,9 +93,9 @@ export class SelectLabelWithOutReduxForm extends Component {
 
     render() {
 
-        const { touched, error, value } = this.state;
+        const { touched, error } = this.state;
 
-        const { name, scholarshipList, selectedScholarship } = this.props;
+        const { name, scholarshipList } = this.props;
 
         let scholarships = [];
 

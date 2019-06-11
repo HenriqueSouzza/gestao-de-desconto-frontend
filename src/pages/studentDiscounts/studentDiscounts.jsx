@@ -38,7 +38,7 @@ class StudentDiscounts extends Component {
         this.props.getCourse();
     }
 
-    mergeData(studentSelected, studentData, RmOrApi){
+    mergeData(studentSelected, studentData, RmOrApi, validateIndice){
         let arrayData = [];
 
         let indexSelected = [];
@@ -53,7 +53,7 @@ class StudentDiscounts extends Component {
         
         for(prop in studentData) {
             if(studentData.hasOwnProperty(prop)){
-                if(indexSelected.indexOf(parseInt(prop)) != -1){
+                if(indexSelected.indexOf(parseInt(prop)) != -1 && !validateIndice[prop]){
                     let studentDataTmp
                     if(RmOrApi == 'rm'){
                         studentDataTmp = {...studentData[prop], send_rm : true }
@@ -74,8 +74,8 @@ class StudentDiscounts extends Component {
 
         const RmOrApi = e.target.name
 
-        const { selectRaForm, valueForm } = this.props.students
-        const aux = this.mergeData(selectRaForm, valueForm, RmOrApi)
+        const { selectRaForm, valueForm, validation } = this.props.students
+        const aux = this.mergeData(selectRaForm, valueForm, RmOrApi, validation)
         const discounts = {discounts: aux};
         this.props.storeDiscount(discounts, this.props.history);
         e.preventDefault();
@@ -107,10 +107,8 @@ class StudentDiscounts extends Component {
 
         let validationInputAndSelect = []
 
-        console.log(students)
-
         Object.values(studentsList).map((student, index) => {
-            validationInputAndSelect[index]=false
+            validationInputAndSelect[index]= false
             arrChecked[index]=''
             arrSelected[index]=''
             arrValue[index] = {

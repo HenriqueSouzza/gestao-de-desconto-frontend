@@ -45,27 +45,57 @@ class StudentDiscounts extends Component {
 
         let prop;
 
+        let scholarshipCurrent = this.props.students.list.content
+        
+        let studentDataTmp
+
         studentSelected.map( (selected, index) => {
             if(selected){
                 indexSelected.push(index)
             }
         })
         
-        for(prop in studentData) {
-            if(studentData.hasOwnProperty(prop)){
-                if(indexSelected.indexOf(parseInt(prop)) != -1 && !validateIndice[prop]){
-                    let studentDataTmp
-                    if(RmOrApi == 'rm'){
-                        studentDataTmp = {...studentData[prop], send_rm : true }
-                    }else{
-                        studentDataTmp = {...studentData[prop], send_rm : false }
+        if(RmOrApi == 'rm'){
+            Object.values(scholarshipCurrent).map( (current) => {
+                if(current.bolsas_locais){
+                    studentDataTmp = {
+                        ra : current.dados.ra,
+                        establishment: current.dados.codfilial,
+                        schoolarship: current.bolsas_locais[0] ? current.bolsas_locais[0].CODBOLSA :  '',
+                        schoolarship_order: 1,
+                        value: current.bolsas_locais[0] ? parseFloat(current.bolsas_locais[0].DESCONTO.replace(',','.')) :  '',
+                        service: 2,
+                        first_installment: current.bolsas_locais[0] ? current.bolsas_locais[0].PARCELAINICIAL :  '',
+                        last_installment: current.bolsas_locais[0] ? current.bolsas_locais[0].PARCELAINICIAL : '',
+                        period: current.dados.idperlet,
+                        period_code: current.dados.codperlet,
+                        contract: current.dados.codContrato,
+                        habilitation: current.dados.idhabilitacaofilial,
+                        modality_major: current.dados.modalidade == 'PRESENCIAL' ? 'P' : 'D',
+                        course_type: 3,
+                        detail: 'sem detalhes',
+                        send_rm: true,
+                        active: 0   
                     }
+
                     arrayData.push(studentDataTmp)
-                    // arrayData.push(studentData[prop])
+                }
+            })
+        }else{
+            for(prop in studentData) {
+                if(studentData.hasOwnProperty(prop)){
+                    if(indexSelected.indexOf(parseInt(prop)) != -1 && !validateIndice[prop]){
+                        if(RmOrApi == 'rm'){
+                            studentDataTmp = {...studentData[prop], send_rm : true }
+                        }else{
+                            studentDataTmp = {...studentData[prop], send_rm : false }
+                        }
+                        arrayData.push(studentDataTmp)
+                    }
                 }
             }
         }
-
+            
         return arrayData;
         // this.props.saveArrayInInsert(arrayData)
     }
@@ -75,7 +105,9 @@ class StudentDiscounts extends Component {
         const RmOrApi = e.target.name
 
         const { selectRaForm, valueForm, validation } = this.props.students
+
         const aux = this.mergeData(selectRaForm, valueForm, RmOrApi, validation)
+        console.log(aux)
         const discounts = {discounts: aux};
         this.props.storeDiscount(discounts, this.props.history);
         e.preventDefault();
@@ -148,7 +180,7 @@ class StudentDiscounts extends Component {
                                             saveChecked={this.props.saveCheckedForm}
                                             studentSelected={this.studentSelected}
                                             label=""
-                                            disabled={Object.keys(students.scholarshipSelectedForm).length > 0 && students.scholarshipSelectedForm[index] != '' ? false : true}
+                                            // disabled={Object.keys(students.scholarshipSelectedForm).length > 0 && students.scholarshipSelectedForm[index] != '' ? false : true}
                                             value={false}
                                         />
                                     }

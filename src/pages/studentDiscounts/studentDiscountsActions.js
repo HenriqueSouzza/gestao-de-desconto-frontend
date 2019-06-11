@@ -203,8 +203,7 @@ export const storeDiscount = (values, router) => {
                     
                     //dispatch do redux multi
                     dispatch([
-                        getList(),
-                        // sendErrorMessage(errorMessages)
+                        getList(),                        
                     ]); 
                     if(errorCount == 0)
                         toastr.success('Sucesso', 'Todos os descontos foram inseridos com sucesso.');

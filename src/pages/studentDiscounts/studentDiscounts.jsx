@@ -148,7 +148,7 @@ class StudentDiscounts extends Component {
                                             saveChecked={this.props.saveCheckedForm}
                                             studentSelected={this.studentSelected}
                                             label=""
-                                            disabled={Object.keys(students.scholarshipSelectedForm).length > 0 && students.scholarshipSelectedForm[index] != '' ? false : true}
+                                            // disabled={Object.keys(students.scholarshipSelectedForm).length > 0 && students.scholarshipSelectedForm[index] != '' ? false : true}
                                             value={false}
                                         />
                                     }
@@ -238,7 +238,7 @@ class StudentDiscounts extends Component {
                                             {student.bolsas_locais.map((studentAfter, i) => (
                                                 <Row key={i + 100000}>
                                                     <div className="col-sm-5 text-center">
-                                                        <div>{studentAfter.BOLSA}</div>
+                                                        <div><div className="badge">NOVO</div>{studentAfter.BOLSA}</div>
                                                     </div>
                                                     <div className="col-sm-3 text-center">
                                                         <div>{studentAfter.DESCONTO}</div>

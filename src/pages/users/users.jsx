@@ -40,6 +40,8 @@ class Users extends Component {
 
         document.title = 'SPCOM | Usuários';
 
+
+        // this.props.getList();
     }
     
     componentDidMount(){        
@@ -49,10 +51,14 @@ class Users extends Component {
     getNumberItems(n) {
         this.props.getListLimit(n);
     }
-
+    
     getPagination = page => {
         this.props.getListPage(page);
-    };
+    }
+
+    componentDidMount(){        
+        this.props.getList();
+    }
 
     render() {
         const { content, pagination } = this.props.users.list;
@@ -68,7 +74,6 @@ class Users extends Component {
                 </div>
             )
         }
-        else {
 
             return (
                 <div>
@@ -86,11 +91,8 @@ class Users extends Component {
                     />
                 </div>
             )
-        }
 
     }
-
-
 
 }
 

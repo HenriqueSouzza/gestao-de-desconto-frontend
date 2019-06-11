@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { bindActionCreators} from 'redux';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import ContentHeader from '../../common/components/template/contentHeader';
@@ -11,30 +11,30 @@ import { ACTION_RULES, has_action } from '../../helpers/authorization';
 import { CircularProgress } from "react-md";
 import { getList, getListLimit, getListPage, remove, getSearch, getDetail, setDetail } from "./rolesActions";
 
-  /**
-   * <b>columns</b> Constante responsável por mapear e fazer o alias (apelido) entre os nomes que serão apresentados na tabela 
-   * e os dados obtidos no getList
-   */
-  const columns = [
-    {
-        title: "#",
-        dataIndex: "id",
-        key: "id",
-        type: "simple"
-    },
-    {
-        title: "Nome",
-        dataIndex: "name",
-        key: "name",
-        type: "simple"
-    },
-    {
-        title: "Descrição",
-        dataIndex: "label",
-        key: "label",
-        type: "simple"
-    }
-  ];
+/**
+ * <b>columns</b> Constante responsável por mapear e fazer o alias (apelido) entre os nomes que serão apresentados na tabela 
+ * e os dados obtidos no getList
+ */
+const columns = [
+  {
+    title: "#",
+    dataIndex: "id",
+    key: "id",
+    type: "simple"
+  },
+  {
+    title: "Nome",
+    dataIndex: "name",
+    key: "name",
+    type: "simple"
+  },
+  {
+    title: "Descrição",
+    dataIndex: "label",
+    key: "label",
+    type: "simple"
+  }
+];
 
 
 class Roles extends Component {
@@ -46,7 +46,7 @@ class Roles extends Component {
   constructor(props) {
     super(props);
     document.title = "SPCOM | Papéis";
-   
+
   }
 
   /**
@@ -59,12 +59,12 @@ class Roles extends Component {
   }
 
   /**
-   * <b>getPagination</b> Método responsável por invocar a action creator getListPage, 
+   * <b>getPagination</b> Método responsá vel por invocar a action creator getListPage, 
    * passando o número da página que será chamada.
    * @param {*} page (número da pagina)
    */
   getPagination = page => {
-      this.props.getListPage(page);
+    this.props.getListPage(page);
   };
 
 
@@ -82,38 +82,37 @@ class Roles extends Component {
     //destructing nas propriedades do estado mapeado no reducer
     const { content, pagination } = this.props.roles.list;
 
-        if (this.props.roles.loading) {
-          return (
-              <div>
-                  <ContentHeader title="Papéis" />
-                  <Content>
-                      <CircularProgress id="role" />
-                  </Content>
-              </div>
-          );
-      }
-
+    if (this.props.roles.loading) {
       return (
-        
-          <div>
-            
-              <Content>
-                <Table
-                    title="Papéis" 
-                    getPagination={this.getPagination}
-                    id="table-roles"
-                    columns={columns}
-                    onDelete={this.props.remove}
-                    //onDetail={this.props}
-                    router={this.props.history}
-                    rows={content}
-                    pagination={pagination}
-                    number_items={this.props.getListLimit}   
-                    actions_permissions={ACTION_RULES.can_all}
-                  />
-              </Content>
-          </div>
-      )
+        <div>
+          <ContentHeader title="Papéis" />
+          <Content>
+            <CircularProgress id="role" />
+          </Content>
+        </div>
+      );
+    }
+
+    return (
+        <div>
+
+          <Content>
+            <Table
+              title="Papéis"
+              getPagination={this.getPagination}
+              id="table-roles"
+              columns={columns}
+              onDelete={this.props.remove}
+              //onDetail={this.props}
+              router={this.props.history}
+              rows={content}
+              pagination={pagination}
+              number_items={this.props.getListLimit}
+              actions_permissions={ACTION_RULES.can_all}
+            />
+          </Content>
+        </div>
+    )
   }
 }
 
@@ -124,7 +123,7 @@ class Roles extends Component {
  */
 const mapStateToProps = state => {
   return {
-      roles: state.roles,
+    roles: state.roles,
   };
 };
 
@@ -138,15 +137,15 @@ const mapStateToProps = state => {
  */
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(
-      {
-          getList,
-          getListLimit,
-          getListPage,
-          getSearch,
-          getDetail,
-          remove,
-      },
-      dispatch
+    {
+      getList,
+      getListLimit,
+      getListPage,
+      getSearch,
+      getDetail,
+      remove,
+    },
+    dispatch
   );
 };
 

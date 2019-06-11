@@ -43,9 +43,7 @@ class Users extends Component {
     }
     
     componentDidMount(){        
-        // this.props.getList();
-        console.log("OI")
-        
+        this.props.getList();
     }
     
     getNumberItems(n) {

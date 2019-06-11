@@ -185,7 +185,7 @@ export function getProfit(params = []){
  * @param {*} router (objeto do react router)
  */
 export const storeDiscount = (values, router) => {
-    
+    let errorCount = 0;
     return (dispatch) => {
         axios.post(`${URL_SAVE}/students`, values)
             .then(
@@ -193,6 +193,7 @@ export const storeDiscount = (values, router) => {
                     for(let key in response.data){   
                                              
                         if(response.data[key].erro){
+                            errorCount++;
                             toastr.error('Erro', `${key} com problemas: ${response.data[key].erro}`);                            
                         }
                         else{
@@ -205,6 +206,8 @@ export const storeDiscount = (values, router) => {
                         getList(),
                         // sendErrorMessage(errorMessages)
                     ]); 
+                    if(errorCount == 0)
+                        toastr.success('Sucesso', 'Todos os descontos foram inseridos com sucesso.');
     
                 //     if (!_.isUndefined(router)) {
                 //         //faz o redirect recebe o objeto da história das rotas                        

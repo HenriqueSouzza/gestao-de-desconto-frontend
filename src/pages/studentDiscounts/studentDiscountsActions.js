@@ -189,9 +189,10 @@ export const storeDiscount = (values, router) => {
     return (dispatch) => {
         axios.post(`${URL_SAVE}/students`, values)
             .then(
-                (response) =>  {      
+                (response) =>  {                     
+                
                     for(let key in response.data){   
-                                             
+                                            
                         if(response.data[key].erro){
                             errorCount++;
                             toastr.error('Erro', `${key} com problemas: ${response.data[key].erro}`);                            
@@ -199,7 +200,8 @@ export const storeDiscount = (values, router) => {
                         else{
                             console.log(key+ "Passou tranquilo")
                         }
-                    }                                 
+                    }    
+                                                
                     
                     //dispatch do redux multi
                     dispatch([
@@ -218,11 +220,12 @@ export const storeDiscount = (values, router) => {
                     try {
                         for (const i in e.response.data) {
                             for (const j in e.response.data[i]) {
-                                toastr.error(i, e.response.data[i][j])
+                                // toastr.error(i, e.response.data[i][j])
+                                toastr.error('Erro', '(D001) Erro interno no servidor');
                             }
                         }
                     } catch (error) {
-                        // toastr.error('Erro', 'Erro interno no servidor');
+                        toastr.error('Erro', 'Erro interno no servidor');
                     }
                 })
             

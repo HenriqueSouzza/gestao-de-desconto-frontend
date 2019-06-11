@@ -284,7 +284,7 @@ class StudentDiscounts extends Component {
                                                                 FORM_RULES.minValue(Object.keys(students.scholarshipSelectedForm).length > 0 && students.scholarshipSelectedForm[index] != '' ? students.scholarshipSelectedForm[index].first_installment_discount_margin_schoolarship : ''), 
                                                                 FORM_RULES.maxValue(Object.keys(students.scholarshipSelectedForm).length > 0 && students.scholarshipSelectedForm[index] != '' ? students.scholarshipSelectedForm[index].last_installment_discount_margin_schoolarship : '')
                                                             ]}
-                                                        value={ this.props.value}
+                                                        value={this.props.value}
                                                         disabled={Object.keys(students.scholarshipSelectedForm).length > 0 && students.scholarshipSelectedForm[index] != '' ? false : true}
                                                     />
                                                 </div>

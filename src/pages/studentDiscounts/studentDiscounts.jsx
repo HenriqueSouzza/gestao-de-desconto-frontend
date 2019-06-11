@@ -221,6 +221,22 @@ class StudentDiscounts extends Component {
                                         <td className='success'>
                                             {student.bolsas_atuais.map((studentAfter, i) => (
                                                 <Row key={i + 100000}>
+                                                    <div className="col-sm-5 text-center">                                                        
+                                                        <div>{studentAfter.BOLSA}</div>
+                                                    </div>
+                                                    <div className="col-sm-3 text-center">
+                                                        <div>{studentAfter.DESCONTO}</div>
+                                                    </div>
+                                                    <div className="col-sm-2 text-center">
+                                                        <div>{studentAfter.PARCELAINICIAL}</div>
+                                                    </div>
+                                                    <div className="col-sm-2 text-center">
+                                                        <div>{studentAfter.PARCELAFINAL}</div>
+                                                    </div>
+                                                </Row>
+                                            ))}
+                                            {student.bolsas_locais.map((studentAfter, i) => (
+                                                <Row key={i + 100000}>
                                                     <div className="col-sm-5 text-center">
                                                         <div>{studentAfter.BOLSA}</div>
                                                     </div>

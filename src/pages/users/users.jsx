@@ -42,7 +42,10 @@ class Users extends Component {
 
 
         // this.props.getList();
-        this.props.getList()
+    }
+    
+    componentDidMount(){        
+        this.props.getList();
     }
     
     getNumberItems(n) {

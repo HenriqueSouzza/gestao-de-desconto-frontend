@@ -185,26 +185,30 @@ export function getProfit(params = []){
  * @param {*} router (objeto do react router)
  */
 export const storeDiscount = (values, router) => {
-    
+    let errorCount = 0;
     return (dispatch) => {
         axios.post(`${URL_SAVE}/students`, values)
             .then(
-                (response) =>  {      
+                (response) =>  {                     
+                
                     for(let key in response.data){   
-                                             
+                                            
                         if(response.data[key].erro){
+                            errorCount++;
                             toastr.error('Erro', `${key} com problemas: ${response.data[key].erro}`);                            
                         }
                         else{
                             console.log(key+ "Passou tranquilo")
                         }
-                    }                                 
+                    }    
+                                                
                     
                     //dispatch do redux multi
                     dispatch([
-                        getList(),
-                        // sendErrorMessage(errorMessages)
+                        getList(),                        
                     ]); 
+                    if(errorCount == 0)
+                        toastr.success('Sucesso', 'Todos os descontos foram inseridos com sucesso.');
     
                 //     if (!_.isUndefined(router)) {
                 //         //faz o redirect recebe o objeto da história das rotas                        
@@ -216,11 +220,12 @@ export const storeDiscount = (values, router) => {
                     try {
                         for (const i in e.response.data) {
                             for (const j in e.response.data[i]) {
-                                toastr.error(i, e.response.data[i][j])
+                                // toastr.error(i, e.response.data[i][j])
+                                toastr.error('Erro', '(D001) Erro interno no servidor');
                             }
                         }
                     } catch (error) {
-                        // toastr.error('Erro', 'Erro interno no servidor');
+                        toastr.error('Erro', 'Erro interno no servidor');
                     }
                 })
             

@@ -10,7 +10,6 @@ import { ESTABLISHMENT_DATA, USER_KEY } from "../../config/consts";
 
 import { CircularProgress } from 'react-md';
 
-
 import Row from '../../common/components/layout/row';
 import Grid from '../../common/components/layout/grid';
 import Messages from '../../common/components/messages/messages';
@@ -19,11 +18,7 @@ import If from '../../common/components/operator/if';
 
 import App from '../../main/app';
 
-import { isNull, isUndefined } from 'util';
-
 import { getList, saveEstablishment, getPeriod, getEstablishmentsUser, getBranchesUser } from './establishmentActions'
-import { timingSafeEqual } from 'crypto';
-import { array } from 'prop-types';
 
 
 
@@ -52,10 +47,10 @@ class Establishment extends Component {
     }
 
     /**
-     * <b>componentWillMount</b> Método do ciclo de vida do React, 
+     * <b>componentDidMount</b> Método do ciclo de vida do React, 
     * é invocado toda vez que o component é chamado antes de montar o mesmo
      */
-    componentWillMount() {
+    componentDidMount() {
         //obtem a lista 
         this.props.getList();
         //obtem os dados de login do usuário

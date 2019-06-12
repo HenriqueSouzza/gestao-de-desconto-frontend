@@ -173,11 +173,10 @@ class Establishment extends Component {
 
 
                 }  
-              
 
                 let periodList = {}
                 
-                if(establishment.period.length){
+                if(establishment.period && establishment.period.length){
                     periodList = establishment.period.map( (period) => ({
                         value: period.id_rm_period_code_concession_period,
                         label: period.id_rm_period_code_concession_period

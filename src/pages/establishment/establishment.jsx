@@ -147,11 +147,12 @@ class Establishment extends Component {
                     value: item.CODFILIAL,
                     label: item.NOMEFANTASIA
                 }));
-                const branchList = []
-                // const branchList = establishment.dataBranchUser.map((item) => ({
-                //     value: item.CODPOLO,
-                //     label: item.POLO
-                // }));
+                let branchList = []
+                if(establishment.dataBranchUser)
+                    branchList = establishment.dataBranchUser.map((item) => ({
+                        value: item.CODPOLO,
+                        label: item.POLO
+                    }));
                 
                 
                 //caso o usuário tenha unidades vinculadas no RM(TOTVS)

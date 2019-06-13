@@ -1,9 +1,11 @@
 .wrapper {
     background-color: #fff!important;
+    
   }
   
   .login-box-body {
     background-color: #eee;
+    height: 100%;
   }
 
   .login-box button {
@@ -12,4 +14,4 @@
 
   .login-box a:hover {
     cursor: pointer;
-  }
+  }  

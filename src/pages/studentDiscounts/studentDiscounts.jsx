@@ -413,7 +413,7 @@ class StudentDiscounts extends Component {
                                         <ValueBox cols='3' color='purple' value={this.formatValueProfit(profit.VALORORIGINAL)}  text='Valor Original' />
                                         <ValueBox cols='3' color='yellow' value={this.formatValueProfit(profit.VALORDEDUCAO)}   text='Valor Dedução' />
                                         <ValueBox cols='3' color='lime'   value={this.formatValueProfit(profit.VALORLIQUIDO)}   text='Valor Liquido' />
-                                        <ValueBox cols='3' color='red'    value={this.formatValueProfit(profit.COMPROMETIMENTO)} text='Valor Comprometido' />
+                                        <ValueBox cols='3' color='red'    value={`${profit.COMPROMETIMENTO} %`} text='Valor Comprometido' />
                                     </Card>
                                     </Row>
                                 </div>

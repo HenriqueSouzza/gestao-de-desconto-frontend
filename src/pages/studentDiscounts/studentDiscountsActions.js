@@ -159,7 +159,7 @@ export function getProfit(params = []){
     const values = {
         codfilial: dataLocalStorage.values.establishment,
         codcurso :  params.course,
-        mes: moment().month(),
+        mes: moment().month(),        
         ano: moment().year()
     }
 

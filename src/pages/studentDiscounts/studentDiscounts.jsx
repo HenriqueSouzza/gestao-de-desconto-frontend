@@ -399,6 +399,7 @@ class StudentDiscounts extends Component {
                         <div>
                             <Form role='form' noValidate>
                                 {this.listStudent(students.list.content)}
+                                <div style={{'height': '400px'}}>.</div>
                                 <div className='main-footer reset-margem-left'>
                                     <Row>
                                         <Grid cols='4'>

@@ -166,7 +166,7 @@ class StudentDiscounts extends Component {
         return (
             Object.values(studentsList).map((student, index) => ( 
                 <div key={student.dados.ra} className="container-fluid space-panel">
-                    <div className="panel panel-info">
+                    <div className="panel panel-info student-panel">
                         <div className="panel-heading text text-center">
                             <Row>
                                 <Grid cols='1'>      
@@ -205,7 +205,7 @@ class StudentDiscounts extends Component {
                                         </td>
                                         <td className='success'>
                                             <Row className="hidden-xs">
-                                                <label className="col-sm-6 text-center">Valor S/ desconto</label>                                                
+                                                <label className="col-sm-6 text-center">Mensalidade</label>                                                
                                             </Row>
                                         </td>
                                         <td className='success'>
@@ -394,8 +394,8 @@ class StudentDiscounts extends Component {
                         <div>
                             <Form role='form' noValidate>
                                 {this.listStudent(students.list.content)}
-                                <div style={{'height': '400px'}}>.</div>
-                                <div className='main-footer reset-margem-left'>
+                                <div style={{'height': '200px'}}>.</div>
+                                <div className="discount-footer">
                                     <Row>
                                         
                                          <Grid cols='6'>

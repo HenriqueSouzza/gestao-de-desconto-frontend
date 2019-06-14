@@ -7,6 +7,23 @@ html, body, #app, #app>div {
     bottom: 0px;
     width: 100%;    
 }
+.discount-footer{
+    position: fixed;
+    bottom: 0px;
+    left: 25%;
+    background-color: #D9EDF7;
+    padding: 1em;
+    margin: 0 auto;
+}
+.student-panel .panel-heading  {
+    height: 2.3em
+    
+}
+
+.student-panel .md-selection-control-container{
+    position: absolute;
+    top: -100%;
+}
 
 button {
 

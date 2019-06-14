@@ -106,8 +106,7 @@ class StudentDiscounts extends Component {
 
         const { selectRaForm, valueForm, validation } = this.props.students
 
-        const aux = this.mergeData(selectRaForm, valueForm, RmOrApi, validation)
-        console.log(aux)
+        const aux = this.mergeData(selectRaForm, valueForm, RmOrApi, validation)        
         const discounts = {discounts: aux};
         this.props.storeDiscount(discounts, this.props.history);
         e.preventDefault();
@@ -200,22 +199,21 @@ class StudentDiscounts extends Component {
                                             <Row className="hidden-xs">
                                                 <label className="col-sm-5 text-center">Desconto anterior</label>
                                                 <label className="col-sm-3 text-center">Percentual</label>
-                                                <label className="col-sm-2 text-center">Parcela Inicial</label>
-                                                <label className="col-sm-2 text-center">Parcela Final</label>
+                                                <label className="col-sm-2 text-center">P. Inicial</label>
+                                                <label className="col-sm-2 text-center">P. Final</label>
                                             </Row>
                                         </td>
                                         <td className='success'>
                                             <Row className="hidden-xs">
-                                                <label className="col-sm-6 text-center">Valor S/ desconto</label>
-                                                <label className="col-sm-6 text-center">Valor C/ desconto</label>
+                                                <label className="col-sm-6 text-center">Valor S/ desconto</label>                                                
                                             </Row>
                                         </td>
                                         <td className='success'>
                                             <Row className="hidden-xs">
                                                 <label className="col-sm-5 text-center">Desconto atual</label>
                                                 <label className="col-sm-3 text-center">Percentual</label>
-                                                <label className="col-sm-2 text-center">Parcela Inicial</label>
-                                                <label className="col-sm-2 text-center">Parcela Final</label>
+                                                <label className="col-sm-2 text-center">P. Inicial</label>
+                                                <label className="col-sm-2 text-center">P. Final</label>
                                             </Row>
                                         </td>
                                     </tr>
@@ -244,10 +242,7 @@ class StudentDiscounts extends Component {
                                             <Row>
                                                 <div className="col-sm-6 text-center">
                                                     <div>R${student.dados.valor_mensalidade}</div>
-                                                </div>
-                                                <div className="col-sm-6 text-center">
-                                                    <div>R${student.dados.valor_mensalidade}</div>
-                                                </div>
+                                                </div>                                                
                                             </Row>
                                         </td>
                                         <td className='success'>
@@ -402,19 +397,21 @@ class StudentDiscounts extends Component {
                                 <div style={{'height': '400px'}}>.</div>
                                 <div className='main-footer reset-margem-left'>
                                     <Row>
-                                        <Grid cols='4'>
+                                        
+                                         <Grid cols='6'>
                                             <button className={`btn btn-primary btn-block`} name={`api`} onClick={(e) => this.onSubmit(e)} disabled={submitting} type="submit">Lançar desconto</button>
                                         </Grid>
-                                        <Grid cols='4'>
+                                        <Grid cols='6'>
                                             <button className={`btn btn-success btn-block`} name={`rm`} onClick={(e) => this.onSubmit(e)} disabled={false} type="submit">Conceder desconto no RM</button>
                                         </Grid>
-                                    <hr/>
-                                    <Card>
-                                        <ValueBox cols='3' color='purple' value={this.formatValueProfit(profit.VALORORIGINAL)}  text='Valor Original' />
-                                        <ValueBox cols='3' color='yellow' value={this.formatValueProfit(profit.VALORDEDUCAO)}   text='Valor Dedução' />
-                                        <ValueBox cols='3' color='lime'   value={this.formatValueProfit(profit.VALORLIQUIDO)}   text='Valor Liquido' />
-                                        <ValueBox cols='3' color='red'    value={`${profit.COMPROMETIMENTO} %`} text='Valor Comprometido' />
-                                    </Card>
+                                    
+                                    
+                                    
+                                        <Grid cols='3'> <b>Valor Original:  </b><span className="badge">{this.formatValueProfit(profit.VALORORIGINAL)}  </span> </Grid>
+                                        <Grid cols='3'> <b>Valor Dedução:   </b><span className="badge">{this.formatValueProfit(profit.VALORDEDUCAO)}</span></Grid>
+                                        <Grid cols='3'> <b>Valor Liquido:   </b><span className="badge">{this.formatValueProfit(profit.VALORLIQUIDO)}</span></Grid>
+                                        <Grid cols='3'> <b>Comprometimento: </b><span className="badge">{profit.COMPROMETIMENTO} %</span> </Grid>
+                                    
                                     </Row>
                                 </div>
                             </Form>

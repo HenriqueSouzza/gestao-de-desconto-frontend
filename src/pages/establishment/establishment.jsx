@@ -166,7 +166,7 @@ class Establishment extends Component {
                                 //adiciona a unidade dele na lista que sera apresentada nas options
                                 establishmentListUser.push({
                                     value: establishmentList[i].value,
-                                    label:  establishmentList[i].label
+                                    label:  `${establishmentList[i].value} - ${establishmentList[i].label}`
                                 })
                             }
                         }
@@ -201,8 +201,7 @@ class Establishment extends Component {
                 }))
 
                 return (
-                    <Row>
-                        <Grid cols="12">
+                        <div>
                             <Form role='form' className="login-box-body" onSubmit={handleSubmit(this.onSubmit)} noValidate>
                                 <div className="login-box">
                                     <div className="login-logo"><b> Escolha</b> filial </div>
@@ -261,8 +260,8 @@ class Establishment extends Component {
                                 </div>
                             </Form>
                             <Messages />
-                        </Grid>
-                    </Row >
+                            </div>
+                        
                 )
             } else {
                 return <CircularProgress id='establishment' />

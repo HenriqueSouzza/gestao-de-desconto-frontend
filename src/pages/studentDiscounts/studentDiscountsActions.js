@@ -155,12 +155,13 @@ export function saveArrayInInsert(array){
 export function getProfit(params = []){
 
     const dataLocalStorage = JSON.parse(localStorage.getItem(ESTABLISHMENT_DATA));
-   
+    
+    
     const values = {
         codfilial: dataLocalStorage.values.establishment,
         codcurso :  params.course,
-        mes: moment().month(),        
-        ano: moment().year()
+        mes: moment().month() + 2,        
+        ano: moment().year() 
     }
 
     const request = axios.post(`${URL_SAVE}/profit`, values);

@@ -35,6 +35,11 @@ class StudentDiscountsForm extends Component {
             label: course.NOME
         }))
 
+        const typeStudent = [{
+            value: 1,
+            label: 'CALOURO'
+        }]
+
         return (
             <div>
                 {/* <ContentHeader title='Papéis' /> */}
@@ -54,10 +59,11 @@ class StudentDiscountsForm extends Component {
                                                 placeholder="RA"
                                                 label='RA do Aluno'
                                                 cols='12 12 8 8'
+                                                value={''}
                                                 // validate={[FORM_RULES.required]}
                                                 />
                                         </Grid>
-                                        <Grid cols='5'>
+                                        <Grid cols='3'>
                                             <Field
                                                 component={InputLabel}
                                                 type="text"
@@ -65,6 +71,7 @@ class StudentDiscountsForm extends Component {
                                                 placeholder="Nome do Aluno"
                                                 label='Nome do Aluno'
                                                 cols='12 12 8 8'
+                                                value={''}
                                                 // validate={[FORM_RULES.required]}
                                                 />
                                         </Grid>
@@ -73,9 +80,21 @@ class StudentDiscountsForm extends Component {
                                                 component={SelectLabel}
                                                 name="course"
                                                 options={courseList}
-                                                cols='12 12 12 12'
+                                                cols='12 12 8 8'
                                                 label="Curso"
                                                 validate={[FORM_RULES.required]}
+                                                value={''}
+                                                />
+                                        </Grid>
+                                        <Grid cols='3'>
+                                            <Field
+                                                component={SelectLabel}
+                                                name="typeStudent"
+                                                options={typeStudent}
+                                                cols='12 12 8 8'
+                                                label="Tipo aluno"
+                                                value={''}
+                                                // validate={[FORM_RULES.required]}
                                                 />
                                         </Grid>
                                     </Row>

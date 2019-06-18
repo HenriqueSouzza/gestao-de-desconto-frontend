@@ -18,6 +18,7 @@ export class InputWithOutReduxForm extends Component {
             touched: false,
             error: false,
             field: '',
+            value: this.props.value,
             list: this.props.arrValue,
             validationReducer: this.props.validationArray
         }
@@ -31,6 +32,10 @@ export class InputWithOutReduxForm extends Component {
         const { validate } = this.props;
 
         const { name, value } = event.target;
+
+        this.setState({
+            value: value
+        })
 
         this.validation(validate, name, value);
     }
@@ -87,7 +92,7 @@ export class InputWithOutReduxForm extends Component {
 
     render() {
 
-        const { touched, error } = this.state;
+        const { touched, error, value } = this.state;
 
         this.saveValue()
 
@@ -107,7 +112,7 @@ export class InputWithOutReduxForm extends Component {
                         className='form-control'
                         name={this.props.name}
                         type={this.props.type}
-                        value={this.props.value}
+                        value={value}
                         placeholder={this.props.placeholder}
                         readOnly={this.props.readOnly}
                         disabled={this.props.disabled}

@@ -95,7 +95,7 @@ export class SelectLabelWithOutReduxForm extends Component {
 
         const { touched, error } = this.state;
 
-        const { name, scholarshipList } = this.props;
+        const { name, scholarshipList, value } = this.props;
 
         let scholarships = [];
 
@@ -117,11 +117,11 @@ export class SelectLabelWithOutReduxForm extends Component {
                         </label>
                         ) : (
                             this.props.label ? <label htmlFor={this.props.name}>{this.props.label}</label> : ''
-                    )}
+                            )}
                     <select name={name} className="form-control" onChange={this.selectChange.bind(this)}>
                         <option value="">--------------</option>
                         {scholarships.map( scholarship => (
-                            <option key={scholarship.value} value={scholarship.value}>{scholarship.label}</option>
+                            <option key={scholarship.value} selected={scholarship.value == value} value={scholarship.value}>{scholarship.label}</option>
                         ))}
                     </select>
                     {touched && error && <span className="help-block">{error}</span>}

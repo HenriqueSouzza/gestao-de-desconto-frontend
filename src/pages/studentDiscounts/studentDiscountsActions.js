@@ -85,6 +85,16 @@ export function getScholarshipLimit(course){
      }
 }
 
+export function resetReducer(){
+    return dispatch => {
+        dispatch([
+            {
+                type: type.STUDENT_DISCOUNT_RESET_REDUCER,
+            }
+        ])
+    }
+}
+
 export function saveValidationDiscount(array){
 
     return dispatch => {
@@ -181,7 +191,6 @@ export function getProfit(params = []){
 }
 
 /**
- * 
  * @param {*} values (valores dos formulários)
  * @param {*} router (objeto do react router)
  */
@@ -203,7 +212,6 @@ export const storeDiscount = (values, router) => {
                         }
                     }    
                                                 
-                    
                     //dispatch do redux multi
                     dispatch([
                         getList(),                        

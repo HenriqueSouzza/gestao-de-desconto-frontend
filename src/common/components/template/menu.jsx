@@ -13,7 +13,8 @@ export default class Menu extends Component {
                     <MenuItem label='Margem de descontos' path='#margem-de-descontos' icon='credit-card' />
                 </MenuTree> */}
                 <MenuTree label='Descontos' icon='money'>
-                    <MenuItem label='Desconto Comercial' path='/desconto-comercial' icon='credit-card-alt' />
+                    <MenuItem label='Lançar Desconto' path='/desconto-comercial/lancar-desconto' icon='percent' />
+                    <MenuItem label='Conceder no RM ' path='/desconto-comercial/conceder-desconto-rm' icon='percent' />
                 </MenuTree>
                 <MenuTree label='Perfis de Acesso' icon='unlock-alt'>
                     <MenuItem path='/usuarios'

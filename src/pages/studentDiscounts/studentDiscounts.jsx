@@ -38,15 +38,13 @@ class StudentDiscounts extends Component {
         this.props.getCourse();
     }
 
-    mergeData(studentSelected, studentData, RmOrApi, validateIndice){
+    mergeData(studentSelected, studentData, validateIndice){
         let arrayData = [];
 
         let indexSelected = [];
 
         let prop;
 
-        let scholarshipCurrent = this.props.students.list.content
-        
         let studentDataTmp
 
         studentSelected.map( (selected, index) => {
@@ -55,46 +53,14 @@ class StudentDiscounts extends Component {
             }
         })
         
-        if(RmOrApi == 'rm'){
-            Object.values(scholarshipCurrent).map( (current) => {
-                if(current.bolsas_locais){
-                    studentDataTmp = {
-                        ra : current.dados.ra,
-                        establishment: current.dados.codfilial,
-                        schoolarship: current.bolsas_locais[0] ? current.bolsas_locais[0].CODBOLSA :  '',
-                        schoolarship_order: 1,
-                        value: current.bolsas_locais[0] ? parseFloat(current.bolsas_locais[0].DESCONTO.replace(',','.')) :  '',
-                        service: 2,
-                        first_installment: current.bolsas_locais[0] ? current.bolsas_locais[0].PARCELAINICIAL :  '',
-                        last_installment: current.bolsas_locais[0] ? current.bolsas_locais[0].PARCELAFINAL : '',
-                        period: current.dados.idperlet,
-                        period_code: current.dados.codperlet,
-                        contract: current.dados.codContrato,
-                        habilitation: current.dados.idhabilitacaofilial,
-                        modality_major: current.dados.modalidade == 'PRESENCIAL' ? 'P' : 'D',
-                        course_type: 3,
-                        detail: 'sem detalhes',
-                        send_rm: true,
-                        active: 0   
-                    }
-
-                    arrayData.push(studentDataTmp)
-                }
-            })
-        }else{
             for(prop in studentData) {
                 if(studentData.hasOwnProperty(prop)){
                     if(indexSelected.indexOf(parseInt(prop)) != -1 && !validateIndice[prop]){
-                        if(RmOrApi == 'rm'){
-                            studentDataTmp = {...studentData[prop], send_rm : true }
-                        }else{
-                            studentDataTmp = {...studentData[prop], send_rm : false }
-                        }
+                        studentDataTmp = {...studentData[prop], send_rm : false }
                         arrayData.push(studentDataTmp)
                     }
                 }
             }
-        }
             
         return arrayData;
         // this.props.saveArrayInInsert(arrayData)
@@ -102,13 +68,14 @@ class StudentDiscounts extends Component {
 
     onSubmit = (e) => {
 
-        const RmOrApi = e.target.name
-
         const { selectRaForm, valueForm, validation } = this.props.students
 
-        const aux = this.mergeData(selectRaForm, valueForm, RmOrApi, validation)        
+        const aux = this.mergeData(selectRaForm, valueForm, validation)   
+
         const discounts = {discounts: aux};
+
         this.props.storeDiscount(discounts, this.props.history);
+
         e.preventDefault();
     }
 
@@ -392,20 +359,15 @@ class StudentDiscounts extends Component {
                     <StudentDiscountsForm />
                     {(this.props.students.list.content != undefined && this.props.students.list.content.length != 0) ?
                         <div>
-                            <Form role='form' noValidate>
+                            <Form role='form' onSubmit={(e) => this.onSubmit(e)} noValidate>
                                 {this.listStudent(students.list.content)}
                                 <div style={{'height': '200px'}}>.</div>
                                 <div className="discount-footer">
                                     <Row>
                                         
-                                         <Grid cols='6'>
-                                            <button className={`btn btn-primary btn-block`} name={`api`} onClick={(e) => this.onSubmit(e)} disabled={submitting} type="submit">Lançar desconto</button>
-                                        </Grid>
                                         <Grid cols='6'>
-                                            <button className={`btn btn-success btn-block`} name={`rm`} onClick={(e) => this.onSubmit(e)} disabled={false} type="submit">Conceder desconto no RM</button>
+                                            <button className={`btn btn-primary btn-block`} disabled={submitting} type="submit">Lançar desconto</button>
                                         </Grid>
-                                    
-                                    
                                     
                                         <Grid cols='3'> <b>Valor Original:  </b><span className="badge">{this.formatValueProfit(profit.VALORORIGINAL)}  </span> </Grid>
                                         <Grid cols='3'> <b>Valor Dedução:   </b><span className="badge">{this.formatValueProfit(profit.VALORDEDUCAO)}</span></Grid>

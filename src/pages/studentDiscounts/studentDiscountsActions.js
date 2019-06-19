@@ -29,6 +29,7 @@ export function getList(params = []) {
     const polo = dataLocalStorage.values.branch ? dataLocalStorage.values.branch : '-1';
     const name = params.name ? params.name : '-1';    
     const ra = params.ra ? params.ra : '-1';
+    const tipoaluno = params.typeStudent ? params.typeStudent : '-1';
     
     const parameters = {
         codcurso: course,
@@ -36,7 +37,8 @@ export function getList(params = []) {
         codfilial: dataLocalStorage.values.establishment,        
         codperlet: dataLocalStorage.values.period,
         ra: ra,
-        nomealuno: name
+        nomealuno: name, 
+        tipoaluno: tipoaluno
     }
 
     const request = axios.post(`${URL_SAVE}/list-students`, parameters);

@@ -35,10 +35,16 @@ class StudentDiscountsForm extends Component {
             label: course.NOME
         }))
 
-        const typeStudent = [{
-            value: 1,
-            label: 'CALOURO'
-        }]
+        const typeStudent = [
+            {
+                value: 'CALOURO',
+                label: 'CALOURO'
+            },
+            {
+                value: 'VETERANO',
+                label: 'VETERANO'
+            }
+        ]
 
         return (
             <div>

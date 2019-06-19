@@ -1,5 +1,5 @@
-html, body, #app, #app>div {
-    height: 100%;    
+html, body, #app  {
+    height: 100%  !important;
   }
 
 .main-footer {
@@ -16,15 +16,31 @@ html, body, #app, #app>div {
     margin: 0 auto;
 }
 .student-panel .panel-heading  {
-    height: 2.3em
+    height: 1.4em;
+    position:relative;
+    padding: 0px;
+}
+.student-panel .panel-heading > .row  {
+    vertical-align: top;
     
+}
+
+.student-panel .panel-body {
+    padding: 0px
+}
+.student-panel  {
+    padding: 0px
 }
 
 .student-panel .md-selection-control-container{
     position: absolute;
-    top: -100%;
+    top: -60%;
+    left: -10%;
 }
-
+.student-panel .table.table-striped{
+    margin-bottom: 0px;
+    font-size: 0.9em
+}
 button {
 
     margin-left: 5px;

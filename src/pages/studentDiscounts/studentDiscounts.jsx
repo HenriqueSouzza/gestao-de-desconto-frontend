@@ -152,10 +152,11 @@ class StudentDiscounts extends Component {
                                     }
                                 </Grid>
                                 <Grid cols='1'><span className='badge'>{student.bolsas_locais.length > 0 ? 'EM VALIDAÇÂO' : 'CONCEDIDO RM' }</span></Grid>
-                                <Grid cols='4'>RA: {student.dados.ra} | {student.dados.aluno}</Grid>
+                                <Grid cols='4'>{student.dados.ra} | {student.dados.aluno}</Grid>
                                 <Grid cols='2'><span className='badge'>{student.dados.curso}</span></Grid>
-                                <Grid cols='2'><span className='badge'>{student.dados.modalidade}</span></Grid>
+                                <Grid cols='1'><span className='badge'>{student.dados.modalidade == 'PRESENCIAL' ? 'PRE' : 'EAD'}</span></Grid>
                                 <Grid cols='2'><span className={`badge ${student.dados.tipo_aluno === 'CALOURO' ? 'new-student' : ''}`}>{student.dados.tipo_aluno}</span></Grid>
+                                <Grid cols='1'><span className='badge'>R$ {student.dados.valor_mensalidade}</span></Grid>
                             </Row>
                         </div>
                         <div className="panel-body">
@@ -166,15 +167,10 @@ class StudentDiscounts extends Component {
                                             <Row className="hidden-xs">
                                                 <label className="col-sm-5 text-center">Desconto anterior</label>
                                                 <label className="col-sm-3 text-center">Percentual</label>
-                                                <label className="col-sm-2 text-center">P. Inicial</label>
-                                                <label className="col-sm-2 text-center">P. Final</label>
+                                                <label className="col-sm-2 text-center">PI</label>
+                                                <label className="col-sm-2 text-center">PF</label>
                                             </Row>
-                                        </td>
-                                        <td className='success'>
-                                            <Row className="hidden-xs">
-                                                <label className="col-sm-6 text-center">Mensalidade</label>                                                
-                                            </Row>
-                                        </td>
+                                        </td>                                        
                                         <td className='success'>
                                             <Row className="hidden-xs">
                                                 <label className="col-sm-5 text-center">Desconto atual</label>
@@ -204,14 +200,7 @@ class StudentDiscounts extends Component {
                                                     </div>
                                                 </Row>
                                             ))}
-                                        </td>
-                                        <td className='success'>
-                                            <Row>
-                                                <div className="col-sm-6 text-center">
-                                                    <div>R${student.dados.valor_mensalidade}</div>
-                                                </div>                                                
-                                            </Row>
-                                        </td>
+                                        </td>                                        
                                         <td className='success'>
                                             {student.bolsas_atuais.map((studentAfter, i) => (
                                                 <Row key={i + 100000}>
@@ -365,14 +354,14 @@ class StudentDiscounts extends Component {
                                 <div className="discount-footer">
                                     <Row>
                                         
-                                        <Grid cols='6'>
+                                        <Grid cols='12'>
                                             <button className={`btn btn-primary btn-block`} disabled={submitting} type="submit">Lançar desconto</button>
                                         </Grid>
                                     
-                                        <Grid cols='3'> <b>Valor Original:  </b><span className="badge">{this.formatValueProfit(profit.VALORORIGINAL)}  </span> </Grid>
+                                        {/* <Grid cols='3'> <b>Valor Original:  </b><span className="badge">{this.formatValueProfit(profit.VALORORIGINAL)}  </span> </Grid>
                                         <Grid cols='3'> <b>Valor Dedução:   </b><span className="badge">{this.formatValueProfit(profit.VALORDEDUCAO)}</span></Grid>
                                         <Grid cols='3'> <b>Valor Liquido:   </b><span className="badge">{this.formatValueProfit(profit.VALORLIQUIDO)}</span></Grid>
-                                        <Grid cols='3'> <b>Comprometimento: </b><span className="badge">{profit.COMPROMETIMENTO} %</span> </Grid>
+                                        <Grid cols='3'> <b>Comprometimento: </b><span className="badge">{profit.COMPROMETIMENTO} %</span> </Grid> */}
                                     
                                     </Row>
                                 </div>

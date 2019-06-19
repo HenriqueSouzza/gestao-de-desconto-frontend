@@ -17,15 +17,16 @@ export class InputLabel extends Component {
         return (
             <Grid cols={this.props.cols} style={this.props.style}>
                 <div className={`form-group ${touched && error && "has-error"}`}>
-                    {touched && error ? (
-                        <label className="control-label">
-                            <i className="fa fa-times-circle-o" />
-                            &nbsp;
-                            {this.props.label}
-                        </label>
-                    ) : (
-                            this.props.label ? <label htmlFor={this.props.name}>{this.props.label}</label> : ''
-                        )}
+                    { //touched && error ? (
+                        // <label className="control-label">
+                        //     <i className="fa fa-times-circle-o" />
+                        //     &nbsp;
+                        //     {this.props.label}
+                        // </label>
+                        // this.props.label ? <label htmlFor={this.props.name}>{this.props.label}</label> : ''
+                    // ) : (
+                        this.props.label ? <label htmlFor={this.props.name}>{this.props.label}</label> : ''}
+                        
                     <input
                         {...this.props.input}
                         className="form-control"

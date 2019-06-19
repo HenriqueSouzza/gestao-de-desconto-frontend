@@ -7,7 +7,7 @@ export default class Menu extends Component {
     //Componente de menu principal que é utilizado na main/app.jsx
     render() {
         return (
-            <ul className='sidebar-menu'>
+            <ul className='sidebar-menu' data-widget="tree">
                 {/* <MenuItem path='/' label='Dashboard' icon='dashboard'/>
                 <MenuTree label='Configurações' icon='cogs'>
                     <MenuItem label='Margem de descontos' path='#margem-de-descontos' icon='credit-card' />

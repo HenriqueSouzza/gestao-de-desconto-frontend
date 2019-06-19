@@ -152,10 +152,10 @@ class StudentDiscounts extends Component {
                                         />
                                     }
                                 </Grid>
-                                <Grid cols='1'><span className='badge'>{student.bolsas_locais.length > 0 ? 'EM VALIDAÇÂO' : 'CONCEDIDO RM' }</span></Grid>
                                 <Grid cols='4'>{student.dados.ra} | {student.dados.aluno}</Grid>
+                                <Grid cols='1'><span className='badge'>{student.bolsas_locais.length > 0 ? 'EM VALIDAÇÂO' : 'CONCEDIDO RM' }</span></Grid>
                                 <Grid cols='2'><span className='badge'>{student.dados.curso}</span></Grid>
-                                <Grid cols='1'><span className='badge'>{student.dados.modalidade == 'PRESENCIAL' ? 'PRE' : 'EAD'}</span></Grid>
+                                <Grid cols='1'><span className='badge'>{student.dados.modalidade}</span></Grid>
                                 <Grid cols='2'><span className={`badge ${student.dados.tipo_aluno === 'CALOURO' ? 'new-student' : ''}`}>{student.dados.tipo_aluno}</span></Grid>
                                 <Grid cols='1'><span className='badge'>R$ {student.dados.valor_mensalidade}</span></Grid>
                             </Row>

@@ -58,7 +58,6 @@ export default (state = INITIAL_STATE, action) => {
         /************************************************************************************/
 
         case type.STUDENT_DISCOUNT_RESET_REDUCER:
-            console.log(INITIAL_STATE, state)
             return INITIAL_STATE
 
         case type.STUDENT_DISCOUNTS_GET_PROFIT:

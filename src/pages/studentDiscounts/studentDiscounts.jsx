@@ -6,7 +6,7 @@ import { reduxForm, Form } from 'redux-form';
 import { CircularProgress } from 'react-md';
 import _ from 'lodash';
 
-import { getList, create, saveForm, saveCheckedForm, saveArrayInInsert, storeDiscount, saveScholarshipDiscount, saveValidationDiscount } from './studentDiscountsActions';
+import { getList, create, saveForm, saveCheckedForm, saveArrayInInsert, storeDiscount, saveScholarshipDiscount, saveValidationDiscount, resetReducer } from './studentDiscountsActions';
 
 
 import { getCourse } from '../establishment/establishmentActions';
@@ -34,8 +34,9 @@ class StudentDiscounts extends Component {
         document.title = "SPCOM | Descontos Comerciais";
     }
     
-    componentWillMount() {
+    componentDidMount() {
         this.props.getCourse();
+        this.props.resetReducer();
     }
 
     mergeData(studentSelected, studentData, validateIndice){
@@ -453,7 +454,7 @@ const mapStateToProps = state => ({
  */
 
 
-const mapDispatchToProps = dispatch => bindActionCreators({ getList, getCourse, create, saveForm, saveCheckedForm, saveArrayInInsert, storeDiscount, saveScholarshipDiscount, saveValidationDiscount /*arrayPush, arrayRemove*/ }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ getList, getCourse, create, saveForm, saveCheckedForm, saveArrayInInsert, storeDiscount, saveScholarshipDiscount, saveValidationDiscount, resetReducer}, dispatch);
 
 /**
  * <b>connect</b> utiliza o padrão decorator da ES para que ele possa incluir dentro das propriedades desse component 

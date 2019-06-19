@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { reduxForm, Form, Field } from 'redux-form'; //formValueSelector obter valores do formulario apartir de seu id
 import { Card, CardTitle, CardText } from 'react-md';
-
+import { toastr } from 'react-redux-toastr';
 
 import { InputLabel } from '../../../common/components/form/inputLabel';
 import Content from '../../../common/components/template/content';
@@ -20,16 +20,30 @@ import { getList, getScholarshipLimit, getProfit } from '../studentDiscountsActi
 
 class StudentDiscountsForm extends Component {
 
-    onSubmit = (values) => {
-        this.props.getList(values)
-        this.props.getScholarshipLimit(values);
-        this.props.getProfit(values);
+    constructor(props){
+        super(props);
+    }
+
+    onSubmit = (value) => {
+        
+        const { values } = this.props.stateForm
+
+        console.log(values)
+
+        if(values && (values.ra || values.course)){
+            this.props.getList(value)
+            this.props.getScholarshipLimit(value);
+            this.props.getProfit(value);
+        }else{
+            toastr.error('Atenção', `Preencha o campo RA ou Curso`);
+        }
+
     }
 
     render() {
         
         const { handleSubmit } = this.props
-        
+
         const courseList = this.props.establishment.course.map( course => ({
             value: course.CODCURSO,
             label: course.NOME
@@ -65,7 +79,6 @@ class StudentDiscountsForm extends Component {
                                                 placeholder="RA"
                                                 label='RA do Aluno'
                                                 cols='12 12 8 8'
-                                                value={''}
                                                 // validate={[FORM_RULES.required]}
                                                 />
                                         </Grid>
@@ -77,9 +90,8 @@ class StudentDiscountsForm extends Component {
                                                 placeholder="Nome do Aluno"
                                                 label='Nome do Aluno'
                                                 cols='12 12 8 8'
-                                                value={''}
                                                 // validate={[FORM_RULES.required]}
-                                                />
+                                            />
                                         </Grid>
                                         <Grid cols='3'>
                                             <Field
@@ -88,8 +100,7 @@ class StudentDiscountsForm extends Component {
                                                 options={courseList}
                                                 cols='12 12 8 8'
                                                 label="Curso"
-                                                validate={[FORM_RULES.required]}
-                                                value={''}
+                                                // validate={[FORM_RULES.required]}
                                                 />
                                         </Grid>
                                         <Grid cols='3'>
@@ -99,7 +110,6 @@ class StudentDiscountsForm extends Component {
                                                 options={typeStudent}
                                                 cols='12 12 8 8'
                                                 label="Tipo aluno"
-                                                value={''}
                                                 // validate={[FORM_RULES.required]}
                                                 />
                                         </Grid>
@@ -117,6 +127,30 @@ class StudentDiscountsForm extends Component {
         );
     }
 }
+
+/**
+ * Retorna o state do formulário, qualquer inserção que estiver em algum input, poderá ser consultado pelo {"this.props.stateForm"}
+ * recurso ultilizado na documentação (formValueSelector)
+ */
+StudentDiscountsForm = connect(state => {
+
+    // const value = selector(state, 'fieldName')
+
+    /**
+     * Guardando as informações do state do formulario no {stateForm} 
+     */
+    const stateForm = state.form.StudentDiscountsForm
+
+    /**
+     * retorna o valor connectado com o nome atribuído ao formulário
+     */
+    return {
+        stateForm
+    }
+
+})(StudentDiscountsForm)
+
+
 
 
 const mapStateToProps = state => ({

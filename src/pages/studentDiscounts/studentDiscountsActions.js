@@ -2,7 +2,6 @@ import axios from 'axios';
 import moment  from 'moment';
 import _ from 'lodash';
 import { toastr } from 'react-redux-toastr';
-import { reset as resetForm, initialize } from 'redux-form';
 
 import type from './types';
 
@@ -25,7 +24,7 @@ export function getList(params = []) {
 
     const dataLocalStorage = JSON.parse(localStorage.getItem(ESTABLISHMENT_DATA))
     
-    const course = params.course ? params.course : 'GP011';
+    const course = params.course ? params.course : '-1';
     const polo = dataLocalStorage.values.branch ? dataLocalStorage.values.branch : '-1';
     const name = params.name ? params.name : '-1';    
     const ra = params.ra ? params.ra : '-1';

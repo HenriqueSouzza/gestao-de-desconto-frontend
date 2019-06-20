@@ -41,6 +41,18 @@ html, body, #app  {
     margin-bottom: 0px;
     font-size: 0.9em
 }
+
+
+
+.panel.menu-panel{
+    padding: 1em;
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center
+}
+
 button {
 
     margin-left: 5px;

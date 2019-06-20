@@ -17,23 +17,23 @@ export const LOGIN_GOOGLE = (
 
     process.env.NODE_ENV === 'production' ? 
        { 
-            'client_id' : '560156040921-uo0006igf0kap726nmidjvb80bke3chq.apps.googleusercontent.com',
-            'client_secret' : 'Sj6tSCVpP4E9jMBQ03df0dB4',
+            'client_id' : '809505609882-8h36mosq038smdt4qh7c3jgidf95gpq1.apps.googleusercontent.com',
+            'client_secret' : '0r7yKJ0PyQuiIZ-jjDQH1z2-',
             'grant_type' : 'authorization_code',
             'redirect_uri': 'http://hmldescontos.cnec.br/'
        }
     : 
     process.env.NODE_ENV === 'homologation' ?
         { 
-            'client_id' : '560156040921-uo0006igf0kap726nmidjvb80bke3chq.apps.googleusercontent.com',
-            'client_secret' : 'Sj6tSCVpP4E9jMBQ03df0dB4',
+            'client_id' : '809505609882-8h36mosq038smdt4qh7c3jgidf95gpq1.apps.googleusercontent.com',
+            'client_secret' : '0r7yKJ0PyQuiIZ-jjDQH1z2-',
             'grant_type' : 'authorization_code',
             'redirect_uri': 'http://hmldescontos.cnec.br/'
         }
     :
         { 
-            'client_id' : '560156040921-uo0006igf0kap726nmidjvb80bke3chq.apps.googleusercontent.com',
-            'client_secret' : 'Sj6tSCVpP4E9jMBQ03df0dB4',
+            'client_id' : '809505609882-8h36mosq038smdt4qh7c3jgidf95gpq1.apps.googleusercontent.com',
+            'client_secret' : '0r7yKJ0PyQuiIZ-jjDQH1z2-',
             'grant_type' : 'authorization_code',
             'redirect_uri': 'http://localhost:3000/'
         }

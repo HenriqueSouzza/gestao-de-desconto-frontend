@@ -12,6 +12,7 @@ import Messages from "../../common/components/messages/messages";
 import { LOGIN_GOOGLE } from "../../config/consts";
 import { login } from "./authActions";
 
+import logo from "../../common/images/logo_vertical.png";
 class Auth extends Component {
   /**
    *
@@ -26,26 +27,25 @@ class Auth extends Component {
   render() {
     return (
       <div className="gradient-wrapper">
-        <Row>
-          <Grid cols="12">
-            <div className="login-box panel panel-default">
-              <div className="login-logo">
-                <b> SPCOM </b>
-              </div>
-              <div className="login-box-body">
-                <GoogleLogin
-                  clientId={LOGIN_GOOGLE.client_id}
-                  buttonText="Login com o Google"
-                  onSuccess={this.props.login}
-                  onFailure={this.props.login}
-                  responseType="code"
-                  redirectUri={LOGIN_GOOGLE.redirect_uri}
-                />
-              </div>
-              <Messages />
-            </div>
-          </Grid>
-        </Row>
+        <div className="login-box panel panel-default panel-cnec">
+          <div className="panel panel-heading center">
+            <h1> SPCOM </h1>
+          </div>
+          <div className="login-logo">
+            <img className="logo-cnec" src={logo} />
+          </div>
+          <div className="login-box-body">
+            <GoogleLogin
+              clientId={LOGIN_GOOGLE.client_id}
+              buttonText="Login com o Google"
+              onSuccess={this.props.login}
+              onFailure={this.props.login}
+              responseType="code"
+              redirectUri={LOGIN_GOOGLE.redirect_uri}
+            />
+          </div>
+          <Messages />
+        </div>
       </div>
     );
   }

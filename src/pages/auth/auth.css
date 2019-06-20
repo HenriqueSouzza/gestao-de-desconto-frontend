@@ -14,16 +14,24 @@
   height: 100%;
 }
 
-.login-box-body {
-  background-color: #eee;
+.login-box-body {  
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: #fff;
 
 }
-
+.panel-default.panel-cnec .panel-heading{
+  background-color: #FEE64D;
+}
+.panel-default.panel-cnec .panel-heading h1{
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 900;
+  text-align: center
+}
 .login-box-body button {
   position: relative;
+  
 }
 
 .login-box button {
@@ -32,4 +40,9 @@
 
 .login-box a:hover {
   cursor: pointer;
+}
+
+.logo-cnec {
+  width: 100px;
+  height: 120px;
 }

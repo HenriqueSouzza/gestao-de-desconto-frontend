@@ -210,82 +210,76 @@ class Establishment extends Component {
             <div>
               <Form
                 role="form"
-                className="login-box-body panel panel-default"
+                className="panel panel-default panel-cnec"
                 onSubmit={handleSubmit(this.onSubmit)}
                 noValidate
               >
-                <div className="login-box">
-                  <div className="login-logo">
-                    <b> Escolha</b> filial{" "}
-                  </div>
+                <div className="panel panel-heading">
+                  <h1><b> Escolha</b> sua filial{" "}</h1>
+                </div>
+                <div className="panel panel-body">
+                  <Field
+                    component={Select}
+                    name="establishment"
+                    label="Unidade:"
+                    options={establishmentListUser}
+                    onChange={e =>
+                      this.onEstablishmentSelected(
+                        e.target.options[e.target.selectedIndex].innerText,
+                        e.target.value
+                      )
+                    }
+                    cols="12 12 12 12"
+                    validate={[FORM_RULES.required]}
+                  />
+                </div>
+                <If test={this.state.codEstablishmentSelected == 169}>
                   <div className="login-box-body">
                     <Field
                       component={Select}
-                      name="establishment"
-                      label="Unidade:"
-                      options={establishmentListUser}
-                      onChange={e =>
-                        this.onEstablishmentSelected(
-                          e.target.options[e.target.selectedIndex].innerText,
-                          e.target.value
-                        )
-                      }
+                      name="modality"
+                      label="Modalidade:"
+                      options={modalityList}
+                      onChange={e => this.onModalitySelected(e.target.value)}
                       cols="12 12 12 12"
                       validate={[FORM_RULES.required]}
                     />
                   </div>
-                  <If test={this.state.codEstablishmentSelected == 169}>
+                  <If test={this.state.codModalitySelected == "D"}>
                     <div className="login-box-body">
                       <Field
                         component={Select}
-                        name="modality"
-                        label="Modalidade:"
-                        options={modalityList}
-                        onChange={e => this.onModalitySelected(e.target.value)}
-                        cols="12 12 12 12"
-                        validate={[FORM_RULES.required]}
-                      />
-                    </div>
-                    <If test={this.state.codModalitySelected == "D"}>
-                      <div className="login-box-body">
-                        <Field
-                          component={Select}
-                          name="branch"
-                          label="Polo:"
-                          options={branchList}
-                          onChange={e =>
-                            this.onBranchSelected(
-                              e.target.options[e.target.selectedIndex]
-                                .innerText,
-                              e.target.value
-                            )
-                          }
-                          cols="12 12 12 12"
-                          validate={[FORM_RULES.required]}
-                        />
-                      </div>
-                    </If>
-                  </If>
-                  <If test={establishment.period.length}>
-                    <div className="login-box-body">
-                      <Field
-                        component={Select}
-                        name="period"
-                        label="Período Letivo:"
-                        options={periodList}
+                        name="branch"
+                        label="Polo:"
+                        options={branchList}
+                        onChange={e =>
+                          this.onBranchSelected(
+                            e.target.options[e.target.selectedIndex].innerText,
+                            e.target.value
+                          )
+                        }
                         cols="12 12 12 12"
                         validate={[FORM_RULES.required]}
                       />
                     </div>
                   </If>
+                </If>
+                <If test={establishment.period.length}>
                   <div className="login-box-body">
-                    <button
-                      className={`btn btn-success offset-1`}
-                      type="submit"
-                    >
-                      Confirmar
-                    </button>
+                    <Field
+                      component={Select}
+                      name="period"
+                      label="Período Letivo:"
+                      options={periodList}
+                      cols="12 12 12 12"
+                      validate={[FORM_RULES.required]}
+                    />
                   </div>
+                </If>
+                <div className="login-box-body">
+                  <button className={`btn btn-success offset-1`} type="submit">
+                    Confirmar
+                  </button>
                 </div>
               </Form>
             </div>

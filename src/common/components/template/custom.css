@@ -1,13 +1,16 @@
-html, body, #app  {
-    height: 100%  !important;
-  }
+html,
+body,
+#app {
+    height: 100% !important;
+}
 
 .main-footer {
     position: fixed;
     bottom: 0px;
-    width: 100%;    
+    width: 100%;
 }
-.discount-footer{
+
+.discount-footer {
     position: fixed;
     bottom: 0px;
     left: 25%;
@@ -15,36 +18,40 @@ html, body, #app  {
     padding: 1em;
     margin: 0 auto;
 }
-.student-panel .panel-heading  {
+
+.student-panel .panel-heading {
     height: 1.4em;
-    position:relative;
+    position: relative;
     padding: 0px;
 }
-.student-panel .panel-heading > .row  {
+
+.student-panel .panel-heading>.row {
     vertical-align: top;
-    
+
 }
 
 .student-panel .panel-body {
     padding: 0px
 }
-.student-panel  {
+
+.student-panel {
     padding: 0px
 }
 
-.student-panel .md-selection-control-container{
+.student-panel .md-selection-control-container {
     position: absolute;
     top: -60%;
     left: -10%;
 }
-.student-panel .table.table-striped{
+
+.student-panel .table.table-striped {
     margin-bottom: 0px;
     font-size: 0.9em
 }
 
 
 
-.panel.menu-panel{
+.panel.menu-panel {
     padding: 1em;
     margin: 0 auto;
     text-align: center;
@@ -53,13 +60,22 @@ html, body, #app  {
     justify-content: center
 }
 
+.panel-default.panel-cnec .panel-heading {
+    background-color: #FEE64D;
+}
+
+.panel-default.panel-cnec .panel-heading h1 {
+    font-family: 'Roboto';
+    text-align: center
+}
+
 button {
 
     margin-left: 5px;
 }
 
 .table-actions {
-    
+
     width: 150px;
 }
 

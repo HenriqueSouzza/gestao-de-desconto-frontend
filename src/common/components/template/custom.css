@@ -29,6 +29,9 @@ body,
     vertical-align: top;
 
 }
+.student-panel .anterior {
+    width: 50%;
+}
 
 .student-panel .panel-body {
     padding: 0px

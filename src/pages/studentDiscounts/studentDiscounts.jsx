@@ -164,20 +164,20 @@ class StudentDiscounts extends Component {
                             <table key={index} className='table table-striped'>
                                 <thead>
                                     <tr>
-                                        <td className='warning'>
+                                        <td className='warning anterior'>
                                             <Row className="hidden-xs">
-                                                <label className="col-sm-5 text-center">Desconto anterior</label>
-                                                <label className="col-sm-3 text-center">Percentual</label>
-                                                <label className="col-sm-2 text-center">PI</label>
-                                                <label className="col-sm-2 text-center">PF</label>
+                                                <label className="col-sm-5 col-md-5 col-lg-5 text-center">Desconto anterior</label>
+                                                <label className="col-sm-3 col-md-3 col-lg-3 text-center">Percentual</label>
+                                                <label className="col-sm-2 col-md-2 col-lg-2 text-center">PI</label>
+                                                <label className="col-sm-2 col-md-2 col-lg-2 text-center">PF</label>
                                             </Row>
                                         </td>                                        
                                         <td className='success'>
                                             <Row className="hidden-xs">
-                                                <label className="col-sm-5 text-center">Desconto atual</label>
-                                                <label className="col-sm-3 text-center">Percentual</label>
-                                                <label className="col-sm-2 text-center">P. Inicial</label>
-                                                <label className="col-sm-2 text-center">P. Final</label>
+                                                <label className="col-sm-5 col-md-5 col-lg-5 text-center">Desconto atual</label>
+                                                <label className="col-sm-3 col-md-3 col-lg-3 text-center">Percentual</label>
+                                                <label className="col-sm-2 col-md-2 col-lg-2 text-center">P. Inicial</label>
+                                                <label className="col-sm-2 col-md-2 col-lg-2 text-center">P. Final</label>
                                             </Row>
                                         </td>
                                     </tr>

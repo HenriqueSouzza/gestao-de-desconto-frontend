@@ -134,7 +134,7 @@ class StudentDiscountsRm extends Component {
             for(i in students) {
                 if(students.hasOwnProperty(i)){
                     if(indexSelected.indexOf(parseInt(i)) != -1){
-                        if(students[i].bolsas_locais.length > 0){
+                        if(students[i].bolsas_locais.length > 0){                            
                             studentDataTmp = {
                                 id: students[i].bolsas_locais[0].ID,
                                 ra : students[i].dados.ra,

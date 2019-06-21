@@ -59,7 +59,7 @@ export function getList(params = []) {
 export function getScholarshipLimit(course){
 
     const dataLocalStorage = JSON.parse(localStorage.getItem(ESTABLISHMENT_DATA))
-    
+    const codcurso = course.course ? course.course : course;
     const modality = dataLocalStorage.values.establishment == 169 ? dataLocalStorage.values.modality : "P" 
 
     const values = {
@@ -67,7 +67,7 @@ export function getScholarshipLimit(course){
         codpolo: dataLocalStorage.values.branch,
         modality: modality,
         codPerlet : dataLocalStorage.values.period,
-        codCurso :  course
+        codCurso :  codcurso
     }
 
     const request = axios.post(`${URL_BASE_LOCAL}`, values);

@@ -56,8 +56,8 @@ export function getList(params = []) {
     }
 }
 
-export function getScholarshipLimit(params){
-    const {course, typeStudent} = params;
+export function getScholarshipLimit(course){
+
     const dataLocalStorage = JSON.parse(localStorage.getItem(ESTABLISHMENT_DATA))
     
     const modality = dataLocalStorage.values.establishment == 169 ? dataLocalStorage.values.modality : "P" 

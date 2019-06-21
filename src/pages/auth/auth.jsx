@@ -29,7 +29,8 @@ class Auth extends Component {
       <div className="gradient-wrapper">
         <div className="login-box panel panel-default panel-cnec">
           <div className="panel panel-heading center">
-            <h1> SPCOM </h1>
+            <h1> SPCOM <p> Sistema de Gerenciamento de Política Comercial </p></h1>
+            
           </div>
           <div className="login-logo">
             <img className="logo-cnec" src={logo} />

@@ -196,7 +196,7 @@ class Establishment extends Component {
           },
           {
             id: "D",
-            name: "Ensino à distâncias"
+            name: "Ensino à distância"
           }
         ];
 

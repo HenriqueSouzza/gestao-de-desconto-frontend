@@ -10,8 +10,7 @@ import { Link } from 'react-router-dom'
 class Dashboard extends Component {
   render() {
     return (
-      <div>
-        <ContentHeader title="Dashboard" small="Versão 1.0" />
+      <div>        
         <Content>
           <Row>
             <div className="offset-md-3 offset-lg-3 col-md-3 col-lg-3">

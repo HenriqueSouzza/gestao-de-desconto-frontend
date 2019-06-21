@@ -263,7 +263,7 @@ class StudentDiscounts extends Component {
                                                         saveValidationReducer={this.props.saveValidationDiscount}
                                                         validate={
                                                             [FORM_RULES.required, 
-                                                                FORM_RULES.minValue(1), 
+                                                                FORM_RULES.minValue( (Object.keys(students.scholarshipSelectedForm).length > 0 && students.scholarshipSelectedForm[index] != '' && students.scholarshipSelectedForm[index].is_exact_value_discount_margin_schoolarship) ? students.scholarshipSelectedForm[index].max_value_discount_margin_schoolarship : 1), 
                                                                 FORM_RULES.maxValue(Object.keys(students.scholarshipSelectedForm).length > 0 && students.scholarshipSelectedForm[index] != '' ? students.scholarshipSelectedForm[index].max_value_discount_margin_schoolarship : '')
                                                             ]}
                                                         value={this.props.value}

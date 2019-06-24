@@ -475,6 +475,7 @@ class StudentDiscountsRm extends Component {
             
         } else if (this.props.establishment.course && this.props.establishment.course.length) {
             if(userData.user.email.indexOf("direcao@cnec.br") != -1 || userPermission.indexOf(userData.user.email) != -1){
+                console.log(userData.user.email, userData.user.email.indexOf("direcao@cnec.br") != -1, userPermission.indexOf(userData.user.email) != -1)
                 return (
                     <div>
                         <ContentHeader title="Desconto Comercial" />

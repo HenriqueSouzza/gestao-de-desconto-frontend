@@ -191,6 +191,29 @@ export function getProfit(params = []){
      }
 }
 
+
+export const deleteDiscountLocal = (values) => {
+
+    return (dispatch) => {
+        axios.post(`${URL_SAVE}/reject`, values)
+            .then( (response) =>  {                     
+                
+                    //dispatch do redux multi
+                    dispatch([
+                        getList(),                        
+                    ]); 
+
+                    toastr.success('Sucesso', 'Todos os descontos foram removidos com sucesso.');
+
+            }).catch((e) => {
+            
+                toastr.error('Erro', '(D005) Por favor selecione algum aluno');
+                
+            })
+    }
+}
+
+
 /**
  * @param {*} values (valores dos formulários)
  * @param {*} router (objeto do react router)

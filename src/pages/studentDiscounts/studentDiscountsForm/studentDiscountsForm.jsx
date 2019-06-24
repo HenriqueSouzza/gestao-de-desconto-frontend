@@ -28,8 +28,6 @@ class StudentDiscountsForm extends Component {
         
         const { values } = this.props.stateForm
 
-        console.log(values)
-
         if(values && (values.ra || values.course)){
             this.props.getList(value)
             this.props.getScholarshipLimit(value);

@@ -5,8 +5,9 @@ import { formValueSelector, reset } from 'redux-form';
 import { reduxForm, Form } from 'redux-form';
 import { CircularProgress } from 'react-md';
 import _ from 'lodash';
+import { toastr } from 'react-redux-toastr';
 
-import { getList, create, saveForm, saveCheckedForm, saveArrayInInsert, storeDiscount, saveScholarshipDiscount, saveValidationDiscount, resetReducer } from './studentDiscountsActions';
+import { getList, create, saveForm, saveCheckedForm, saveArrayInInsert, storeDiscount, saveScholarshipDiscount, saveValidationDiscount, resetReducer, deleteDiscountLocal } from './studentDiscountsActions';
 
 
 import { getCourse } from '../establishment/establishmentActions';
@@ -72,7 +73,7 @@ class StudentDiscountsRm extends Component {
                 if(indexSelected.indexOf(parseInt(i)) != -1){
                     if(students[i].bolsas_locais.length > 0){
                         studentDataTmp = {
-                            ra : students[i].dados.ra,
+                            id : students[i].bolsas_locais[0].ID,
                         }
                         arrayData.push(studentDataTmp)
                     }
@@ -174,7 +175,15 @@ class StudentDiscountsRm extends Component {
         e.preventDefault();
         const { selectRaForm } = this.props.students;
 
-        this.mergeStudentCancel(selectRaForm);
+        let id = this.mergeStudentCancel(selectRaForm);
+
+        if(id.length > 0){
+            const discounts = { discounts: id }
+            this.props.deleteDiscountLocal(discounts);
+        }else{
+            toastr.error('Erro', '(D005) Por favor selecione algum aluno');
+        }
+
     }
     
     /**
@@ -571,7 +580,7 @@ const mapStateToProps = state => ({
  */
 
 
-const mapDispatchToProps = dispatch => bindActionCreators({ getList, getCourse, create, saveForm, saveCheckedForm, saveArrayInInsert, storeDiscount, saveScholarshipDiscount, saveValidationDiscount, resetReducer /*arrayPush, arrayRemove*/ }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ getList, getCourse, create, saveForm, saveCheckedForm, saveArrayInInsert, storeDiscount, saveScholarshipDiscount, saveValidationDiscount, resetReducer, deleteDiscountLocal }, dispatch);
 
 /**
  * <b>connect</b> utiliza o padrão decorator da ES para que ele possa incluir dentro das propriedades desse component 

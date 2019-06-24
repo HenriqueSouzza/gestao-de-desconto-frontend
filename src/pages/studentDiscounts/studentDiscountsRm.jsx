@@ -6,6 +6,7 @@ import { reduxForm, Form } from 'redux-form';
 import { CircularProgress } from 'react-md';
 import _ from 'lodash';
 import { toastr } from 'react-redux-toastr';
+import { USER_KEY } from "../../config/consts";
 
 import { getList, create, saveForm, saveCheckedForm, saveArrayInInsert, storeDiscount, saveScholarshipDiscount, saveValidationDiscount, resetReducer, deleteDiscountLocal } from './studentDiscountsActions';
 
@@ -453,6 +454,16 @@ class StudentDiscountsRm extends Component {
 
         const profit = students.profit.content;
 
+        /**
+         * Usuários que podem ter acesso de diretor para conceder desconto no RM
+         */
+        let userPermission = [ "henrique.souza@cnec.br", "renata.ferreira@cnec.br", "wander.costa@cnec.br", "nadielle.miranda@cnec.br", "caio.oliveira@cnec.br" ]
+
+        /**
+         * Busca os dados do usuario que está no localstorage
+         */
+        const userData = JSON.parse(localStorage.getItem(USER_KEY));
+
         if (this.props.students.loading || this.props.establishment.loading) {
             return (
                 <div>
@@ -463,53 +474,68 @@ class StudentDiscountsRm extends Component {
             );
             
         } else if (this.props.establishment.course && this.props.establishment.course.length) {
-            return (
-                <div>
-                    <ContentHeader title="Desconto Comercial" />
-                    <Content>
-                        <StudentDiscountsForm />
-                        {(this.props.students.list.content != undefined && this.props.students.list.content.length != 0) ?
-                            <div>
-                                <Form role='form' onSubmit={(e) => this.onSubmit(e)} noValidate>
-                                    {this.listStudent(students.list.content)}
-                                    <div style={{'height': '200px'}}>.</div>
-                                    <div className="discount-footer">
-                                        <Row>
+            if(userData.user.email.indexOf("direcao@cnec.br") != -1 || userPermission.indexOf(userData.user.email) != -1){
+                return (
+                    <div>
+                        <ContentHeader title="Desconto Comercial" />
+                        <Content>
+                            <StudentDiscountsForm />
+                            {(this.props.students.list.content != undefined && this.props.students.list.content.length != 0) ?
+                                <div>
+                                    <Form role='form' onSubmit={(e) => this.onSubmit(e)} noValidate>
+                                        {this.listStudent(students.list.content)}
+                                        <div style={{'height': '200px'}}>.</div>
+                                        <div className="discount-footer">
+                                            <Row>
+                                                
+                                                <Grid cols='6'>
+                                                    <button className={`btn btn-success btn-block`} type="submit">Conceder desconto no RM</button>
+                                                </Grid>
+                                                
+                                                <Grid cols='6'>
+                                                    <button className={`btn btn-danger btn-block`} onClick={this.onCancel.bind(this)}> Não conceder desconto</button>
+                                                </Grid>
                                             
-                                            <Grid cols='6'>
-                                                <button className={`btn btn-success btn-block`} type="submit">Conceder desconto no RM</button>
-                                            </Grid>
+                                                {/* <Grid cols='3'> <b>Valor Original:  </b><span className="badge">{this.formatValueProfit(profit.VALORORIGINAL)}  </span> </Grid>
+                                                <Grid cols='3'> <b>Valor Dedução:   </b><span className="badge">{this.formatValueProfit(profit.VALORDEDUCAO)}</span></Grid>
+                                                <Grid cols='3'> <b>Valor Liquido:   </b><span className="badge">{this.formatValueProfit(profit.VALORLIQUIDO)}</span></Grid>
+                                                <Grid cols='3'> <b>Comprometimento: </b><span className="badge">{profit.COMPROMETIMENTO} %</span> </Grid> */}
                                             
-                                            <Grid cols='6'>
-                                                <button className={`btn btn-danger btn-block`} onClick={this.onCancel.bind(this)}> Não conceder desconto</button>
-                                            </Grid>
-                                        
-                                            {/* <Grid cols='3'> <b>Valor Original:  </b><span className="badge">{this.formatValueProfit(profit.VALORORIGINAL)}  </span> </Grid>
-                                            <Grid cols='3'> <b>Valor Dedução:   </b><span className="badge">{this.formatValueProfit(profit.VALORDEDUCAO)}</span></Grid>
-                                            <Grid cols='3'> <b>Valor Liquido:   </b><span className="badge">{this.formatValueProfit(profit.VALORLIQUIDO)}</span></Grid>
-                                            <Grid cols='3'> <b>Comprometimento: </b><span className="badge">{profit.COMPROMETIMENTO} %</span> </Grid> */}
-                                        
-                                        </Row>
-                                    </div>
-                                </Form>
-                            </div>
-                            :
-                            <div className="container-fluid space-panel">
-                                <div className="panel panel-info">
-                                    <div className="panel-heading text text-center">
-                                        <span>
-                                            <h1>Não existe aluno nesse curso</h1>
-                                        </span>
-                                        <span>
-                                            <h1>Selecione outro curso</h1>
-                                        </span>
+                                            </Row>
+                                        </div>
+                                    </Form>
+                                </div>
+                                :
+                                <div className="container-fluid space-panel">
+                                    <div className="panel panel-info">
+                                        <div className="panel-heading text text-center">
+                                            <span>
+                                                <h1>Não existe aluno nesse curso</h1>
+                                            </span>
+                                            <span>
+                                                <h1>Selecione outro curso</h1>
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
+                            }
+                        </Content>
+                    </div>
+                )
+            }else{
+
+                return( 
+                    <div className="container-fluid space-panel">
+                        <div className="panel panel-info">
+                            <div className="panel-heading text text-center">
+                                <span>
+                                    <h1>Ops! Somente diretores podem acessar essa página</h1>
+                                </span>
                             </div>
-                        }
-                 </Content>
-                </div>
-            )
+                        </div>
+                    </div>
+                )
+            }
         } else {
             return (
                 <div>

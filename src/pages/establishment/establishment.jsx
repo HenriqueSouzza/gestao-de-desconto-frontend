@@ -140,7 +140,7 @@ class Establishment extends Component {
       this.props.getBranchesUser(user.email);
     }
   };
-
+  
   /**
    * <b>onBranchSelected</b> Obtem o polo selecionado e guarda o mesmo no estado do componente
    * @param {*} codBranch (código do polo)
@@ -151,6 +151,7 @@ class Establishment extends Component {
       descriptionBranch: branch,
       codBranchSelected: codBranch
     });
+
   };
 
   render() {

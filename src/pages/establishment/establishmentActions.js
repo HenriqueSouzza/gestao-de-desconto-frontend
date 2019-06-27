@@ -7,8 +7,6 @@ import { BASE_API, ESTABLISHMENT_DATA } from '../../config/consts';
 
 // import { getDetailTransform } from '../../helpers/transformResponse';
 
-import { errorTreat } from '../../helpers/errorTreat';
-
 import { toastr } from 'react-redux-toastr';
 
 import type from './types';

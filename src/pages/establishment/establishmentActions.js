@@ -7,42 +7,157 @@ import { BASE_API, ESTABLISHMENT_DATA } from '../../config/consts';
 
 // import { getDetailTransform } from '../../helpers/transformResponse';
 
+import { errorTreat } from '../../helpers/errorTreat';
+
+import { toastr } from 'react-redux-toastr';
+
 import type from './types';
+import { timingSafeEqual } from 'crypto';
 
 const URL = `${BASE_API}/totvs-queries/query`;
-
 
 const URL_BASE_LOCAL = `${BASE_API}/concession-periods/list`;
 
 
 /**
- *  Busca todas as unidades
+ * <b>getEstablishmentsUser</b> Action creator responsável por buscar as unidades que 
+ * o usuário possui acesso/designação no RM(TOTVS)
+ * @param {*} email (email do usuário)
  */
-export function getList() {
+
+export function getEstablishmentsUser(email){
 
     const values = {
-        "name": "WEB001",
+        "name": "WEB008",
         "parameters" : {
-            "codtipocurso" : 3
+            "email" : email
         }
     }
 
-    const request = axios.post(URL, values);
+    const response = axios.post(URL, values);
+
+    
+    return dispatch => {
+        
+        dispatch([
+            { 
+                type: type.ESTABLISHMENT_LOAD,
+                payload: true
+            },
+            { 
+                type: type.ESTABLISHMENT_USER,
+                payload: response
+            }
+        ])
+    }
+}
+
+
+
+/**
+ * <b>getBranchesUser</b> Action creator responsável por buscar os polos que 
+ * o usuário possui acesso/designação no RM(TOTVS)
+ * @param {*} email (email do usuário)
+ */
+
+export function getBranchesUser(email){
+
+    const values = {
+        "name": "WEB011",
+        "parameters" : {
+            "email" : email
+        }
+    }
+
+    const response = axios.post(URL, values);
+    
+    
+    return dispatch => {
+        
+        dispatch([
+            { 
+                type: type.ESTABLISHMENT_LOAD,
+                payload: true
+            },
+            { 
+                type: type.ESTABLISHMENT_BRANCH_USER,
+                payload: response
+            }
+        ])
+    }
+}
+
+
+ 
+/**
+ * <b>getEstablishmentsPeriod</b> Action creator responsável por buscar os periodo letivos 
+ * referente a uma unidade e uma modalidade de ensino passada
+ * @param {*} Codfilial 
+ * @param {*} Modality 
+ */
+export function getEstablishmentsPeriod(Codfilial, Modality){
+
+    // const dataLocalStorage = JSON.parse(localStorage.getItem(ESTABLISHMENT_DATA))
+
+    const ModalityPreview = Codfilial == 169 ? Modality : "P"
+
+    const values = {
+        codfilial: Codfilial,
+        modality : ModalityPreview
+    }
+
+    const request = axios.post(URL_BASE_LOCAL, values);
 
     return dispatch => {
-       
         dispatch([
             { 
                 type: type.ESTABLISHMENT_LOAD,
                 payload: true
             },
             {
-                type: type.ESTABLISHMENT_FETCHED,
+                type: type.ESTABLISHMENT_PERIOD,
                 payload: request
             }
         ])
     }
 }
+
+
+
+
+/**
+ *  Busca todas as unidades
+ */
+// export function getList() {
+
+//     const values = {
+//         "name": "WEB001",
+//         "parameters" : {
+//             "codtipocurso" : 3
+//         }
+//     }
+    
+//     return dispatch => {
+       
+//         dispatch({ 
+//             type: type.ESTABLISHMENT_LOAD,
+//             payload: true
+//         })
+        
+//         axios.post(URL, values)
+//             .then( (result) => {
+//                 dispatch({ 
+//                     type: type.ESTABLISHMENT_FETCHED,
+//                     payload: result
+//                 })
+//             }).catch( (error) => {
+//                 if(error.response.status == 401 || error.response.status == 500){
+//                     console.log('error listar todos os usuários');
+//                     this.getList();
+//                 }
+//             })
+//     }
+// }
 
 /**
  * Dados em JSON com os respectivos parametros CODFILIAL, CODTIPOCURSO
@@ -82,36 +197,6 @@ export function getCourse(){
 }
 
 
-/**
- * Dados em JSON com os respectivos parametros CODFILIAL, CODTIPOCURSO
- * @param {*} params 
- */
-export function getPeriod(Codfilial, Modality){
-
-    // const dataLocalStorage = JSON.parse(localStorage.getItem(ESTABLISHMENT_DATA))
-
-    const ModalityPreview = Codfilial == 169 ? Modality : "P"
-
-    const values = {
-        codfilial: Codfilial,
-        modality : ModalityPreview
-    }
-
-    const request = axios.post(URL_BASE_LOCAL, values);
-
-    return dispatch => {
-        dispatch([
-            { 
-                type: type.ESTABLISHMENT_LOAD,
-                payload: true
-            },
-            {
-                type: type.ESTABLISHMENT_PERIOD_FETCHED,
-                payload: request
-            }
-        ])
-    }
-}
 
 
 /**
@@ -172,62 +257,4 @@ export const getSearch = (value, field) => {
             }
         ]);
     };
-}
-
-/**
- * <b>getEstablishmentsUser</b> Action creator responsável por buscar as unidades que 
- * o usuário possui acesso/designação no RM(TOTVS)
- * @param {*} email (email do usuário)
- */
-
-export const getEstablishmentsUser = (email) => {
-
-    const values = {
-        "name": "WEB008",
-        "parameters" : {
-            "email" : email
-        }
-    }
-
-    const request = axios.post(URL, values);
-
-    return dispatch => {
-        dispatch([
-            {
-                type: type.ESTABLISHMENT_USERS_SHOW,
-                payload: request
-            }
-        ])
-    }
-
-}
-
-
-
-/**
- * <b>getBranchesUser</b> Action creator responsável por buscar os polos que 
- * o usuário possui acesso/designação no RM(TOTVS)
- * @param {*} email (email do usuário)
- */
-
-export const getBranchesUser = (email) => {
-
-    const values = {
-        "name": "WEB011",
-        "parameters" : {
-            "email" : email
-        }
-    }
-
-    const request = axios.post(URL, values);
-
-    return dispatch => {
-        dispatch([
-            {
-                type: type.BRANCH_USERS_SHOW,
-                payload: request
-            }
-        ])
-    }
-
 }

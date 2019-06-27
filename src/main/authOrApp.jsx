@@ -35,7 +35,7 @@ class AuthOrApp extends Component {
      * 
      * Obtem os dados de validação e verifica se o token é valido
      */
-    componentWillMount() {
+    componentDidMount() {
         const { user } = this.props.auth;
         
         if (user) {
@@ -47,8 +47,9 @@ class AuthOrApp extends Component {
     
     render() {
         
+        
         const { user, validToken } = this.props.auth;
-
+        
         if (user && validToken) {
             
             axios.defaults.headers.common['Authorization'] = `Bearer ${user.access_token}`;

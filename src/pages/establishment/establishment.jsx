@@ -8,7 +8,11 @@ import { reduxForm, Form, Field } from "redux-form";
 import { FORM_RULES } from "../../helpers/validations";
 import { ESTABLISHMENT_DATA, USER_KEY } from "../../config/consts";
 
+
 import { CircularProgress } from "react-md";
+import { toastr } from 'react-redux-toastr';
+
+import Moment from 'moment';
 
 import Row from "../../common/components/layout/row";
 import Grid from "../../common/components/layout/grid";
@@ -19,12 +23,12 @@ import If from "../../common/components/operator/if";
 import App from "../../main/app";
 
 import {
-  getList,
   saveEstablishment,
-  getPeriod,
+  getEstablishmentsPeriod,
   getEstablishmentsUser,
   getBranchesUser
 } from "./establishmentActions";
+import { object } from "prop-types";
 
 class Establishment extends Component {
   /**
@@ -33,15 +37,14 @@ class Establishment extends Component {
    */
   constructor(props) {
     super(props);
+
     document.title = "Escolha filial | Período letivo";
 
-    const instanceData = new Date();
-    const DateCurrent =
-      instanceData.getDate() +
-      "/" +
-      instanceData.getMonth() +
-      "/" +
-      instanceData.getFullYear();
+    const DateCurrent = Moment().format("DD/MM/YYYY");
+
+
+    // const instanceData = new Date();
+    // const DateCurrent = instanceData.getDate() + "/" + instanceData.getMonth() + "/" + instanceData.getFullYear();
 
     this.state = {
       codEstablishmentSelected: "",
@@ -59,19 +62,38 @@ class Establishment extends Component {
    */
   componentDidMount() {
     //obtem a lista
-    this.props.getList();
+    // this.props.getList();
     //obtem os dados de login do usuário
-    const user = JSON.parse(localStorage.getItem(USER_KEY)).user;
     //obtem a lista de filiais/unidades que o usuário possui acesso
+    const user = JSON.parse(localStorage.getItem(USER_KEY)).user;
+
+    // this.props.getBranchesUser(user.email);
     this.props.getEstablishmentsUser(user.email);
-    this.props.getBranchesUser(user.email);
+
   }
+
+  orderArr = (arr, indexColumn) => {
+
+    let arrOrdered = []
+
+    if (arr.length > 0) {
+      for (let i = 0; i < arr.length; i++) {
+        arrOrdered[arr[i][indexColumn]] =
+          {
+            value: arr[i][indexColumn],
+            label: arr[i][indexColumn] + ' - ' + arr[i][indexColumn.replace('COD', '')]
+          };
+      }
+    }
+
+    return arrOrdered
+  }
+
 
   /**
    * <b>onSubmit</b> Método de submit do formulário, que irá ser chamado quando o botão de submit for chamado,
    * para isso recebe os dados fo formulário
    * @param {*} values (valores enviados no formulario)
-   *
    */
   onSubmit = values => {
     const nameEstablishment = this.state.descriptionEstablishment
@@ -98,7 +120,7 @@ class Establishment extends Component {
     });
     //se a unidade selecionada não for Osório exibe o select option de periodo letivo
     if (codEstablishment != 169) {
-      this.props.getPeriod(codEstablishment, this.state.codModalitySelected);
+      this.props.getEstablishmentsPeriod(codEstablishment, this.state.codModalitySelected);
     }
   };
 
@@ -111,7 +133,12 @@ class Establishment extends Component {
       codModalitySelected: codModality
     });
 
-    this.props.getPeriod(this.state.codEstablishmentSelected, codModality);
+    this.props.getEstablishmentsPeriod(this.state.codEstablishmentSelected, codModality);
+
+    if(codModality == 'D'){
+      const user = JSON.parse(localStorage.getItem(USER_KEY)).user;
+      this.props.getBranchesUser(user.email);
+    }
   };
 
   /**
@@ -134,74 +161,64 @@ class Establishment extends Component {
 
     const selectedEstablishmentLocal = localStorage.getItem(ESTABLISHMENT_DATA);
 
-    const establishmentListUser = [];
+    // console.log(selectedEstablishmentLocal, selected, selectedEstablishmentLocal !== null)
 
-    if (
-      selected ||
-      (selectedEstablishmentLocal && selectedEstablishmentLocal.length > 0)
-    ) {
+
+
+    if (selected && (selectedEstablishmentLocal && selectedEstablishmentLocal.length > 0)) {
+
       return <App />;
+
     } else {
       //loading
       if (this.props.establishment.loading) {
-        return <CircularProgress id="establishment" />;
-      } else if (
-        establishment.list.length > 0 &&
-        establishment.list !== undefined &&
-        establishment.dataBranchUser !== undefined
-      ) {
-        const establishmentList = establishment.list.map(item => ({
-          value: item.CODFILIAL,
-          label: item.NOMEFANTASIA
-        }));
-        let branchList = [];
-        if (establishment.dataBranchUser)
-          branchList = establishment.dataBranchUser.map(item => ({
-            value: item.CODPOLO,
-            label: item.POLO
-          }));
 
-        //caso o usuário tenha unidades vinculadas no RM(TOTVS)
-        if (establishment.dataEstablishmentUser.length > 0) {
-          //percorre as unidades dele
-          establishment.dataEstablishmentUser.forEach(element => {
-            //faz um for na lista de unidades
-            for (let i = 0; i < establishmentList.length; i++) {
-              if (establishmentList[i].value == element.CODFILIAL) {
-                //adiciona a unidade dele na lista que sera apresentada nas options
-                establishmentListUser.push({
-                  value: establishmentList[i].value,
-                  label: `${establishmentList[i].value} - ${
-                    establishmentList[i].label
-                  }`
-                });
-              }
-            }
-          });
+        return <CircularProgress id="establishment" />;
+
+      } else {
+
+        // let establishmentList = this.orderArr(establishment.establishmentUser, "CODFILIAL");
+        // let branchList = this.orderArr(establishment.branchUser, "CODPOLO");
+
+        let establishmentList = []
+
+        if (establishment.establishmentUser.length > 0) {
+          establishmentList = establishment.establishmentUser.map(item => ({
+            value: item.CODFILIAL,
+            label: item.CODFILIAL + ' - ' + item.FILIAL
+          }));
+        } else {
+          establishmentList = [{
+            value: establishment.establishmentUser.CODFILIAL,
+            label: establishment.establishmentUser.CODFILIAL + ' - ' + establishment.establishmentUser.FILIAL
+          }];
         }
 
-        let periodList = {};
+        let branchList = []
 
-        if (establishment.period && establishment.period.length) {
-          periodList = establishment.period.map(period => ({
+        if (establishment.establishmentUser.length > 0) {
+          branchList = establishment.branchUser.map(item => ({
+            value: item.CODPOLO,
+            label: item.CODPOLO + ' - ' + item.POLO
+          }));
+        } else if (establishment.branchUser.length > 0) {
+          branchList = [{
+            value: establishment.establishmentUser.CODPOLO,
+            label: establishment.establishmentUser.CODPOLO + ' - ' + establishment.establishmentUser.POLO
+          }];
+        }
+
+        let periodList = []
+
+        if(establishment.establishmentPeriod.length > 0) {
+          periodList = establishment.establishmentPeriod.map(period => ({
             value: period.id_rm_period_code_concession_period,
             label: period.id_rm_period_code_concession_period
-          }));
+          }))
         }
 
-        const modality = [
-          {
-            id: "P",
-            name: "Presencial"
-          },
-          {
-            id: "D",
-            name: "Ensino à distância"
-          }
-        ];
-
-        const modalityList = modality.map(item => ({
-          value: item.id,
+        const modalityList = establishment.modality.map(item => ({
+          value: item.value,
           label: item.name
         }));
 
@@ -222,13 +239,8 @@ class Establishment extends Component {
                     component={Select}
                     name="establishment"
                     label="Unidade:"
-                    options={establishmentListUser}
-                    onChange={e =>
-                      this.onEstablishmentSelected(
-                        e.target.options[e.target.selectedIndex].innerText,
-                        e.target.value
-                      )
-                    }
+                    options={establishmentList}
+                    onChange={e => this.onEstablishmentSelected(e.target.options[e.target.selectedIndex].innerText, e.target.value)}
                     cols="12 12 12 12"
                     validate={[FORM_RULES.required]}
                   />
@@ -264,7 +276,7 @@ class Establishment extends Component {
                     </div>
                   </If>
                 </If>
-                <If test={establishment.period.length}>
+                <If test={establishment.establishmentPeriod.length}>
                   <div className="login-box-body">
                     <Field
                       component={Select}
@@ -286,8 +298,6 @@ class Establishment extends Component {
             <Messages />
           </div>
         );
-      } else {
-        return <CircularProgress id="establishment" />;
       }
     }
   }
@@ -323,9 +333,8 @@ const mapStateToProps = state => ({ establishment: state.establishment });
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      getList,
       saveEstablishment,
-      getPeriod,
+      getEstablishmentsPeriod,
       getEstablishmentsUser,
       getBranchesUser
     },

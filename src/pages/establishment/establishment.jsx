@@ -8,6 +8,9 @@ import { reduxForm, Form, Field } from "redux-form";
 import { FORM_RULES } from "../../helpers/validations";
 import { ESTABLISHMENT_DATA, USER_KEY } from "../../config/consts";
 
+import { logout } from '../auth/authActions';
+
+import { Link } from 'react-router-dom'
 
 import { CircularProgress } from "react-md";
 import { toastr } from 'react-redux-toastr';
@@ -41,7 +44,6 @@ class Establishment extends Component {
     document.title = "Escolha filial | Período letivo";
 
     const DateCurrent = Moment().format("DD/MM/YYYY");
-
 
     // const instanceData = new Date();
     // const DateCurrent = instanceData.getDate() + "/" + instanceData.getMonth() + "/" + instanceData.getFullYear();
@@ -135,12 +137,12 @@ class Establishment extends Component {
 
     this.props.getEstablishmentsPeriod(this.state.codEstablishmentSelected, codModality);
 
-    if(codModality == 'D'){
+    if (codModality == 'D') {
       const user = JSON.parse(localStorage.getItem(USER_KEY)).user;
       this.props.getBranchesUser(user.email);
     }
   };
-  
+
   /**
    * <b>onBranchSelected</b> Obtem o polo selecionado e guarda o mesmo no estado do componente
    * @param {*} codBranch (código do polo)
@@ -204,7 +206,7 @@ class Establishment extends Component {
 
         let periodList = []
 
-        if(establishment.establishmentPeriod.length > 0) {
+        if (establishment.establishmentPeriod.length > 0) {
           periodList = establishment.establishmentPeriod.map(period => ({
             value: period.id_rm_period_code_concession_period,
             label: period.id_rm_period_code_concession_period
@@ -283,9 +285,15 @@ class Establishment extends Component {
                   </div>
                 </If>
                 <div className="login-box-body">
-                  <button className={`btn btn-success offset-1`} type="submit">
+                  <button className={`btn btn-success`} type="submit">
                     Confirmar
                   </button>
+                </div>
+                <div className="login-box-body">
+                  Deseja trocar e-mail ?
+                  <a className={`btn btn-dark`} href={"#/logout"} onClick={this.props.logout}>
+                    Clique aqui
+                  </a>
                 </div>
               </Form>
             </div>
@@ -330,7 +338,8 @@ const mapDispatchToProps = dispatch =>
       saveEstablishment,
       getEstablishmentsPeriod,
       getEstablishmentsUser,
-      getBranchesUser
+      getBranchesUser,
+      logout
     },
     dispatch
   );

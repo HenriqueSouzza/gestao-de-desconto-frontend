@@ -19,6 +19,7 @@ const INITIAL_STATE = {
             name: "Ensino à distância"
         }
     ],
+    
     list: [],
     selected: false,
     course: [],

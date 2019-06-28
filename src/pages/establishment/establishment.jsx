@@ -197,15 +197,15 @@ class Establishment extends Component {
 
         let branchList = []
 
-        if (establishment.establishmentUser.length > 0) {
+        if (establishment.branchUser.length > 0) {
           branchList = establishment.branchUser.map(item => ({
             value: item.CODPOLO,
             label: item.CODPOLO + ' - ' + item.POLO
           }));
-        } else if (establishment.branchUser.length > 0) {
+        } else {
           branchList = [{
-            value: establishment.establishmentUser.CODPOLO,
-            label: establishment.establishmentUser.CODPOLO + ' - ' + establishment.establishmentUser.POLO
+            value: establishment.branchUser.CODPOLO,
+            label: establishment.branchUser.CODPOLO + ' - ' + establishment.branchUser.POLO
           }];
         }
 

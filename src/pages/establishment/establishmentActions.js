@@ -171,12 +171,14 @@ export function getCourse(){
         name: "WEB002",
         parameters : {
             codfilial: dataLocalStorage.values.establishment,
-            codpolo: dataLocalStorage.values.branch,
             codtipocurso : 3,
             codperlet: dataLocalStorage.values.period,
-            modalidade: modality
+            modalidade: modality,
+            codpolo: dataLocalStorage.values.branch ? dataLocalStorage.values.branch : '-1' 
         }
     }
+
+    console.log(values)
 
     const request = axios.post(URL, values);
 

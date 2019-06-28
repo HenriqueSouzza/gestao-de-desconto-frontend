@@ -162,10 +162,6 @@ class Establishment extends Component {
 
     const selectedEstablishmentLocal = localStorage.getItem(ESTABLISHMENT_DATA);
 
-    // console.log(selectedEstablishmentLocal, selected, selectedEstablishmentLocal !== null)
-
-
-
     if (selected && (selectedEstablishmentLocal && selectedEstablishmentLocal.length > 0)) {
 
       return <App />;
@@ -177,9 +173,6 @@ class Establishment extends Component {
         return <CircularProgress id="establishment" />;
 
       } else {
-
-        // let establishmentList = this.orderArr(establishment.establishmentUser, "CODFILIAL");
-        // let branchList = this.orderArr(establishment.branchUser, "CODPOLO");
 
         let establishmentList = []
 

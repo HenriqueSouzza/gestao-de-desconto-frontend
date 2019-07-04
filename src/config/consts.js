@@ -8,7 +8,7 @@ export const BASE_API = (
     process.env.NODE_ENV === 'production' ? 
         'http://spcomapi.cnec.br/api'
     :
-    process.env.NODE_ENV === 'test' ?
+    process.env.NODE_ENV === 'homologation' ?
         'http://hmlapidescontos.cnec.br/api'
     :
         'http://localhost:8888/api'
@@ -25,7 +25,7 @@ export const LOGIN_GOOGLE = (
             'redirect_uri': 'http://spcom.cnec.br/'
        }
     : 
-    process.env.NODE_ENV === 'test' ?
+    process.env.NODE_ENV === 'homologation' ?
         { 
             'client_id' : '809505609882-8h36mosq038smdt4qh7c3jgidf95gpq1.apps.googleusercontent.com',
             'client_secret' : '0r7yKJ0PyQuiIZ-jjDQH1z2-',

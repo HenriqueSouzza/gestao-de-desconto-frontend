@@ -2,8 +2,6 @@ import _  from 'lodash';
 
 // export const BASE_API =  'http://hmlapidescontos.cnec.br/api';
 
-console.log(process.env);
-
 export const BASE_API = (
 
     

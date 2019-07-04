@@ -5,13 +5,13 @@ import _  from 'lodash';
 export const BASE_API = (
 
     
-    process.env.NODE_ENV === 'production' ? 
-        'http://spcomapi.cnec.br/api'
-    :
-    process.env.NODE_ENV === 'homologation' ?
+    // process.env.NODE_ENV === 'production' ? 
+    //     'http://spcomapi.cnec.br/api'
+    // :
+    // process.env.NODE_ENV === 'homologation' ?
         'http://hmlapidescontos.cnec.br/api'
-    :
-        'http://localhost:8888/api'
+    // :
+    //     'http://localhost:8888/api'
 );
 
 

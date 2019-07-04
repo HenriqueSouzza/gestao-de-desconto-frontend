@@ -8,7 +8,7 @@
 # testing
 /coverage
 
-# ignorar o arquivo de constantes consts.js
+# ignorando arquivos de constantes consts.js
 /src/config/consts.js
 
 # production

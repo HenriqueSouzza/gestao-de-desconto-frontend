@@ -36,10 +36,10 @@ export default (state = INITIAL_STATE, action) => {
         case type.ESTABLISHMENT_BRANCH_USER:
             return { ...state, branchUser: action.payload.data.response.content.Resultado || INITIAL_STATE.branchUser, loading: false }
         case type.ESTABLISHMENT_PERIOD:
-            return { ...state, establishmentPeriod: action.payload.data.response.content || INITIAL_STATE.establishmentPeriod, loading: false }
+            return { ...state, establishmentPeriod: action.payload ? action.payload.data.response.content : INITIAL_STATE.establishmentPeriod, loading: false }
 
 
-
+        /**************************************  DESCARTAR  *******************************************************/
         case type.ESTABLISHMENT_FETCHED:
             const dataLocalStorage = JSON.parse(localStorage.getItem(ESTABLISHMENT_DATA))
             return { ...state, list: action.payload.data.response.content.Resultado || INITIAL_STATE.list, loading: false, dataEstablishment: dataLocalStorage, }

@@ -31,7 +31,6 @@ import {
   getEstablishmentsUser,
   getBranchesUser
 } from "./establishmentActions";
-import { object } from "prop-types";
 
 class Establishment extends Component {
   /**
@@ -105,7 +104,12 @@ class Establishment extends Component {
       ? this.state.descriptionBranch
       : "";
 
-    this.props.saveEstablishment(values, nameEstablishment, nameBranch);
+      if(this.props.establishment.establishmentPeriod.length > 0){
+        this.props.saveEstablishment(values, nameEstablishment, nameBranch);
+      }else{
+        toastr.error('Error', 'Unidade fora do periodo de concessão')
+      }
+
   };
 
   /**
@@ -285,7 +289,7 @@ class Establishment extends Component {
                   </div>
                 </If>
                 <div className="login-box-body">
-                  <button className={`btn btn-success`} type="submit">
+                  <button className={`btn btn-success`} disabled={this.props.establishment.loading} type="submit">
                     Confirmar
                   </button>
                 </div>

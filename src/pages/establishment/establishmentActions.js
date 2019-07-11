@@ -10,7 +10,6 @@ import { BASE_API, ESTABLISHMENT_DATA } from '../../config/consts';
 import { toastr } from 'react-redux-toastr';
 
 import type from './types';
-import { timingSafeEqual } from 'crypto';
 
 const URL = `${BASE_API}/totvs-queries/query`;
 
@@ -23,26 +22,26 @@ const URL_BASE_LOCAL = `${BASE_API}/concession-periods/list`;
  * @param {*} email (email do usuário)
  */
 
-export function getEstablishmentsUser(email){
+export function getEstablishmentsUser(email) {
 
     const values = {
         "name": "WEB008",
-        "parameters" : {
-            "email" : email
+        "parameters": {
+            "email": email
         }
     }
 
     const response = axios.post(URL, values);
 
-    
+
     return dispatch => {
-        
+
         dispatch([
-            { 
+            {
                 type: type.ESTABLISHMENT_LOAD,
                 payload: true
             },
-            { 
+            {
                 type: type.ESTABLISHMENT_USER,
                 payload: response
             }
@@ -58,26 +57,25 @@ export function getEstablishmentsUser(email){
  * @param {*} email (email do usuário)
  */
 
-export function getBranchesUser(email){
+export function getBranchesUser(email) {
 
     const values = {
         "name": "WEB011",
-        "parameters" : {
-            "email" : email
+        "parameters": {
+            "email": email
         }
     }
 
     const response = axios.post(URL, values);
-    
-    
+
     return dispatch => {
-        
+
         dispatch([
-            { 
+            {
                 type: type.ESTABLISHMENT_LOAD,
                 payload: true
             },
-            { 
+            {
                 type: type.ESTABLISHMENT_BRANCH_USER,
                 payload: response
             }
@@ -86,37 +84,43 @@ export function getBranchesUser(email){
 }
 
 
- 
+
 /**
  * <b>getEstablishmentsPeriod</b> Action creator responsável por buscar os periodo letivos 
  * referente a uma unidade e uma modalidade de ensino passada
  * @param {*} Codfilial 
  * @param {*} Modality 
  */
-export function getEstablishmentsPeriod(Codfilial, Modality){
-
-    // const dataLocalStorage = JSON.parse(localStorage.getItem(ESTABLISHMENT_DATA))
+export function getEstablishmentsPeriod(Codfilial, Modality) {
 
     const ModalityPreview = Codfilial == 169 ? Modality : "P"
 
     const values = {
         codfilial: Codfilial,
-        modality : ModalityPreview
+        modality: ModalityPreview
     }
 
-    const request = axios.post(URL_BASE_LOCAL, values);
-
     return dispatch => {
-        dispatch([
-            { 
-                type: type.ESTABLISHMENT_LOAD,
-                payload: true
-            },
-            {
-                type: type.ESTABLISHMENT_PERIOD,
-                payload: request
-            }
-        ])
+        dispatch({
+            type: type.ESTABLISHMENT_LOAD,
+            payload: true
+        })
+        axios.post(URL_BASE_LOCAL, values)
+            .then(response => {
+                dispatch({
+                    type: type.ESTABLISHMENT_PERIOD,
+                    payload: response
+                })
+            })
+            .catch(error => {
+                if (error.response.data.response.content.error) {
+                    toastr.error('Error', error.response.data.response.content.message)
+                }
+                dispatch({
+                    type: type.ESTABLISHMENT_PERIOD,
+                    payload: ''
+                })
+            })
     }
 }
 
@@ -134,14 +138,14 @@ export function getEstablishmentsPeriod(Codfilial, Modality){
 //             "codtipocurso" : 3
 //         }
 //     }
-    
+
 //     return dispatch => {
-       
+
 //         dispatch({ 
 //             type: type.ESTABLISHMENT_LOAD,
 //             payload: true
 //         })
-        
+
 //         axios.post(URL, values)
 //             .then( (result) => {
 //                 dispatch({ 
@@ -161,30 +165,28 @@ export function getEstablishmentsPeriod(Codfilial, Modality){
  * Dados em JSON com os respectivos parametros CODFILIAL, CODTIPOCURSO
  * @param {*} params 
  */
-export function getCourse(){
+export function getCourse() {
 
     const dataLocalStorage = JSON.parse(localStorage.getItem(ESTABLISHMENT_DATA))
 
-    const modality = dataLocalStorage.values.establishment == 169 ? dataLocalStorage.values.modality : "P" 
+    const modality = dataLocalStorage.values.establishment == 169 ? dataLocalStorage.values.modality : "P"
 
     const values = {
         name: "WEB002",
-        parameters : {
+        parameters: {
             codfilial: dataLocalStorage.values.establishment,
-            codtipocurso : 3,
+            codtipocurso: 3,
             codperlet: dataLocalStorage.values.period,
             modalidade: modality,
-            codpolo: dataLocalStorage.values.branch ? dataLocalStorage.values.branch : '-1' 
+            codpolo: dataLocalStorage.values.branch ? dataLocalStorage.values.branch : '-1'
         }
     }
-
-    console.log(values)
 
     const request = axios.post(URL, values);
 
     return dispatch => {
         dispatch([
-            { 
+            {
                 type: type.ESTABLISHMENT_LOAD,
                 payload: true
             },
@@ -206,13 +208,13 @@ export function getCourse(){
 export function saveEstablishment(values, nameEstablishment, nameBranch) {
     return dispatch => {
         dispatch([
-            { 
+            {
                 type: type.ESTABLISHMENT_LOAD,
                 payload: true
             },
             {
                 type: type.ESTABLISHMENT_SAVE,
-                payload: {values, nameEstablishment, nameBranch}
+                payload: { values, nameEstablishment, nameBranch }
             }
         ])
     }
@@ -224,7 +226,7 @@ export function saveEstablishment(values, nameEstablishment, nameBranch) {
 export function alterEstablishment() {
     return dispatch => {
         dispatch([
-            { 
+            {
                 type: type.ESTABLISHMENT_LOAD,
                 payload: true
             },

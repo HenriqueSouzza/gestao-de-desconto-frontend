@@ -457,7 +457,9 @@ class StudentDiscountsRm extends Component {
         /**
          * Usuários que podem ter acesso de diretor para conceder desconto no RM
          */
-        let userPermission = [ "renata.ferreira@cnec.br", "wander.costa@cnec.br", "nadielle.miranda@cnec.br", "caio.oliveira@cnec.br" ]
+        let userPermission = [ "renata.ferreira@cnec.br", "wander.costa@cnec.br", "nadielle.miranda@cnec.br", "caio.oliveira@cnec.br", 
+        "0019.deboraferreira@cnec.br" // DEBORA PEDIU VIA EMAIL COM AUTORIZACAO DO DIRETOR
+        ]
 
         /**
          * Busca os dados do usuario que está no localstorage

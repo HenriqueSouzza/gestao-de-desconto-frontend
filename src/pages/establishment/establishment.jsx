@@ -67,7 +67,7 @@ class Establishment extends Component {
    */
   onSubmit = values => {
 
-    if (values.period != '') {
+    if (this.props.establishment.establishmentPeriod.length > 0) {
       this.props.saveEstablishment(values);
     } else {
       toastr.error('Error', 'Unidade fora do periodo de concessão')

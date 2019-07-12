@@ -9,9 +9,6 @@ import type from './types';
 const URL = `${BASE_API}`;
 
 
-// import { getDetailTransform } from '../../helpers/transformResponse';
-// import { toastr } from 'react-redux-toastr';
-
 /**
  * @param {*} values 
  */

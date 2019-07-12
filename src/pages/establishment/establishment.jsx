@@ -156,8 +156,6 @@ class Establishment extends Component {
         label: item.name
       }));
 
-      console.log(valuesForm, valuesForm.establishment)
-
       return (
         <div className="gradient-wrapper">
           <div>

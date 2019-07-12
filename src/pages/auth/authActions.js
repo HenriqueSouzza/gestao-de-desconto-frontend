@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import { toastr } from 'react-redux-toastr';
+
 import { BASE_API, LOGIN_GOOGLE } from '../../config/consts';
 
 import type from './types';
@@ -36,7 +38,10 @@ function submit(values, method, url) {
 
     return dispatch => {
         
-        dispatch({ type: type.AUTH_LOAD })
+        dispatch({ 
+            type: type.AUTH_LOAD, 
+            payload: true 
+        })
 
         axios[method](`${url}`, values).then(
             response => {
@@ -46,11 +51,13 @@ function submit(values, method, url) {
                 })
         }).catch(
             error => {  
-                console.log(error.response)
-                dispatch({
-                    type: type.USER_FETCHED,
-                    payload: undefined
-                })
+                if(error.response.data.response.status == 401){
+                    toastr.error('Error', error.response.data.response.content.messages)
+                    dispatch({ 
+                        type: type.AUTH_LOAD, 
+                        payload: false 
+                    })
+                }
             }
         );
     }

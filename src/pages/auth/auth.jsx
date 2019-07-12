@@ -7,7 +7,7 @@ import { GoogleLogin } from "react-google-login";
 import { CircularProgress } from "react-md";
 import { login } from "./authActions";
 
-// import Messages from "../../common/components/messages/messages";
+import Messages from "../../common/components/messages/messages";
 import { LOGIN_GOOGLE } from "../../config/consts";
 import logo from "../../common/images/logo_vertical.png";
 
@@ -45,6 +45,7 @@ class Auth extends Component {
           </div>
           {this.props.auth.loading ? <CircularProgress id={`auth`} /> : ''}
         </div>
+        <Messages />
       </div>
     );
   }

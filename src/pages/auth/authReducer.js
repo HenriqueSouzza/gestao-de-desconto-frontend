@@ -15,7 +15,7 @@ export default (state = INITIAL_STATE, action) => {
 
     switch(action.type) {
         case type.AUTH_LOAD: 
-            return { ...state, loading: true }
+            return { ...state, loading: action.payload }
         case type.AUTH_ERROR:
             return { ...state, loading: false}
         case type.TOKEN_VALIDATED: 

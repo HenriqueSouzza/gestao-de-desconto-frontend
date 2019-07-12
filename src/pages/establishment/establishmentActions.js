@@ -1,13 +1,9 @@
 
-// import { toastr } from 'react-redux-toastr';
-
 import axios from 'axios';
 
-import { BASE_API, ESTABLISHMENT_DATA } from '../../config/consts';
-
-// import { getDetailTransform } from '../../helpers/transformResponse';
-
 import { toastr } from 'react-redux-toastr';
+
+import { BASE_API, ESTABLISHMENT_DATA } from '../../config/consts';
 
 import type from './types';
 

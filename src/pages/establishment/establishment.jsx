@@ -1,19 +1,24 @@
 import "./establishment.css";
 
 import React, { Component } from "react";
+
 import { bindActionCreators } from "redux";
+
 import { connect } from "react-redux";
+
 import { reduxForm, Form, Field } from "redux-form";
 
+import { CircularProgress } from "react-md";
+
 import { FORM_RULES } from "../../helpers/validations";
+
 import { ESTABLISHMENT_DATA, USER_KEY } from "../../config/consts";
 
 import { logout } from '../auth/authActions';
 
-import { CircularProgress } from "react-md";
 import { toastr } from 'react-redux-toastr';
 
-import Moment from 'moment';
+// import Moment from 'moment';
 
 import Messages from "../../common/components/messages/messages";
 import Select from "../../common/components/form/selectLabel";

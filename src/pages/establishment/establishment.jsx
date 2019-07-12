@@ -185,7 +185,7 @@ class Establishment extends Component {
                   />
                 </div>
               </If>
-              <If test={valuesForm.modality == "D"}>
+              <If test={valuesForm.modality == "D" && valuesForm.establishment == 169}>
                 <div className="login-box-body">
                   <Field
                     component={Select}

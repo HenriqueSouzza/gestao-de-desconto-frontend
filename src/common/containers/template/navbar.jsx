@@ -1,11 +1,10 @@
 import React, { Component } from 'react'; 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+
 import { logout } from '../../../pages/auth/authActions';
 import { alterEstablishment, getSearch } from '../../../pages/establishment/establishmentActions';
 import { ESTABLISHMENT_DATA } from '../../../config/consts';
-import establishment from '../../../pages/establishment/establishment';
-import IF from '../../components/operator/if';
 
 class Navbar extends Component {
 
@@ -38,16 +37,18 @@ class Navbar extends Component {
        
         const establishmentLocal = JSON.parse(localStorage.getItem(ESTABLISHMENT_DATA))
         
-        const establishment = establishmentLocal ? establishmentLocal.nameEstablishment : ''
+        const establishment = establishmentLocal && establishmentLocal.values ? establishmentLocal.values.nameEstablishment : ''
 
-        const codEstablishment =  establishmentLocal && establishmentLocal.values ? establishmentLocal.values.establishment : ''
+        // const codEstablishment =  establishmentLocal && establishmentLocal.values ? establishmentLocal.values.establishment : ''
 
         const PeriodLetivo =  establishmentLocal && establishmentLocal.values ? establishmentLocal.values.period : ''
 
-        const branch =  establishmentLocal ? establishmentLocal.nameBranch : ''
+        // const branch =  establishmentLocal ? establishmentLocal.nameBranch : ''
 
-        const modality = establishmentLocal && establishmentLocal.values && establishmentLocal.values.modality ? establishmentLocal.values.modality : ''
+        // const modality = establishmentLocal && establishmentLocal.values && establishmentLocal.values.modality ? establishmentLocal.values.modality : ''
 
+
+        console.log(establishmentLocal, establishment)
         return (
             <div className="navbar-custom-menu">
                 <ul className="nav navbar-nav">
@@ -58,23 +59,21 @@ class Navbar extends Component {
                     </li>
                     <li className={`dropdown offset-1`}>
                             <a className="">
-                                <span className="hidden-xs">{ codEstablishment == '169' && modality == '2' ? branch : establishment }</span>
+                                <span className="hidden-xs">{ establishment }</span>
                             </a>
                             {/* <a className="">
                                 <span className="hidden-xs">{ codEstablishment !== '169' ? establishment : ''}</span>
                             </a> */}
                     </li>
                     <li  className={`dropdown user user-menu`}>
-                        <a href={"javascript:;"} 
+                        <a href={`/#`} 
                             onClick={() => this.changeAlterEstablisment()} 
                             className="dropdown-toggle">
                             <i className="fa fa-university"></i>
                             <span className="hidden-xs">Trocar unidade</span>
                         </a>
                     </li>
-                    <li onMouseLeave={() => this.changeOpen()}
-                        className={`dropdown user user-menu ${this.state.open ? 'open' :
-                            ''}`}>
+                    <li onMouseLeave={() => this.changeOpen()} className={`dropdown user user-menu ${this.state.open ? 'open' :''}`}>
                         <a href="javascript:;" onClick={() => this.changeOpen()}
                             aria-expanded={this.state.open ? 'true' : 'false'}
                             className="dropdown-toggle"

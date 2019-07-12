@@ -60,6 +60,7 @@ class Establishment extends Component {
 
   }
 
+  
   /**
    * <b>onSubmit</b> Método de submit do formulário, que irá ser chamado quando o botão de submit for chamado,
    * para isso recebe os dados fo formulário
@@ -67,19 +68,45 @@ class Establishment extends Component {
    */
   onSubmit = values => {
 
+    let nameFilial = ''
+
     if (this.props.establishment.establishmentPeriod.length > 0) {
-      this.props.saveEstablishment(values);
+      if(values.modality == 'D'){
+        nameFilial = this.searchBranchOrEstablishment(this.props.establishment.branchUser, values.branch, values.modality);
+      }else{
+        nameFilial = this.searchBranchOrEstablishment(this.props.establishment.establishmentUser, values.establishment, values.modality);
+      }
+      const value = {...values, nameEstablishment: nameFilial}
+      this.props.saveEstablishment(value);
     } else {
       toastr.error('Error', 'Unidade fora do periodo de concessão')
     }
-
+    
   };
-
+  
+  searchBranchOrEstablishment = (establishmentOrPoloArray, codigo, codModality) => {
+    for(let prop in establishmentOrPoloArray) {
+      if(establishmentOrPoloArray.hasOwnProperty(prop)){
+        if(establishmentOrPoloArray.indexOf(parseInt(prop))){
+          if(codModality == 'D'){
+            if(establishmentOrPoloArray[prop].CODPOLO == parseInt(codigo)){
+              console.log(establishmentOrPoloArray[prop].POLO, 'polo')
+              return establishmentOrPoloArray[prop].POLO
+            }
+          }else{
+            if(establishmentOrPoloArray[prop].CODFILIAL == parseInt(codigo)){
+              console.log(establishmentOrPoloArray[prop].FILIAL, 'establishment')
+              return establishmentOrPoloArray[prop].FILIAL
+            }
+          }
+        }
+      }
+    }
+  }
 
 
   modalitySelected = (codModality, codEstablishment) => {
     
-    console.log(codModality, codEstablishment);
     if(codModality != '' && codEstablishment != ''){
       if(codModality == 'D' && codEstablishment == 169){
         const user = JSON.parse(localStorage.getItem(USER_KEY)).user;

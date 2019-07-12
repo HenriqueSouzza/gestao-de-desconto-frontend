@@ -2,6 +2,7 @@ import type from './types';
 
 import { ESTABLISHMENT_DATA } from "../../config/consts";
 
+
 /**
  * <b>INITIAL_STATE<b/> Estado inicial 
  */
@@ -19,7 +20,6 @@ const INITIAL_STATE = {
             name: "Ensino à distância"
         }
     ],
-    
     list: [],
     selected: false,
     course: [],

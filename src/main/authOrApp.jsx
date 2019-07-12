@@ -6,7 +6,6 @@ import axios from 'axios';
 
 import _ from 'lodash';
 
-
 import Auth from '../pages/auth/auth';
 import Establishment from '../pages/establishment/establishment';
 
@@ -16,7 +15,6 @@ import { validateToken } from '../pages/auth/authActions';
 class AuthOrApp extends Component {
 
     /**
-     * 
      * @param {*} props 
      */
     constructor(props){
@@ -30,7 +28,7 @@ class AuthOrApp extends Component {
 
 
     /**
-     * <b>componentWillMount</b> Método do ciclo de vida do React, 
+     * <b>componentDidMount</b> Método do ciclo de vida do React, 
      * é invocado toda vez que o component é chamado antes de montar o mesmo
      * 
      * Obtem os dados de validação e verifica se o token é valido
@@ -40,29 +38,31 @@ class AuthOrApp extends Component {
         
         if (user) {
 
-			this.props.validateToken(user.access_token);
+            this.props.validateToken(user.access_token);
+            
 		}
         
     }
     
     render() {
         
-        
         const { user, validToken } = this.props.auth;
-        
+
+        /* Verificar se o usuario está logado */
         if (user && validToken) {
             
             axios.defaults.headers.common['Authorization'] = `Bearer ${user.access_token}`;
-            
+             
             return <Establishment />
-
+            
         } else if (! user && ! validToken) {
-
+            
             return <Auth />
-
+            
         } else {
 
             return false
+            
         }
 
     }
@@ -85,9 +85,7 @@ const mapStateToProps = (state) => ({ auth: state.auth });
  * 
  * @param {*} dispatch 
  */
-const mapDispatchToProps = (dispatch) => bindActionCreators({
-    validateToken
-}, dispatch);
+const mapDispatchToProps = (dispatch) => bindActionCreators({ validateToken }, dispatch);
 
 /**
  * <b>connect</b> utiliza o padrão decorator da ES para que ele possa incluir dentro das propriedades desse component 

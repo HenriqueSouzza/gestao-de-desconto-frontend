@@ -205,7 +205,7 @@ export function getCourse() {
  * Salva a unidade que o usuario escolheu
  * @param {*} values 
  */
-export function saveEstablishment(values, nameEstablishment, nameBranch) {
+export function saveEstablishment(values) {
     return dispatch => {
         dispatch([
             {
@@ -214,7 +214,7 @@ export function saveEstablishment(values, nameEstablishment, nameBranch) {
             },
             {
                 type: type.ESTABLISHMENT_SAVE,
-                payload: { values, nameEstablishment, nameBranch }
+                payload: { values }
             }
         ])
     }

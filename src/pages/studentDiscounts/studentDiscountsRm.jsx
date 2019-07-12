@@ -457,13 +457,14 @@ class StudentDiscountsRm extends Component {
         /**
          * Usuários que podem ter acesso de diretor para conceder desconto no RM
          */
-        let userPermission = [ "renata.ferreira@cnec.br", "wander.costa@cnec.br", "nadielle.miranda@cnec.br", "caio.oliveira@cnec.br" ]
-
+        let userPermission = [ "renata.ferreira@cnec.br", "wander.costa@cnec.br", "nadielle.miranda@cnec.br", "caio.oliveira@cnec.br", "henrique.souza@cnec.br" ]
+        
         /**
          * Busca os dados do usuario que está no localstorage
          */
-        const userData = JSON.parse(localStorage.getItem(USER_KEY));
 
+        const userData = JSON.parse(localStorage.getItem(USER_KEY));
+        
         if (this.props.students.loading || this.props.establishment.loading) {
             return (
                 <div>

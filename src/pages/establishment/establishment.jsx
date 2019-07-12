@@ -10,27 +10,18 @@ import { ESTABLISHMENT_DATA, USER_KEY } from "../../config/consts";
 
 import { logout } from '../auth/authActions';
 
-import { Link } from 'react-router-dom'
-
 import { CircularProgress } from "react-md";
 import { toastr } from 'react-redux-toastr';
 
 import Moment from 'moment';
 
-import Row from "../../common/components/layout/row";
-import Grid from "../../common/components/layout/grid";
 import Messages from "../../common/components/messages/messages";
 import Select from "../../common/components/form/selectLabel";
 import If from "../../common/components/operator/if";
 
 import App from "../../main/app";
 
-import {
-  saveEstablishment,
-  getEstablishmentsPeriod,
-  getEstablishmentsUser,
-  getBranchesUser
-} from "./establishmentActions";
+import { saveEstablishment, getEstablishmentsPeriod, getEstablishmentsUser, getBranchesUser } from "./establishmentActions";
 
 class Establishment extends Component {
   /**
@@ -38,23 +29,16 @@ class Establishment extends Component {
    * @param {*} props
    */
   constructor(props) {
+
     super(props);
 
     document.title = "Escolha filial | Período letivo";
 
-    const DateCurrent = Moment().format("DD/MM/YYYY");
+    // const DateCurrent = Moment().format("DD/MM/YYYY");
 
-    // const instanceData = new Date();
-    // const DateCurrent = instanceData.getDate() + "/" + instanceData.getMonth() + "/" + instanceData.getFullYear();
-
-    this.state = {
-      codEstablishmentSelected: "",
-      descriptionEstablishment: "",
-      codBranchSelected: "",
-      descriptionBranch: "",
-      codModalitySelected: "",
-      dataCurrent: DateCurrent
-    };
+    // this.state = {
+    //   dataCurrent: DateCurrent
+    // };
   }
 
   /**
@@ -62,34 +46,14 @@ class Establishment extends Component {
    * é invocado toda vez que o component é chamado antes de montar o mesmo
    */
   componentDidMount() {
-    //obtem a lista
-    // this.props.getList();
-    //obtem os dados de login do usuário
     //obtem a lista de filiais/unidades que o usuário possui acesso
     const user = JSON.parse(localStorage.getItem(USER_KEY)).user;
 
-    // this.props.getBranchesUser(user.email);
-    this.props.getEstablishmentsUser(user.email);
-
-  }
-
-  orderArr = (arr, indexColumn) => {
-
-    let arrOrdered = []
-
-    if (arr.length > 0) {
-      for (let i = 0; i < arr.length; i++) {
-        arrOrdered[arr[i][indexColumn]] =
-          {
-            value: arr[i][indexColumn],
-            label: arr[i][indexColumn] + ' - ' + arr[i][indexColumn.replace('COD', '')]
-          };
-      }
+    if (this.props.establishment.establishmentUser.length == 0) {
+      this.props.getEstablishmentsUser(user.email);
     }
 
-    return arrOrdered
   }
-
 
   /**
    * <b>onSubmit</b> Método de submit do formulário, que irá ser chamado quando o botão de submit for chamado,
@@ -97,214 +61,169 @@ class Establishment extends Component {
    * @param {*} values (valores enviados no formulario)
    */
   onSubmit = values => {
-    const nameEstablishment = this.state.descriptionEstablishment
-      ? this.state.descriptionEstablishment
-      : "";
-    const nameBranch = this.state.descriptionBranch
-      ? this.state.descriptionBranch
-      : "";
 
-      if(this.props.establishment.establishmentPeriod.length > 0){
-        this.props.saveEstablishment(values, nameEstablishment, nameBranch);
+    if (values.period != '') {
+      this.props.saveEstablishment(values);
+    } else {
+      toastr.error('Error', 'Unidade fora do periodo de concessão')
+    }
+
+  };
+
+  modalitySelected = (codModality, codEstablishment) => {
+
+    if(codModality != ''){
+      if(codModality == 'D'){
+        const user = JSON.parse(localStorage.getItem(USER_KEY)).user;
+        this.props.getBranchesUser(user.email);
+        this.props.getEstablishmentsPeriod(codEstablishment, codModality);
       }else{
-        toastr.error('Error', 'Unidade fora do periodo de concessão')
+        this.props.getEstablishmentsPeriod(codEstablishment, codModality);
       }
-
-  };
-
-  /**
-   * <b>onEstablishmentSelected</b> Pega a unidade selecionada e seta no estado
-   * @param {*} establishment nome da filial/unidade
-   * @param {*} codEstablishment codigo da filial/unidade
-   * OBS: Caso a filial/unidade selecionada seja Osório terá que seleciona a modalidade de ensino
-   * Caso contrário irá exibir o select option de periodo letivo
-   */
-  onEstablishmentSelected = (establishment, codEstablishment) => {
-    this.setState({
-      descriptionEstablishment: establishment,
-      codEstablishmentSelected: codEstablishment
-    });
-    //se a unidade selecionada não for Osório exibe o select option de periodo letivo
-    if (codEstablishment != 169) {
-      this.props.getEstablishmentsPeriod(codEstablishment, this.state.codModalitySelected);
     }
-  };
-
-  /**
-   * <b>onModalitySelected</b> Pega a modalidade selecionada e seta no estado
-   * @param {*} codModality codigo da modalidade
-   */
-  onModalitySelected = codModality => {
-    this.setState({
-      codModalitySelected: codModality
-    });
-
-    this.props.getEstablishmentsPeriod(this.state.codEstablishmentSelected, codModality);
-
-    if (codModality == 'D') {
-      const user = JSON.parse(localStorage.getItem(USER_KEY)).user;
-      this.props.getBranchesUser(user.email);
-    }
-  };
-
-  /**
-   * <b>onBranchSelected</b> Obtem o polo selecionado e guarda o mesmo no estado do componente
-   * @param {*} codBranch (código do polo)
-   * @param {*} branch (nome do polo)
-   */
-  onBranchSelected = (branch, codBranch) => {
-    this.setState({
-      descriptionBranch: branch,
-      codBranchSelected: codBranch
-    });
-
-  };
+    
+  }
 
   render() {
-    //extrai da action creator do redux form para informar para qual método irá ser submetido os dados do formulário
-    const { handleSubmit, establishment } = this.props;
+   
+    /**
+    * handleSubmit = pega uma função handle submit para ser inserido na tag form, para pegar o submit do formulario
+    * establishment = pega o estado do componente com todas as variaveis inseridas no reducer (establishmentReducer.jsx)
+    * stateForm = pega os estados do formulário
+    */
+    const { handleSubmit, establishment, stateForm } = this.props;
 
-    const selected = establishment.selected;
+    const valuesForm = stateForm && stateForm.values ? stateForm.values : '';
+
+    const fieldActive = stateForm && stateForm.active ? stateForm.active : '';
 
     const selectedEstablishmentLocal = localStorage.getItem(ESTABLISHMENT_DATA);
 
-    if (selected && (selectedEstablishmentLocal && selectedEstablishmentLocal.length > 0)) {
+    if (establishment.selected || (selectedEstablishmentLocal && selectedEstablishmentLocal.length > 0)) {
 
       return <App />;
 
     } else {
-      //loading
-      if (this.props.establishment.loading) {
 
-        return <CircularProgress id="establishment" />;
+      let establishmentList = []
 
-      } else {
-
-        let establishmentList = []
-
-        if (establishment.establishmentUser.length > 0) {
-          establishmentList = establishment.establishmentUser.map(item => ({
-            value: item.CODFILIAL,
-            label: item.CODFILIAL + ' - ' + item.FILIAL
-          }));
-        } else {
-          establishmentList = [{
-            value: establishment.establishmentUser.CODFILIAL,
-            label: establishment.establishmentUser.CODFILIAL + ' - ' + establishment.establishmentUser.FILIAL
-          }];
-        }
-
-        let branchList = []
-
-        if (establishment.branchUser.length > 0) {
-          branchList = establishment.branchUser.map(item => ({
-            value: item.CODPOLO,
-            label: item.CODPOLO + ' - ' + item.POLO
-          }));
-        } else {
-          branchList = [{
-            value: establishment.branchUser.CODPOLO,
-            label: establishment.branchUser.CODPOLO + ' - ' + establishment.branchUser.POLO
-          }];
-        }
-
-        let periodList = []
-
-        if (establishment.establishmentPeriod.length > 0) {
-          periodList = establishment.establishmentPeriod.map(period => ({
-            value: period.id_rm_period_code_concession_period,
-            label: period.id_rm_period_code_concession_period
-          }))
-        }
-
-        const modalityList = establishment.modality.map(item => ({
-          value: item.value,
-          label: item.name
+      if (establishment.establishmentUser.length > 0) {
+        establishmentList = establishment.establishmentUser.map(item => ({
+          value: item.CODFILIAL,
+          label: item.CODFILIAL + ' - ' + item.FILIAL
         }));
+      } else {
+        establishmentList = [{
+          value: establishment.establishmentUser.CODFILIAL,
+          label: establishment.establishmentUser.CODFILIAL + ' - ' + establishment.establishmentUser.FILIAL
+        }];
+      }
 
-        return (
-          <div className="gradient-wrapper">
-            <div>
-              <Form
-                role="form"
-                className="panel panel-default panel-cnec"
-                onSubmit={handleSubmit(this.onSubmit)}
-                noValidate
-              >
-                <div className="panel panel-heading">
-                  <h1><b> Escolha</b> sua filial{" "}</h1>
-                </div>
-                <div className="panel panel-body">
+      let branchList = []
+
+      if (establishment.branchUser.length > 0) {
+        branchList = establishment.branchUser.map(item => ({
+          value: item.CODPOLO,
+          label: item.CODPOLO + ' - ' + item.POLO
+        }));
+      } else {
+        branchList = [{
+          value: establishment.branchUser.CODPOLO,
+          label: establishment.branchUser.CODPOLO + ' - ' + establishment.branchUser.POLO
+        }];
+      }
+
+      let periodList = []
+
+      if (establishment.establishmentPeriod.length > 0) {
+        periodList = establishment.establishmentPeriod.map(period => ({
+          value: period.id_rm_period_code_concession_period,
+          label: period.id_rm_period_code_concession_period
+        }))
+      }
+
+      const modalityList = establishment.modality.map(item => ({
+        value: item.value,
+        label: item.name
+      }));
+
+      return (
+        <div className="gradient-wrapper">
+          <div>
+            <Form role="form" className="panel panel-default panel-cnec" onSubmit={handleSubmit(this.onSubmit)} noValidate>
+              <div className="panel panel-heading">
+                <h1> <b>Escolha</b> sua filial</h1>
+              </div>
+              <div className="panel panel-body">
+                <Field
+                  component={Select}
+                  name="establishment"
+                  label="Unidade:"
+                  options={establishmentList}
+                  cols={establishment.loading && fieldActive == "" ? "10 10 10 10" : '12 12 12 12'}
+                  validate={[FORM_RULES.required]}
+                  readOnly={establishment.loading}
+                />
+                {establishment.loading && fieldActive == "" ? <CircularProgress id="establishment" /> : ''}
+              </div>
+              <If test={valuesForm.establishment == 169}>
+                <div className="login-box-body">
                   <Field
                     component={Select}
-                    name="establishment"
-                    label="Unidade:"
-                    options={establishmentList}
-                    onChange={e => this.onEstablishmentSelected(e.target.options[e.target.selectedIndex].innerText, e.target.value)}
+                    name="modality"
+                    label="Modalidade:"
+                    options={modalityList}
+                    onChange={(e) => this.modalitySelected(e.target.value, valuesForm.establishment)}
                     cols="12 12 12 12"
                     validate={[FORM_RULES.required]}
+                    readOnly={establishment.loading}
                   />
                 </div>
-                <If test={this.state.codEstablishmentSelected == 169}>
-                  <div className="login-box-body">
-                    <Field
-                      component={Select}
-                      name="modality"
-                      label="Modalidade:"
-                      options={modalityList}
-                      onChange={e => this.onModalitySelected(e.target.value)}
-                      cols="12 12 12 12"
-                      validate={[FORM_RULES.required]}
-                    />
-                  </div>
-                  <If test={this.state.codModalitySelected == "D"}>
-                    <div className="login-box-body">
-                      <Field
-                        component={Select}
-                        name="branch"
-                        label="Polo:"
-                        options={branchList}
-                        onChange={e =>
-                          this.onBranchSelected(
-                            e.target.options[e.target.selectedIndex].innerText,
-                            e.target.value
-                          )
-                        }
-                        cols="12 12 12 12"
-                        validate={[FORM_RULES.required]}
-                      />
-                    </div>
-                  </If>
-                </If>
-                <If test={establishment.establishmentPeriod.length}>
-                  <div className="login-box-body">
-                    <Field
-                      component={Select}
-                      name="period"
-                      label="Período Letivo:"
-                      options={periodList}
-                      cols="12 12 12 12"
-                      validate={[FORM_RULES.required]}
-                    />
-                  </div>
-                </If>
+              </If>
+              <If test={valuesForm.modality == "D"}>
                 <div className="login-box-body">
-                  <button className={`btn btn-success`} disabled={this.props.establishment.loading} type="submit">
-                    Confirmar
-                  </button>
+                  <Field
+                    component={Select}
+                    name="branch"
+                    label="Polo:"
+                    options={branchList}
+                    cols={establishment.loading ? "10 10 10 10" : '12 12 12 12'}
+                    validate={[FORM_RULES.required]}
+                    readOnly={establishment.loading}
+                  />
+                  {establishment.loading ? <CircularProgress id="establishment" /> : ''}
                 </div>
+              </If>
+              <If test={valuesForm.modality == "P" || valuesForm.modality == "D"}>
                 <div className="login-box-body">
-                  Deseja trocar e-mail ?
-                  <a className={`btn btn-dark`} href={"#/logout"} onClick={this.props.logout}>
-                    Clique aqui
+                  <Field
+                    component={Select}
+                    name="period"
+                    label="Período Letivo:"
+                    options={periodList}
+                    cols={establishment.loading ? "10 10 10 10" : '12 12 12 12'}
+                    validate={[FORM_RULES.required]}
+                    readOnly={establishment.loading}
+                    />
+                  {establishment.loading ? <CircularProgress id="establishment" /> : ''}
+                </div>
+              </If>
+              <div className="login-box-body">
+                <button className={`btn btn-success`} disabled={this.props.establishment.loading} type="submit">
+                  Confirmar
+                </button>
+              </div>
+              <div className="login-box-body">
+                Deseja trocar e-mail ?
+                  <a className={`btn btn-dark`} href={"#/"} onClick={this.props.logout}>
+                  Clique aqui
                   </a>
-                </div>
-              </Form>
-            </div>
-            <Messages />
+              </div>
+            </Form>
           </div>
-        );
-      }
+          <Messages />
+        </div>
+      );
     }
   }
 }
@@ -325,7 +244,7 @@ Establishment = reduxForm({ form: "establishment" })(Establishment);
  * o state.propriedade vem do registro do reducer no arquivo geral chamado main/reducers.js
  * @param {*} state
  */
-const mapStateToProps = state => ({ establishment: state.establishment });
+const mapStateToProps = state => ({ establishment: state.establishment, stateForm: state.form.establishment });
 
 /**
  * <b>mapDispatchToProps</b> mapeia o disparo de ações para as propriedades.
@@ -336,23 +255,10 @@ const mapStateToProps = state => ({ establishment: state.establishment });
  * @param {*} dispatch
  */
 
-const mapDispatchToProps = dispatch =>
-  bindActionCreators(
-    {
-      saveEstablishment,
-      getEstablishmentsPeriod,
-      getEstablishmentsUser,
-      getBranchesUser,
-      logout
-    },
-    dispatch
-  );
+const mapDispatchToProps = dispatch => bindActionCreators({ saveEstablishment, getEstablishmentsPeriod, getEstablishmentsUser, getBranchesUser, logout }, dispatch);
 
 /**
  * <b>connect</b> utiliza o padrão decorator da ES para que ele possa incluir dentro das propriedades desse component
  * para incluir o que foi mapeado no estado(mapStateToProps) e o que foi mapeado nas actions(mapDispatchToProps)
  */
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Establishment);
+export default connect(mapStateToProps, mapDispatchToProps)(Establishment);

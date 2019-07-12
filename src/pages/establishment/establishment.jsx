@@ -171,7 +171,7 @@ class Establishment extends Component {
                 />
                 {establishment.loading && fieldActive == "" ? <CircularProgress id="establishment" /> : ''}
               </div>
-              <If test={valuesForm.establishment == 169}>
+              <If test={valuesForm.establishment != ""}>
                 <div className="login-box-body">
                   <Field
                     component={Select}

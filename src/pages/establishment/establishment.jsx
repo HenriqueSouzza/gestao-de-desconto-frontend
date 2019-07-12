@@ -78,7 +78,8 @@ class Establishment extends Component {
 
 
   modalitySelected = (codModality, codEstablishment) => {
-
+    
+    console.log(codModality, codEstablishment);
     if(codModality != '' && codEstablishment != ''){
       if(codModality == 'D' && codEstablishment == 169){
         const user = JSON.parse(localStorage.getItem(USER_KEY)).user;
@@ -86,9 +87,9 @@ class Establishment extends Component {
         this.props.getEstablishmentsPeriod(codEstablishment, codModality);
       }else if(codModality == 'P' && codEstablishment == 169){
         this.props.getEstablishmentsPeriod(codEstablishment, codModality);
-      }else if(codEstablishment != 169){
-        this.props.getEstablishmentsPeriod(codEstablishment, codModality);
       }
+    }else if(codEstablishment != '' && codEstablishment != 169){
+      this.props.getEstablishmentsPeriod(codEstablishment, codModality);
     }
     
   }
@@ -204,7 +205,7 @@ class Establishment extends Component {
                   {establishment.loading ? <CircularProgress id="establishment" /> : ''}
                 </div>
               </If>
-              <If test={(fieldActive == "establishment" && valuesForm.establishment != 169 && valuesForm.establishment != undefined) || valuesForm.modality == "D" || valuesForm.modality == "P"}>
+              <If test={valuesForm.establishment != undefined || valuesForm.modality == "D" || valuesForm.modality == "P"}>
                 <div className="login-box-body">
                   <Field
                     component={Select}

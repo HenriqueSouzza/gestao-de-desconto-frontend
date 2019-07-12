@@ -79,12 +79,14 @@ class Establishment extends Component {
 
   modalitySelected = (codModality, codEstablishment) => {
 
-    if(codModality != ''){
-      if(codModality == 'D'){
+    if(codModality != '' && codEstablishment != ''){
+      if(codModality == 'D' && codEstablishment == 169){
         const user = JSON.parse(localStorage.getItem(USER_KEY)).user;
         this.props.getBranchesUser(user.email);
         this.props.getEstablishmentsPeriod(codEstablishment, codModality);
-      }else{
+      }else if(codModality == 'P' && codEstablishment == 169){
+        this.props.getEstablishmentsPeriod(codEstablishment, codModality);
+      }else if(codEstablishment != 169){
         this.props.getEstablishmentsPeriod(codEstablishment, codModality);
       }
     }
@@ -154,6 +156,8 @@ class Establishment extends Component {
         label: item.name
       }));
 
+      console.log(valuesForm, valuesForm.establishment)
+
       return (
         <div className="gradient-wrapper">
           <div>
@@ -167,13 +171,14 @@ class Establishment extends Component {
                   name="establishment"
                   label="Unidade:"
                   options={establishmentList}
+                  onChange={(e) => this.modalitySelected("", e.target.value)}
                   cols={establishment.loading && fieldActive == "" ? "10 10 10 10" : '12 12 12 12'}
                   validate={[FORM_RULES.required]}
                   readOnly={establishment.loading}
                 />
                 {establishment.loading && fieldActive == "" ? <CircularProgress id="establishment" /> : ''}
               </div>
-              <If test={valuesForm.establishment != ""}>
+              <If test={valuesForm != ""  && valuesForm.establishment != undefined && valuesForm.establishment == 169}>
                 <div className="login-box-body">
                   <Field
                     component={Select}
@@ -201,7 +206,7 @@ class Establishment extends Component {
                   {establishment.loading ? <CircularProgress id="establishment" /> : ''}
                 </div>
               </If>
-              <If test={valuesForm.modality == "P" || valuesForm.modality == "D"}>
+              <If test={(fieldActive == "establishment" && valuesForm.establishment != 169 && valuesForm.establishment != undefined) || valuesForm.modality == "D" || valuesForm.modality == "P"}>
                 <div className="login-box-body">
                   <Field
                     component={Select}

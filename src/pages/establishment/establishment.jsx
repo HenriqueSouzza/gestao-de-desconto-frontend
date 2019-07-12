@@ -75,6 +75,8 @@ class Establishment extends Component {
 
   };
 
+
+
   modalitySelected = (codModality, codEstablishment) => {
 
     if(codModality != ''){
@@ -199,7 +201,7 @@ class Establishment extends Component {
                   {establishment.loading ? <CircularProgress id="establishment" /> : ''}
                 </div>
               </If>
-              <If test={(valuesForm.modality == "P" || valuesForm.modality == "D") && valuesForm.establishment != ''}>
+              <If test={valuesForm.modality == "P" || valuesForm.modality == "D"}>
                 <div className="login-box-body">
                   <Field
                     component={Select}

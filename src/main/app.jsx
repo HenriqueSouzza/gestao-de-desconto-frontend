@@ -8,8 +8,6 @@ import SideBar from '../common/components/template/sideBar';
 import Footer from '../common/components/template/footer';
 import Messages from '../common/components/messages/messages'; 
 
-
-
 const theme = createMuiTheme({
     typography: {
         htmlFontSize: 8,

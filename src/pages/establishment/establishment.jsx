@@ -82,19 +82,18 @@ class Establishment extends Component {
 
   searchBranchOrEstablishment = (establishmentOrPoloArray, codigo, codModality) => {
     /* Verifica se o establishmentOrPoloArray é um objeto se não for ele é um array */
-    if ((typeof establishmentOrPoloArray) == 'object') {
+    if (!Array.isArray(establishmentOrPoloArray)) {
       
       if (codModality == 'D') {
         return establishmentOrPoloArray.POLO
       } else {
         return establishmentOrPoloArray.FILIAL
       }
-
+      
     } else {
-
+      
       for (let prop in establishmentOrPoloArray) {
         if (establishmentOrPoloArray.hasOwnProperty(prop)) {
-        } else {
           if (establishmentOrPoloArray.indexOf(parseInt(prop))) {
             if (codModality == 'D') {
               if (establishmentOrPoloArray[prop].CODPOLO == parseInt(codigo)) {

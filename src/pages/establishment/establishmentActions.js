@@ -11,7 +11,6 @@ const URL = `${BASE_API}/totvs-queries/query`;
 
 const URL_BASE_LOCAL = `${BASE_API}/concession-periods/list`;
 
-
 /**
  * <b>getEstablishmentsUser</b> Action creator responsável por buscar as unidades que 
  * o usuário possui acesso/designação no RM(TOTVS)
@@ -45,8 +44,6 @@ export function getEstablishmentsUser(email) {
     }
 }
 
-
-
 /**
  * <b>getBranchesUser</b> Action creator responsável por buscar os polos que 
  * o usuário possui acesso/designação no RM(TOTVS)
@@ -79,11 +76,9 @@ export function getBranchesUser(email) {
     }
 }
 
-
-
 /**
  * <b>getEstablishmentsPeriod</b> Action creator responsável por buscar os periodo letivos 
- * referente a uma unidade e uma modalidade de ensino passada
+ * referente de acordo com a unidade e a modalidade de ensino passada
  * @param {*} Codfilial 
  * @param {*} Modality 
  */
@@ -120,46 +115,9 @@ export function getEstablishmentsPeriod(Codfilial, Modality) {
     }
 }
 
-
-
-
 /**
- *  Busca todas as unidades
- */
-// export function getList() {
-
-//     const values = {
-//         "name": "WEB001",
-//         "parameters" : {
-//             "codtipocurso" : 3
-//         }
-//     }
-
-//     return dispatch => {
-
-//         dispatch({ 
-//             type: type.ESTABLISHMENT_LOAD,
-//             payload: true
-//         })
-
-//         axios.post(URL, values)
-//             .then( (result) => {
-//                 dispatch({ 
-//                     type: type.ESTABLISHMENT_FETCHED,
-//                     payload: result
-//                 })
-//             }).catch( (error) => {
-//                 if(error.response.status == 401 || error.response.status == 500){
-//                     console.log('error listar todos os usuários');
-//                     this.getList();
-//                 }
-//             })
-//     }
-// }
-
-/**
- * Dados em JSON com os respectivos parametros CODFILIAL, CODTIPOCURSO
- * @param {*} params 
+ * <b>getCourse</b> Action creator responsável por buscar os cursos disponiveis para aquela unidade
+ * os dados da unidade é pego do localStorage
  */
 export function getCourse() {
 
@@ -194,11 +152,8 @@ export function getCourse() {
     }
 }
 
-
-
-
 /**
- * Salva a unidade que o usuario escolheu
+ * <b>getCourse</b> Action creator responsável por salva a unidade, o periodo letivo, e a modalidade que o usuario escolheu
  * @param {*} values 
  */
 export function saveEstablishment(values) {
@@ -217,42 +172,16 @@ export function saveEstablishment(values) {
 }
 
 /**
- * Quando o usuario clicar em { trocar de unidade } será chamado essa action para fazer a "exclusão" da unidade atual 
+ * <b>getCourse</b> Action creator responsável quando o usuario clicar em { trocar de unidade } será chamado essa action para fazer a "exclusão" da unidade atual 
  */
 export function alterEstablishment() {
+
+    localStorage.removeItem(ESTABLISHMENT_DATA);
+
     return dispatch => {
-        dispatch([
-            {
-                type: type.ESTABLISHMENT_LOAD,
-                payload: true
-            },
-            {
-                type: type.ESTABLISHMENT_DISCARD,
-                payload: {}
-            }
-        ])
+        dispatch({
+            type: type.ESTABLISHMENT_DISCARD,
+            payload: false
+        })
     }
-}
-
-/**
- * @param {*} value 
- * @param {*} field 
- */
-export const getSearch = (value, field) => {
-    // let request = {};
-
-    const request = axios.get(`${URL}?like=${field},${value}`);
-
-    return dispatch => {
-        dispatch([
-            {
-                type: type.ESTABLISHMENT_LOAD,
-                payload: true
-            },
-            {
-                type: type.ESTABLISHMENT_SEARCH,
-                payload: request
-            }
-        ]);
-    };
 }

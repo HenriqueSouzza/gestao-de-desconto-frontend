@@ -10,18 +10,18 @@ import { reduxForm, Form, Field } from "redux-form";
 
 import { CircularProgress } from "react-md";
 
+import { toastr } from 'react-redux-toastr';
+
 import { FORM_RULES } from "../../helpers/validations";
 
-import { ESTABLISHMENT_DATA, USER_KEY } from "../../config/consts";
+import { USER_KEY } from "../../config/consts";
 
 import { logout } from '../auth/authActions';
 
-import { toastr } from 'react-redux-toastr';
-
-// import Moment from 'moment';
-
 import Messages from "../../common/components/messages/messages";
+
 import Select from "../../common/components/form/selectLabel";
+
 import If from "../../common/components/operator/if";
 
 import App from "../../main/app";
@@ -39,11 +39,6 @@ class Establishment extends Component {
 
     document.title = "Escolha filial | Período letivo";
 
-    // const DateCurrent = Moment().format("DD/MM/YYYY");
-
-    // this.state = {
-    //   dataCurrent: DateCurrent
-    // };
   }
 
   /**
@@ -51,14 +46,16 @@ class Establishment extends Component {
    * é invocado toda vez que o component é chamado antes de montar o mesmo
    */
   componentDidMount() {
-    //obtem a lista de filiais/unidades que o usuário possui acesso
-    const user = JSON.parse(localStorage.getItem(USER_KEY)).user;
 
+    const user = JSON.parse(localStorage.getItem(USER_KEY)).user;
+    
     if (this.props.establishment.establishmentUser.length == 0) {
+      //obtem a lista de filiais/unidades que o usuário possui acesso
       this.props.getEstablishmentsUser(user.email);
     }
 
   }
+
 
   /**
    * <b>onSubmit</b> Método de submit do formulário, que irá ser chamado quando o botão de submit for chamado,
@@ -67,30 +64,72 @@ class Establishment extends Component {
    */
   onSubmit = values => {
 
-    if (values.period != '') {
-      this.props.saveEstablishment(values);
+    let nameFilial = ''
+
+    if (this.props.establishment.establishmentPeriod.length > 0) {
+      if (values.modality == 'D') {
+        nameFilial = this.searchBranchOrEstablishment(this.props.establishment.branchUser, values.branch, values.modality);
+      } else {
+        nameFilial = this.searchBranchOrEstablishment(this.props.establishment.establishmentUser, values.establishment, values.modality);
+      }
+      const value = { ...values, nameEstablishment: nameFilial }
+      this.props.saveEstablishment(value);
     } else {
       toastr.error('Error', 'Unidade fora do periodo de concessão')
     }
 
   };
 
+  searchBranchOrEstablishment = (establishmentOrPoloArray, codigo, codModality) => {
+    /* Verifica se o establishmentOrPoloArray é um objeto se não for ele é um array */
+    if (!Array.isArray(establishmentOrPoloArray)) {
+      
+      if (codModality == 'D') {
+        return establishmentOrPoloArray.POLO
+      } else {
+        return establishmentOrPoloArray.FILIAL
+      }
+      
+    } else {
+      
+      for (let prop in establishmentOrPoloArray) {
+        if (establishmentOrPoloArray.hasOwnProperty(prop)) {
+          if (establishmentOrPoloArray.indexOf(parseInt(prop))) {
+            if (codModality == 'D') {
+              if (establishmentOrPoloArray[prop].CODPOLO == parseInt(codigo)) {
+                return establishmentOrPoloArray[prop].POLO
+              }
+            } else {
+              if (establishmentOrPoloArray[prop].CODFILIAL == parseInt(codigo)) {
+                return establishmentOrPoloArray[prop].FILIAL
+              }
+            }
+          }
+        }
+      }
+
+    }
+  }
+
+
   modalitySelected = (codModality, codEstablishment) => {
 
-    if(codModality != ''){
-      if(codModality == 'D'){
+    if (codModality != '' && codEstablishment != '') {
+      if (codModality == 'D' && codEstablishment == 169) {
         const user = JSON.parse(localStorage.getItem(USER_KEY)).user;
         this.props.getBranchesUser(user.email);
         this.props.getEstablishmentsPeriod(codEstablishment, codModality);
-      }else{
+      } else if (codModality == 'P' && codEstablishment == 169) {
         this.props.getEstablishmentsPeriod(codEstablishment, codModality);
       }
+    } else if (codEstablishment != '' && codEstablishment != 169) {
+      this.props.getEstablishmentsPeriod(codEstablishment, codModality);
     }
-    
+
   }
 
   render() {
-   
+
     /**
     * handleSubmit = pega uma função handle submit para ser inserido na tag form, para pegar o submit do formulario
     * establishment = pega o estado do componente com todas as variaveis inseridas no reducer (establishmentReducer.jsx)
@@ -102,10 +141,8 @@ class Establishment extends Component {
 
     const fieldActive = stateForm && stateForm.active ? stateForm.active : '';
 
-    const selectedEstablishmentLocal = localStorage.getItem(ESTABLISHMENT_DATA);
-
-    if (establishment.selected || (selectedEstablishmentLocal && selectedEstablishmentLocal.length > 0)) {
-
+    if (establishment.selected) {
+      
       return <App />;
 
     } else {
@@ -165,13 +202,14 @@ class Establishment extends Component {
                   name="establishment"
                   label="Unidade:"
                   options={establishmentList}
+                  onChange={(e) => this.modalitySelected("", e.target.value)}
                   cols={establishment.loading && fieldActive == "" ? "10 10 10 10" : '12 12 12 12'}
                   validate={[FORM_RULES.required]}
                   readOnly={establishment.loading}
                 />
                 {establishment.loading && fieldActive == "" ? <CircularProgress id="establishment" /> : ''}
               </div>
-              <If test={valuesForm.establishment == 169}>
+              <If test={valuesForm != "" && valuesForm.establishment != undefined && valuesForm.establishment == 169}>
                 <div className="login-box-body">
                   <Field
                     component={Select}
@@ -185,7 +223,7 @@ class Establishment extends Component {
                   />
                 </div>
               </If>
-              <If test={valuesForm.modality == "D"}>
+              <If test={valuesForm.modality == "D" && valuesForm.establishment == 169}>
                 <div className="login-box-body">
                   <Field
                     component={Select}
@@ -199,7 +237,7 @@ class Establishment extends Component {
                   {establishment.loading ? <CircularProgress id="establishment" /> : ''}
                 </div>
               </If>
-              <If test={valuesForm.modality == "P" || valuesForm.modality == "D"}>
+              <If test={valuesForm.establishment != undefined || valuesForm.modality == "D" || valuesForm.modality == "P"}>
                 <div className="login-box-body">
                   <Field
                     component={Select}
@@ -209,7 +247,7 @@ class Establishment extends Component {
                     cols={establishment.loading ? "10 10 10 10" : '12 12 12 12'}
                     validate={[FORM_RULES.required]}
                     readOnly={establishment.loading}
-                    />
+                  />
                   {establishment.loading ? <CircularProgress id="establishment" /> : ''}
                 </div>
               </If>

@@ -46,7 +46,7 @@ class StudentDiscounts extends Component {
 
         let prop;
 
-        let studentDataTmp
+        let studentDataTmp;
 
         studentSelected.map( (selected, index) => {
             if(selected){

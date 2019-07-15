@@ -142,8 +142,6 @@ class Establishment extends Component {
 
     const fieldActive = stateForm && stateForm.active ? stateForm.active : '';
 
-    console.log(establishment.loading)
-
     if (establishment.selected) {
       
       return <App />;

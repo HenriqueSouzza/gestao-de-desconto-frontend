@@ -48,7 +48,7 @@ class Establishment extends Component {
   componentDidMount() {
 
     const user = JSON.parse(localStorage.getItem(USER_KEY)).user;
-    
+
     if (this.props.establishment.establishmentUser.length == 0) {
       //obtem a lista de filiais/unidades que o usuário possui acesso
       this.props.getEstablishmentsUser(user.email);
@@ -83,15 +83,15 @@ class Establishment extends Component {
   searchBranchOrEstablishment = (establishmentOrPoloArray, codigo, codModality) => {
     /* Verifica se o establishmentOrPoloArray é um objeto se não for ele é um array */
     if (!Array.isArray(establishmentOrPoloArray)) {
-      
+
       if (codModality == 'D') {
         return establishmentOrPoloArray.POLO
       } else {
         return establishmentOrPoloArray.FILIAL
       }
-      
+
     } else {
-      
+
       for (let prop in establishmentOrPoloArray) {
         if (establishmentOrPoloArray.hasOwnProperty(prop)) {
           if (establishmentOrPoloArray.indexOf(parseInt(prop))) {
@@ -142,7 +142,7 @@ class Establishment extends Component {
     const fieldActive = stateForm && stateForm.active ? stateForm.active : '';
 
     if (establishment.selected) {
-      
+
       return <App />;
 
     } else {

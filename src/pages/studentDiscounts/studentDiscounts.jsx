@@ -337,7 +337,7 @@ class StudentDiscounts extends Component {
         if (this.props.students.loading || this.props.establishment.loading) {
             return (
                 <div>
-                    <ContentHeader title="Desconto Comercial" />
+                    <ContentHeader title="Lançar desconto comercial" />
                     <Content>
                         <CircularProgress id="student-discounts" />
                     </Content>

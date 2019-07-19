@@ -26,21 +26,26 @@ export function getEstablishmentsUser(email) {
         }
     }
 
-    const response = axios.post(URL, values);
+    // const response = axios.post(URL, values);
 
 
     return dispatch => {
-
-        dispatch([
-            {
-                type: type.ESTABLISHMENT_LOAD,
-                payload: true
-            },
-            {
-                type: type.ESTABLISHMENT_USER,
-                payload: response
-            }
-        ])
+        dispatch({
+            type: type.ESTABLISHMENT_LOAD,
+            payload: true
+        })
+        axios.post(URL, values)
+            .then(response => {
+                dispatch({
+                    type: type.ESTABLISHMENT_USER,
+                    payload: response
+                })
+            }).catch(error => {
+                console.log(error.response)
+                if(error.response.status == 500){
+                    toastr.error('Erro', "Ops ! Houve um problema em nosso servido. Por favor, atualize a página com apertando CTRL + R")
+                }
+            })
     }
 }
 
@@ -59,20 +64,25 @@ export function getBranchesUser(email) {
         }
     }
 
-    const response = axios.post(URL, values);
+    // const response = axios.post(URL, values);
 
     return dispatch => {
-
-        dispatch([
-            {
-                type: type.ESTABLISHMENT_LOAD,
-                payload: true
-            },
-            {
-                type: type.ESTABLISHMENT_BRANCH_USER,
-                payload: response
-            }
-        ])
+        dispatch({
+            type: type.ESTABLISHMENT_LOAD,
+            payload: true
+        })
+        axios.post(URL, values)
+            .then(response => {
+                dispatch({
+                    type: type.ESTABLISHMENT_BRANCH_USER,
+                    payload: response
+                })
+            }).catch(error => {
+                if(error.response.status == 500){
+                    toastr.error.error('Error', "Ops ! Houve um problema em nosso servido. Por favor, atualize a página com apertando CTRL + R")
+                    console.log(error.response)
+                }
+            })
     }
 }
 
@@ -136,19 +146,25 @@ export function getCourse() {
         }
     }
 
-    const request = axios.post(URL, values);
+    // const request = axios.post(URL, values);
 
     return dispatch => {
-        dispatch([
-            {
-                type: type.ESTABLISHMENT_LOAD,
-                payload: true
-            },
-            {
-                type: type.ESTABLISHMENT_COURSE_FETCHED,
-                payload: request
-            }
-        ])
+        dispatch({
+            type: type.ESTABLISHMENT_LOAD,
+            payload: true
+        })
+        axios.post(URL, values)
+            .then(response => {
+                dispatch({
+                    type: type.ESTABLISHMENT_COURSE_FETCHED,
+                    payload: response
+                })
+            }).catch(error => {
+                if(error.response.status == 500){
+                    toastr.error('Error', "Ops ! Houve um problema em nosso servido. Por favor, atualize a página com apertando CTRL + R")
+                    console.log(error.response)
+                }
+            })
     }
 }
 

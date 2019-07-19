@@ -8,7 +8,7 @@ import _ from 'lodash';
 import { toastr } from 'react-redux-toastr';
 import { USER_KEY } from "../../config/consts";
 
-import { getList, create, saveForm, saveCheckedForm, saveArrayInInsert, storeDiscount, saveScholarshipDiscount, saveValidationDiscount, resetReducer, deleteDiscountLocal } from './studentDiscountsActions';
+import { getList, create, saveForm, saveCheckedForm, saveArrayInInsert, storeDiscount, saveScholarshipDiscount, saveValidationDiscount, deleteDiscountLocal } from './studentDiscountsActions';
 
 
 import { getCourse } from '../establishment/establishmentActions';
@@ -36,16 +36,6 @@ class StudentDiscountsRm extends Component {
         document.title = "SPCOM | Descontos Comerciais | Conceder desconto no RM";
     }
     
-    /**
-     * {componentDidMount()} método do ciclo de vida do react "indicar que antes de carregar o component ele será chamado"
-     * Lista todos os curso existentes para aquela unidade
-     */
-    componentDidMount() {
-        this.props.getCourse();
-        this.props.resetReducer();
-    }
-
-
     mergeStudentCancel(studentSelected){
 
         /* lista de alunos */
@@ -607,7 +597,7 @@ const mapStateToProps = state => ({
  */
 
 
-const mapDispatchToProps = dispatch => bindActionCreators({ getList, getCourse, create, saveForm, saveCheckedForm, saveArrayInInsert, storeDiscount, saveScholarshipDiscount, saveValidationDiscount, resetReducer, deleteDiscountLocal }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ getList, getCourse, create, saveForm, saveCheckedForm, saveArrayInInsert, storeDiscount, saveScholarshipDiscount, saveValidationDiscount, deleteDiscountLocal }, dispatch);
 
 /**
  * <b>connect</b> utiliza o padrão decorator da ES para que ele possa incluir dentro das propriedades desse component 

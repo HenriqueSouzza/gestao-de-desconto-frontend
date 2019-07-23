@@ -1,29 +1,16 @@
 import React, { Component } from 'react';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import { formValueSelector } from 'redux-form';
-import { reduxForm, Form } from 'redux-form';
-import { CircularProgress } from 'react-md';
-import _ from 'lodash';
 import { toastr } from "react-redux-toastr";
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { CircularProgress } from 'react-md';
+import { reduxForm, Form } from 'redux-form';
+import _ from 'lodash';
 
-import { saveValuesParams, 
-    getList, create, saveForm, saveCheckedForm, saveArrayInInsert, storeDiscount, saveScholarshipDiscount, saveValidationDiscount } from './studentDiscountsActions';
+import { storeDiscount } from './studentDiscountsActions';
 
-
-import { getCourse } from '../establishment/establishmentActions';
 import ContentHeader from '../../common/components/template/contentHeader';
-import Content from '../../common/components/template/content';
 import StudentDiscountsForm from './studentDiscountsForm/studentDiscountsForm'
 import StudentDiscountsList from './studentDiscountsList'
-import { FORM_RULES } from '../../helpers/validations';
-import { CheckboxWithOutReduxForm } from '../../common/components/form/checkboxWithOutReduxForm';
-import { InputWithOutReduxForm } from '../../common/components/form/inputWithOutReduxForm';
-import { SelectLabelWithOutReduxForm } from '../../common/components/form/selectLabelWithOutReduxForm';
-
-import Row from '../../common/components/layout/row';
-import Grid from '../../common/components/layout/grid';
-
 
 
 class StudentDiscounts extends Component {
@@ -34,7 +21,8 @@ class StudentDiscounts extends Component {
     }
 
     /**
-     * 
+     * Função para fazer os merge das informações que são vindas do reducer, o merge é feito pelo indice do array
+     * os parametros são passados, mais tem que vir do reducer
      * @param {*} studentSelected 
      * @param {*} studentData 
      * @param {*} studentValidation 
@@ -63,23 +51,23 @@ class StudentDiscounts extends Component {
      */
     onSubmit = (e) => {
         
-        const { selectRaForm, valueForm, validation } = this.props.students
+        const { selectRaForm, valueForm, validation, paramsFormSelected } = this.props.students
         
         if(selectRaForm.indexOf(true) != -1){
-            this.mergeData(selectRaForm, valueForm, validation)
+        
+            const value = this.mergeData(selectRaForm, valueForm, validation)
+            
+            const discounts = { discounts: value };
+    
+            this.props.storeDiscount(discounts, paramsFormSelected);
+
         } else {
             toastr.error('Error', 'Por favor, selecione um estudante para conceder o desconto na caixinha do lado da matrícula')
         }
 
-        const value = this.mergeData(selectRaForm, valueForm, validation)
-        
-        const discounts = { discounts: value };
-
-        this.props.storeDiscount(discounts, this.props.history);
-        
         e.preventDefault();
     }
-    
+
     /**
      * <b><formatValueProfit/b> Recebe um valor monetário que será formatado para o valor em moeda pt-br
      * @param {*} number
@@ -100,11 +88,11 @@ class StudentDiscounts extends Component {
         return (
             <div>
                 <ContentHeader title="Lançar descontos para o estudante" />
-                <StudentDiscountsForm />
+                <StudentDiscountsForm pathname={this.props.history.location.pathname}/>
                 { 
                     (Object.keys(studentList).length > 0 && !students.loading) ?
                         <Form role='form' onSubmit={(e) => this.onSubmit(e)} noValidate>
-                                <StudentDiscountsList studentsList={studentList} />
+                                <StudentDiscountsList typePage={`studentDiscounts`} studentsList={studentList} />
                                 <div className="discount-footer">
                                     <div className={`container`}>
                                         <div className={`row justify-content-center`}>
@@ -140,8 +128,7 @@ StudentDiscounts = reduxForm({ form: 'studentDiscounts' })(StudentDiscounts);
  * recebe o estado (state) como parametro e retira o dado da história(store)
  * @param {*} state 
  */
-const mapStateToProps = state => ({ students: state.students, establishment: state.establishment, stateForm: state.form.studentDiscounts });
-
+const mapStateToProps = state => ({ students: state.students });
 
 /**
  * <b>mapDispatchToProps</b> mapeia o disparo de ações para as propriedades. 
@@ -150,8 +137,7 @@ const mapStateToProps = state => ({ students: state.students, establishment: sta
  * e o component seja renderizado novamente para refletir o estado atual
  * @param {*} dispatch 
  */
-const mapDispatchToProps = dispatch => bindActionCreators({ saveValuesParams, 
-    getList, getCourse, create, saveForm, saveCheckedForm, saveArrayInInsert, storeDiscount, saveScholarshipDiscount, saveValidationDiscount }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ storeDiscount }, dispatch);
 
 /**
  * <b>connect</b> utiliza o padrão decorator da ES para que ele possa incluir dentro das propriedades desse component 

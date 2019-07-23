@@ -12,12 +12,16 @@ import SelectLabel from '../../../common/components/form/selectLabel';
 
 import { FORM_RULES } from '../../../helpers/validations';
 
-import { resetReducerForm, getList, getSchoolarship } from '../studentDiscountsActions';
+import { resetReducerForm, getList, getSchoolarship, getListLocal } from '../studentDiscountsActions';
 import { getCourse } from '../../establishment/establishmentActions';
 
 
 class StudentDiscountsForm extends Component {
     
+    constructor(props){
+        super(props)
+    }
+
     componentDidMount(){
         
         if(this.props.establishment.course.length == 0){
@@ -27,11 +31,14 @@ class StudentDiscountsForm extends Component {
     }
 
     onSubmit = (value) => {
-        
-        this.props.getList(value)
-        this.props.getSchoolarship(value);
+    
+        if(this.props.pathname == "/desconto-comercial/conceder-desconto-rm"){
+            this.props.getListLocal(value);
+        }else if(this.props.pathname == "/desconto-comercial/lancar-desconto"){
+            this.props.getList(value);
+        }
+        setTimeout(function(){ this.props.getSchoolarship(value) }.bind(this) , 1000);
         // this.props.getProfit(value);
-        // toastr.error('Atenção', `Preencha o campo RA ou Curso`);
 
     }
 
@@ -130,10 +137,10 @@ const mapStateToProps = state => ({
  * 
  * OBS: Devolve o mesmo component criado acima decorado pelo redux-form
  */
-
 StudentDiscountsForm = reduxForm({ form: 'StudentDiscountsForm', destroyOnUnmount: false })(StudentDiscountsForm);
 
-const mapDispatchToProps = dispatch => bindActionCreators({ getCourse, resetReducerForm, getList, getSchoolarship }, dispatch);
+
+const mapDispatchToProps = dispatch => bindActionCreators({ getCourse, resetReducerForm, getList, getSchoolarship, getListLocal }, dispatch);
 
 /**
  * <b>connect</b> utiliza o padrão decorator da ES para que ele possa incluir dentro das propriedades desse component 

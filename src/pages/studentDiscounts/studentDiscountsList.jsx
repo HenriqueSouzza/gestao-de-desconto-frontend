@@ -1,24 +1,16 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { formValueSelector } from 'redux-form';
-import { reduxForm, Form } from 'redux-form';
-import { CircularProgress } from 'react-md';
 import _ from 'lodash';
 
 import { saveValuesParams, saveValueInputs } from './studentDiscountsActions';
 
-
-import { getCourse } from '../establishment/establishmentActions';
-import ContentHeader from '../../common/components/template/contentHeader';
-import Content from '../../common/components/template/content';
+import Row from '../../common/components/layout/row';
+import Grid from '../../common/components/layout/grid';
 import { FORM_RULES } from '../../helpers/validations';
 import { CheckboxWithOutReduxForm } from '../../common/components/form/checkboxWithOutReduxForm';
 import { InputWithOutReduxForm } from '../../common/components/form/inputWithOutReduxForm';
 import { SelectLabelWithOutReduxForm } from '../../common/components/form/selectLabelWithOutReduxForm';
-
-import Row from '../../common/components/layout/row';
-import Grid from '../../common/components/layout/grid';
 
 
 
@@ -53,6 +45,7 @@ class StudentDiscountsList extends Component {
             arrayScholarshipSelected[index] = {}
             validationInputAndSelect[index] = false
             discountModel[index] = {
+                id: this.props.typePage == "studentDiscountsRM" && student.bolsas_locais[0] ? student.bolsas_locais[0].ID : '',
                 ra: student.dados.ra,
                 establishment: student.dados.codfilial,
                 schoolarship: student.bolsas_locais[0] ? student.bolsas_locais[0].CODBOLSA : '',
@@ -162,8 +155,10 @@ class StudentDiscountsList extends Component {
 
         let { selectRaForm, scholarshipSelectedForm, validation } = this.props.students;
 
-        const studentsList = this.props.studentsList ? this.props.studentsList : {};
+        let { typePage } = this.props
 
+        const studentsList = this.props.studentsList ? this.props.studentsList : {};
+        
         if(selectRaForm.length > 0 ) {
             return (
                 Object.values(studentsList).map((student, index) => (
@@ -179,11 +174,20 @@ class StudentDiscountsList extends Component {
                                             arrChecked={selectRaForm}
                                             saveValueInputs={this.props.saveValueInputs}
                                             label=""
-                                            disabled={scholarshipSelectedForm.length <= 0 || _.isEmpty(scholarshipSelectedForm[index]) || validation[index]}
+                                            disabled={
+                                                typePage != "studentDiscountsRM" ? 
+                                                    scholarshipSelectedForm.length <= 0 || _.isEmpty(scholarshipSelectedForm[index]) || validation[index]
+                                                :
+                                                    false
+                                            }
                                         />
                                     </Grid>
                                     <Grid cols='4'>{student.dados.ra} | {student.dados.aluno}</Grid>
-                                    <Grid cols='1'><span className='badge'>{student.bolsas_locais.length > 0 ? 'EM VALIDAÇÂO' : 'CONCEDIDO RM'}</span></Grid>
+                                    { typePage == "studentDiscountsRM" ? 
+                                        <Grid cols='1'><span className='badge'>{student.bolsas_locais.length > 0 ? 'PENDENTE' : ''}</span></Grid>
+                                        :
+                                        <Grid cols='1'><span className='badge'>{student.bolsas_locais.length > 0 ? 'EM VALIDAÇÂO' : 'CONCEDIDO RM'}</span></Grid>
+                                    }
                                     <Grid cols='2'><span className='badge'>{student.dados.curso}</span></Grid>
                                     <Grid cols='1'><span className='badge'>{student.dados.modalidade}</span></Grid>
                                     <Grid cols='2'><span className={`badge ${student.dados.tipo_aluno === 'CALOURO' ? 'new-student' : ''}`}>{student.dados.tipo_aluno}</span></Grid>
@@ -269,7 +273,8 @@ class StudentDiscountsList extends Component {
                                                     </Row>
                                                 ))}
                                                 {/************** Apresenta os inputs para preenchimento ***************************************/}
-                                                {this.onInput(index)}
+
+                                                { typePage == "studentDiscounts" ? this.onInput(index) : ''}
                                             </td>
                                         </tr>
                                     </tbody>

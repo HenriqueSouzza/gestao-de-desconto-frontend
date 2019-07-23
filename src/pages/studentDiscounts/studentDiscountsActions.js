@@ -1,16 +1,24 @@
 import axios from 'axios';
 import moment from 'moment';
-import _ from 'lodash';
 import { toastr } from 'react-redux-toastr';
+import _ from 'lodash';
 
 import type from './types';
-
 import { BASE_API, ESTABLISHMENT_DATA } from '../../config/consts';
 
+/**
+ * 
+ */
 const URL = `${BASE_API}/totvs-queries/query`;
 
+/**
+ * 
+ */
 const URL_SAVE = `${BASE_API}/student-schoolarships`;
 
+/**
+ * 
+ */
 const URL_BASE_LOCAL = `${BASE_API}/discount-margin-schoolarships/list`;
 
 
@@ -52,16 +60,49 @@ export function getList(params = []) {
         })
 
         axios.post(`${URL_SAVE}/list-students`, parameters)
-            .then( response => {
+            .then(response => {
                 dispatch({
                     type: type.STUDENT_DISCOUNTS_FETCHED,
-                    payload: response
+                    payload: { response, params }
                 })
             }).catch(error => {
                 console.log(error.reponse)
             })
     }
 }
+
+export function getListLocal(params = []) {
+
+    const dataLocalStorage = JSON.parse(localStorage.getItem(ESTABLISHMENT_DATA))
+
+    const parameters = {
+        codcurso: params.course ? params.course : '-1',
+        codpolo: dataLocalStorage.values.branch ? dataLocalStorage.values.branch : '-1',
+        codfilial: dataLocalStorage.values.establishment,
+        codperlet: dataLocalStorage.values.period,
+        ra: params.ra ? params.ra : '-1',
+        nomealuno: params.name ? params.name : '-1',
+        tipoaluno: params.typeStudent ? params.typeStudent : '-1'
+    }
+
+    return dispatch => {
+        dispatch({
+            type: type.STUDENT_DISCOUNTS_LOAD,
+            payload: true
+        })
+
+        axios.post(`${URL_SAVE}/list-local-students`, parameters)
+            .then(response => {
+                dispatch({
+                    type: type.STUDENT_DISCOUNTS_FETCHED,
+                    payload: { response, params }
+                })
+            }).catch(error => {
+                console.log(error.reponse)
+            })
+    }
+}
+
 
 /**
  * Traz as bolsas disponiveis de acordo com o curso selecionado
@@ -115,7 +156,7 @@ export function saveValuesParams(params) {
  * o {Params} tem que receber o name do input e valor
  * @param {*} params 
  */
-export function saveValueInputs(params = {}){
+export function saveValueInputs(params = {}) {
     return dispatch => {
         dispatch({
             type: type.STUDENT_DISCOUNTS_INPUT_VALUE,
@@ -123,6 +164,53 @@ export function saveValueInputs(params = {}){
         })
     }
 }
+
+/**
+ * action creator para salvar as bolsas, e params é para ser passado quando der sucesso no getList para trazer os alunos atualizados.
+ * @param {*} values 
+ * @param {*} params 
+ */
+export const storeDiscount = (values, params) => {
+    let errorCount = 0;
+
+    return dispatch => {
+        axios.post(`${URL_SAVE}/students`, values)
+            .then(response => {
+
+                /** Quando violar alguma regra, ele retorna success 200 com erro e é retornando os erros em uma array **/
+                for (let key in response.data) {
+                    if (response.data[key].erro) {
+                        errorCount++;
+                        toastr.error('Erro', `${key} com problemas: ${response.data[key].erro}`);
+                    }
+                }
+
+                /** Se não houver nenhum erro ele retorna Sucesso*/
+                if (errorCount == 0) {
+                    toastr.success('Sucesso', 'Todos os descontos foram inseridos com sucesso.');
+
+                    dispatch([getListLocal(params), getSchoolarship(params)])
+                }
+
+            })
+            .catch(error => {
+
+                if (error.response.status == 500) {
+                    toastr.error('Erro', 'Ops ! Houve uma indisponibilidade em nosso servidor, por favor tente novamente, caso persista esse error, entrar em contato com a TI (ti_desenvolvimento@cnec.br)');
+                }
+
+            });
+    }
+}
+
+
+
+
+
+
+
+
+
 
 
 
@@ -208,8 +296,10 @@ export function saveArrayInInsert(array) {
 }
 
 
+
+
+
 /**
- * 
  * @param {*} values 
  */
 export function getProfit(params = []) {
@@ -262,62 +352,7 @@ export const deleteDiscountLocal = (values) => {
     }
 }
 
-
 /**
- * @param {*} values (valores dos formulários)
- * @param {*} router (objeto do react router)
- */
-export const storeDiscount = (values, router) => {
-    let errorCount = 0;
-    return (dispatch) => {
-        axios.post(`${URL_SAVE}/students`, values)
-            .then(
-                (response) => {
-
-                    for (let key in response.data) {
-
-                        if (response.data[key].erro) {
-                            errorCount++;
-                            toastr.error('Erro', `${key} com problemas: ${response.data[key].erro}`);
-                        }
-                        else {
-                            console.log(key + "Passou tranquilo")
-                        }
-                    }
-
-                    //dispatch do redux multi
-                    // dispatch([
-                    //     getList(),
-                    // ]);
-                    if (errorCount == 0)
-                        toastr.success('Sucesso', 'Todos os descontos foram inseridos com sucesso.');
-
-                    //     if (!_.isUndefined(router)) {
-                    //         //faz o redirect recebe o objeto da história das rotas                        
-                    //         router.router.push('/desconto-comercial')
-                    //    }
-                })
-            .catch((e) => {
-                //exibe mensagens de erro
-                try {
-                    for (const i in e.response.data) {
-                        for (const j in e.response.data[i]) {
-                            // toastr.error(i, e.response.data[i][j])
-                            toastr.error('Erro', '(D001) Erro interno no servidor');
-                        }
-                    }
-                } catch (error) {
-                    toastr.error('Erro', 'Erro interno no servidor');
-                }
-            })
-
-            ;
-    }
-}
-
-
-/**
- * 
  * @param {*} values (valores dos formulários)
  * @param {*} router (objeto do react router)
  */

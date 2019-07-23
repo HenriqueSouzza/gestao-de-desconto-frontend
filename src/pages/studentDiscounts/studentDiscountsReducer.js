@@ -13,12 +13,9 @@ const INITIAL_STATE = {
     scholarshipSelectedForm: [],
     validation: [],
     valueForm: [],
-
-
-
-
-    discounts: [],
-    profit: []
+    profit: [],
+    /** Parametros que foram selecionados no formulario (studentDiscountsForm.jsx)*/
+    paramsFormSelected: []
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -32,7 +29,7 @@ export default (state = INITIAL_STATE, action) => {
             return INITIAL_STATE;
 
         case type.STUDENT_DISCOUNTS_FETCHED:
-            return { ...state, list: getListTransform(action.payload.data) || INITIAL_STATE.list, loading: false }
+            return { ...state, list: getListTransform(action.payload.response.data) || INITIAL_STATE.list, paramsFormSelected: action.payload.params, loading: false }
 
         case type.STUDENT_DISCOUNTS_SCHOLARSHIP_FETCHED:
             return { ...state, scholarship: action.payload.data.response.content || INITIAL_STATE.list }
@@ -58,26 +55,28 @@ export default (state = INITIAL_STATE, action) => {
                 return {...state}
             }
 
+        // case type.STUDENT_DISCOUNTS_LOCAL_FETCHED:
+        //     return {...state, list: getListTransform(action.payload.response.data)}
 
 
 
 
         /********************************** REFATORAR ***************************************/
 
-        case type.STUDENT_DISCOUNTS_SET_FORM:
-            return { ...state, discounts: action.payload || INITIAL_STATE.list }
+        // case type.STUDENT_DISCOUNTS_SET_FORM:
+        //     return { ...state, discounts: action.payload || INITIAL_STATE.list }
 
-        case type.STUDENT_DISCOUNTS_SAVE_VALUE_INPUT:
-            return { ...state, valueForm: action.payload || INITIAL_STATE.list }
+        // case type.STUDENT_DISCOUNTS_SAVE_VALUE_INPUT:
+        //     return { ...state, valueForm: action.payload || INITIAL_STATE.list }
 
-        case type.STUDENT_DISCOUNTS_SAVE_CHECKED_FORM:
-            return { ...state, selectRaForm: action.payload || INITIAL_STATE.list }
+        // case type.STUDENT_DISCOUNTS_SAVE_CHECKED_FORM:
+        //     return { ...state, selectRaForm: action.payload || INITIAL_STATE.list }
 
-        case type.STUDENT_DISCOUNTS_SAVE_SCHOLARSHIP_FORM:
-            return { ...state, scholarshipSelectedForm: action.payload || INITIAL_STATE.list }
+        // case type.STUDENT_DISCOUNTS_SAVE_SCHOLARSHIP_FORM:
+        //     return { ...state, scholarshipSelectedForm: action.payload || INITIAL_STATE.list }
 
-        case type.STUDENT_DISCOUNTS_SAVE_VALIDATION_FORM:
-            return { ...state, validation: action.payload || INITIAL_STATE.list }
+        // case type.STUDENT_DISCOUNTS_SAVE_VALIDATION_FORM:
+        //     return { ...state, validation: action.payload || INITIAL_STATE.list }
 
         /************************************************************************************/
 

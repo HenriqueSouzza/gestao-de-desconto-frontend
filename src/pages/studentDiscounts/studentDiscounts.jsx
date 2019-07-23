@@ -10,7 +10,7 @@ import { storeDiscount } from './studentDiscountsActions';
 
 import ContentHeader from '../../common/components/template/contentHeader';
 import StudentDiscountsForm from './studentDiscountsForm/studentDiscountsForm'
-import StudentDiscountsList from './studentDiscountsList'
+import StudentDiscountsList from './studentDiscountsList';
 
 
 class StudentDiscounts extends Component {
@@ -59,7 +59,7 @@ class StudentDiscounts extends Component {
             
             const discounts = { discounts: value };
     
-            this.props.storeDiscount(discounts, paramsFormSelected);
+            this.props.storeDiscount(discounts, paramsFormSelected, 'studentDiscounts');
 
         } else {
             toastr.error('Error', 'Por favor, selecione um estudante para conceder o desconto na caixinha do lado da matrícula')

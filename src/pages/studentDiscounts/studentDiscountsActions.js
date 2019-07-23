@@ -170,7 +170,7 @@ export function saveValueInputs(params = {}) {
  * @param {*} values 
  * @param {*} params 
  */
-export const storeDiscount = (values, params) => {
+export const storeDiscount = (values, params, typePage) => {
     let errorCount = 0;
 
     return dispatch => {
@@ -188,8 +188,12 @@ export const storeDiscount = (values, params) => {
                 /** Se não houver nenhum erro ele retorna Sucesso*/
                 if (errorCount == 0) {
                     toastr.success('Sucesso', 'Todos os descontos foram inseridos com sucesso.');
+                }
 
+                if(typePage == 'studentDiscounts'){
                     dispatch([getListLocal(params), getSchoolarship(params)])
+                }else if(typePage == 'studentDiscountsRm'){
+                    dispatch([getList(params), getSchoolarship(params)])
                 }
 
             })

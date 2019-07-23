@@ -106,8 +106,12 @@ class StudentDiscountsList extends Component {
                         validationArray={validation}
                         validate={[
                             FORM_RULES.required,
-                            FORM_RULES.minValue(scholarshipSelectedForm.length > 0 && scholarshipSelectedForm[index].hasOwnProperty('is_exact_value_discount_margin_schoolarship') ? scholarshipSelectedForm[index].max_value_discount_margin_schoolarship : 1),
-                            FORM_RULES.maxValue(scholarshipSelectedForm.length > 0 && scholarshipSelectedForm[index].hasOwnProperty('max_value_discount_margin_schoolarship') ? scholarshipSelectedForm[index].max_value_discount_margin_schoolarship : '')
+                            scholarshipSelectedForm.length > 0 && scholarshipSelectedForm[index].hasOwnProperty('is_exact_value_discount_margin_schoolarship') && scholarshipSelectedForm[index].is_exact_value_discount_margin_schoolarship == '1' ? 
+                                FORM_RULES.maxValueExact(scholarshipSelectedForm[index].max_value_discount_margin_schoolarship) 
+                            : 
+                                FORM_RULES.minValue(1),
+                                FORM_RULES.maxValue(scholarshipSelectedForm.length > 0 && scholarshipSelectedForm[index].hasOwnProperty('max_value_discount_margin_schoolarship') ? scholarshipSelectedForm[index].max_value_discount_margin_schoolarship : ''),
+                            // FORM_RULES.maxValue(scholarshipSelectedForm.length > 0 && scholarshipSelectedForm[index].hasOwnProperty('max_value_discount_margin_schoolarship') ? scholarshipSelectedForm[index].max_value_discount_margin_schoolarship : '')
                         ]}
                         value={valueForm[index].schoolarship != '' ? this.props.value : valueForm[index].value}
                         disabled={_.isEmpty(scholarshipSelectedForm[index]) || scholarshipSelectedForm.length <= 0}
@@ -274,6 +278,7 @@ class StudentDiscountsList extends Component {
                                                 ))}
                                                 {/************** Apresenta os inputs para preenchimento ***************************************/}
 
+                                                {/* { typePage == "studentDiscounts" && student.dados.tipo_aluno === 'CALOURO' ? this.onInput(index) : ''} */}
                                                 { typePage == "studentDiscounts" ? this.onInput(index) : ''}
                                             </td>
                                         </tr>

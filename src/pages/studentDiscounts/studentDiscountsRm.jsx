@@ -65,7 +65,7 @@ class StudentDiscountsRm extends Component {
 
             const discounts = { discounts: value };
 
-            this.props.storeDiscount(discounts, paramsFormSelected);
+            this.props.storeDiscount(discounts, paramsFormSelected, 'studentDiscountsRm');
 
         } else {
             toastr.error('Error', 'Por favor, selecione um estudante para conceder o desconto na caixinha do lado da matrícula')

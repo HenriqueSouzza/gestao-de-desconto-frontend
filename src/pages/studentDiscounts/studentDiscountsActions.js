@@ -191,9 +191,9 @@ export const storeDiscount = (values, params, typePage) => {
                 }
 
                 if(typePage == 'studentDiscounts'){
-                    dispatch([getListLocal(params), getSchoolarship(params)])
-                }else if(typePage == 'studentDiscountsRm'){
                     dispatch([getList(params), getSchoolarship(params)])
+                }else if(typePage == 'studentDiscountsRm'){
+                    dispatch([getListLocal(params), getSchoolarship(params)])
                 }
 
             })

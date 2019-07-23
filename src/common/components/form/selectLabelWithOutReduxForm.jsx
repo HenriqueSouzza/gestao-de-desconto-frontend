@@ -25,7 +25,7 @@ export class SelectLabelWithOutReduxForm extends Component {
     selectChange(event){
         const { value } = event.target;
 
-        const { index, saveData, scholarshipList, selectedScholarship, validate } = this.props;
+        const { index, saveValueInputs, scholarshipList, validate } = this.props;
 
         let i;
         
@@ -45,11 +45,11 @@ export class SelectLabelWithOutReduxForm extends Component {
             array[index] = ''
         }
         
-        arrayStudents[index] = { ...arrayStudents[index], schoolarship: value }
+        arrayStudents[index] = { ...arrayStudents[index], schoolarship: value, value: '', first_installment: '', last_installment: '' }
         
-        saveData({ ...arrayStudents });
+        saveValueInputs({ valueForm: [...arrayStudents] });
         
-        selectedScholarship({...array})
+        saveValueInputs({ scholarshipSelectedForm: [...array]})
 
         this.validation(validate, index, value)
 
@@ -62,7 +62,7 @@ export class SelectLabelWithOutReduxForm extends Component {
      * @param {*} value 
      */
     validation(validates, index, value) {
-        let { saveValidationReducer } = this.props;
+        let { saveValueInputs } = this.props;
         let { validationReducer } = this.state;
 
         let result = [];
@@ -77,7 +77,7 @@ export class SelectLabelWithOutReduxForm extends Component {
                     // value: value
                 });
                 validationReducer[index] = true
-                saveValidationReducer({...validationReducer})
+                saveValueInputs({validation: [...validationReducer]})
                 break;
             }
             this.setState({
@@ -87,7 +87,7 @@ export class SelectLabelWithOutReduxForm extends Component {
             });
             
             validationReducer[index] = false
-            saveValidationReducer({...validationReducer})
+            saveValueInputs({validation: [...validationReducer]})
         }
     }
 

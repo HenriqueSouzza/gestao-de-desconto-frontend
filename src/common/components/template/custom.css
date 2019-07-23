@@ -11,12 +11,13 @@ body,
 }
 
 .discount-footer {
+    width: 100%;
     position: fixed;
     bottom: 0px;
-    left: 25%;
-    background-color: #D9EDF7;
+    /* left: 25%; */
+    background-color: rgb(187, 200, 206);
     padding: 1em;
-    margin: 0 auto;
+    /* margin: 0 auto; */
 }
 
 .student-panel .panel-heading {

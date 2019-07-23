@@ -1,30 +1,20 @@
 import "./establishment.css";
 
 import React, { Component } from "react";
-
 import { bindActionCreators } from "redux";
-
 import { connect } from "react-redux";
-
 import { reduxForm, Form, Field } from "redux-form";
-
 import { CircularProgress } from "react-md";
-
 import { toastr } from 'react-redux-toastr';
 
 import { FORM_RULES } from "../../helpers/validations";
-
-import { USER_KEY } from "../../config/consts";
-
+import { USER_KEY, ESTABLISHMENT_DATA } from "../../config/consts";
 import { logout } from '../auth/authActions';
+import App from "../../main/app";
 
 import Messages from "../../common/components/messages/messages";
-
 import Select from "../../common/components/form/selectLabel";
-
 import If from "../../common/components/operator/if";
-
-import App from "../../main/app";
 
 import { saveEstablishment, getEstablishmentsPeriod, getEstablishmentsUser, getBranchesUser } from "./establishmentActions";
 
@@ -49,13 +39,10 @@ class Establishment extends Component {
 
     const user = JSON.parse(localStorage.getItem(USER_KEY)).user;
 
-    if (this.props.establishment.establishmentUser.length == 0) {
-      //obtem a lista de filiais/unidades que o usuário possui acesso
-      this.props.getEstablishmentsUser(user.email);
-    }
+    //obtem a lista de filiais/unidades que o usuário possui acesso
+    this.props.getEstablishmentsUser(user.email);
 
   }
-
 
   /**
    * <b>onSubmit</b> Método de submit do formulário, que irá ser chamado quando o botão de submit for chamado,

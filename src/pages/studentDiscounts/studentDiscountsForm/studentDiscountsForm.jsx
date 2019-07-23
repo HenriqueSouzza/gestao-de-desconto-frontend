@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { reduxForm, Form, Field } from 'redux-form'; //formValueSelector obter valores do formulario apartir de seu id
-import { Card, CardTitle, CardText } from 'react-md';
-import { toastr } from 'react-redux-toastr';
+import { Card, CardText, LinearProgress } from 'react-md';
 
 import { InputLabel } from '../../../common/components/form/inputLabel';
 import Content from '../../../common/components/template/content';
@@ -11,61 +10,52 @@ import Row from '../../../common/components/layout/row';
 import Grid from '../../../common/components/layout/grid';
 import SelectLabel from '../../../common/components/form/selectLabel';
 
-
 import { FORM_RULES } from '../../../helpers/validations';
 
-import { getList, getScholarshipLimit, getProfit } from '../studentDiscountsActions';
-
+import { resetReducerForm, getList, getSchoolarship, getListLocal } from '../studentDiscountsActions';
+import { getCourse } from '../../establishment/establishmentActions';
 
 
 class StudentDiscountsForm extends Component {
-
+    
     constructor(props){
-        super(props);
+        super(props)
+    }
+
+    componentDidMount(){
+        
+        if(this.props.establishment.course.length == 0){
+            this.props.getCourse();
+        }
+        this.props.resetReducerForm();
     }
 
     onSubmit = (value) => {
-        
-        const { values } = this.props.stateForm
-
-        if(values && (values.ra || values.course)){
-            this.props.getList(value)
-            this.props.getScholarshipLimit(value);
-            this.props.getProfit(value);
-        }else{
-            toastr.error('Atenção', `Preencha o campo RA ou Curso`);
+    
+        if(this.props.pathname == "/desconto-comercial/conceder-desconto-rm"){
+            this.props.getListLocal(value);
+        }else if(this.props.pathname == "/desconto-comercial/lancar-desconto"){
+            this.props.getList(value);
         }
+        setTimeout(function(){ this.props.getSchoolarship(value) }.bind(this) , 1000);
+        // this.props.getProfit(value);
 
     }
 
     render() {
         
-        const { handleSubmit } = this.props
+        const { handleSubmit, establishment, students } = this.props
 
         const courseList = this.props.establishment.course.map( course => ({
             value: course.CODCURSO,
             label: course.NOME
         }))
 
-        const typeStudent = [
-            {
-                value: 'CALOURO',
-                label: 'CALOURO'
-            },
-            {
-                value: 'VETERANO',
-                label: 'VETERANO'
-            }
-        ]
-
         return (
             <div>
-                {/* <ContentHeader title='Papéis' /> */}
                 <Content>
                     <Card>
-                        {/* <CardTitle title='Pesquisar' /> */}
                         <CardText>
-                            {/* <Form role='form' onSubmit={handleSubmit(this.onSubmit)} noValidate> */}
                             <Form role='form' onSubmit={handleSubmit(this.onSubmit)} noValidate>
                                 <div className="box-body">
                                     <Row>
@@ -77,8 +67,9 @@ class StudentDiscountsForm extends Component {
                                                 placeholder="RA"
                                                 label='RA do Aluno'
                                                 cols='12 12 8 8'
+                                                readOnly={establishment.loading || students.loading} 
                                                 // validate={[FORM_RULES.required]}
-                                                />
+                                            />
                                         </Grid>
                                         <Grid cols='3'>
                                             <Field
@@ -88,6 +79,7 @@ class StudentDiscountsForm extends Component {
                                                 placeholder="Nome do Aluno"
                                                 label='Nome do Aluno'
                                                 cols='12 12 8 8'
+                                                readOnly={establishment.loading || students.loading}
                                                 // validate={[FORM_RULES.required]}
                                             />
                                         </Grid>
@@ -98,27 +90,30 @@ class StudentDiscountsForm extends Component {
                                                 options={courseList}
                                                 cols='12 12 8 8'
                                                 label="Curso"
-                                                // validate={[FORM_RULES.required]}
+                                                readOnly={establishment.loading || students.loading}
+                                                validate={[FORM_RULES.required]}
                                                 />
                                         </Grid>
                                         <Grid cols='3'>
                                             <Field
                                                 component={SelectLabel}
                                                 name="typeStudent"
-                                                options={typeStudent}
+                                                options={students.typeStudent}
                                                 cols='12 12 8 8'
                                                 label="Tipo aluno"
+                                                readOnly={establishment.loading || students.loading}
                                                 // validate={[FORM_RULES.required]}
                                                 />
                                         </Grid>
                                     </Row>
                                 </div>
+
                                 <div className="box-footer">
-                                    <button className={`btn btn-success`} type="submit">Pesquisar</button>
-                                    {/* <button className='btn btn-defaut' type="button" onClick={() => this.props.history.goBack()}>Cancelar</button> */}
+                                    <button className={`btn btn-success`} disabled={establishment.loading || students.loading} type="submit">Pesquisar</button>
                                 </div>
                             </Form>
                         </CardText>
+                        { establishment.loading || students.loading ? <LinearProgress id="student-discounts-form" /> : '' }
                     </Card>
                 </Content>
             </div>
@@ -126,34 +121,10 @@ class StudentDiscountsForm extends Component {
     }
 }
 
-/**
- * Retorna o state do formulário, qualquer inserção que estiver em algum input, poderá ser consultado pelo {"this.props.stateForm"}
- * recurso ultilizado na documentação (formValueSelector)
- */
-StudentDiscountsForm = connect(state => {
-
-    // const value = selector(state, 'fieldName')
-
-    /**
-     * Guardando as informações do state do formulario no {stateForm} 
-     */
-    const stateForm = state.form.StudentDiscountsForm
-
-    /**
-     * retorna o valor connectado com o nome atribuído ao formulário
-     */
-    return {
-        stateForm
-    }
-
-})(StudentDiscountsForm)
-
-
-
-
 const mapStateToProps = state => ({
     students: state.students,
-    establishment: state.establishment
+    establishment: state.establishment,
+    stateForm: state.form.StudentDiscountsForm
 });
 
 
@@ -166,12 +137,10 @@ const mapStateToProps = state => ({
  * 
  * OBS: Devolve o mesmo component criado acima decorado pelo redux-form
  */
-
 StudentDiscountsForm = reduxForm({ form: 'StudentDiscountsForm', destroyOnUnmount: false })(StudentDiscountsForm);
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-    getList, getScholarshipLimit, getProfit
-}, dispatch);
+
+const mapDispatchToProps = dispatch => bindActionCreators({ getCourse, resetReducerForm, getList, getSchoolarship, getListLocal }, dispatch);
 
 /**
  * <b>connect</b> utiliza o padrão decorator da ES para que ele possa incluir dentro das propriedades desse component 

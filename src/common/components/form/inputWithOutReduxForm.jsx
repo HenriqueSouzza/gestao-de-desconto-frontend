@@ -17,15 +17,14 @@ export class InputWithOutReduxForm extends Component {
         this.state = {
             touched: false,
             error: false,
-            field: '',
             value: this.props.value,
-            list: this.props.arrValue,
-            validationReducer: this.props.validationArray
+            valueForm: this.props.arrValue,
+            validation: this.props.validationArray
         }
+
     }
 
     /**
-     * 
      * @param {*} event 
      */
     inputChange(event) {
@@ -40,25 +39,14 @@ export class InputWithOutReduxForm extends Component {
         this.validation(validate, name, value);
     }
 
-    saveValue() {
-        let { touched, error, field, list } = this.state;
-        let { index, saveData } = this.props;
-
-        if (field && !error && !touched && list) {
-            list[index] = { ...list[index], [field.name]: field.value }
-            saveData({ ...list });
-        }
-    }
-
     /**
-     * 
      * @param {*} validates 
      * @param {*} input 
      * @param {*} value 
      */
     validation(validates, input, value) {
-        let { saveValidationReducer, index } = this.props;
-        let { validationReducer } = this.state;
+        let { saveValueInputs, index } = this.props;
+        let { validation, valueForm } = this.state;
 
         let result = [];
         let i;
@@ -73,8 +61,10 @@ export class InputWithOutReduxForm extends Component {
                         value: value
                     }
                 });
-                validationReducer[index] = true
-                saveValidationReducer({...validationReducer})
+                validation[index] = true
+                saveValueInputs({ validation: [...validation] })
+                valueForm[index] = { ...valueForm[index], [input]: '' }
+                saveValueInputs({ valueForm: [...valueForm] })
                 break;
             }
             this.setState({
@@ -85,16 +75,16 @@ export class InputWithOutReduxForm extends Component {
                     value: value
                 }
             });
-            validationReducer[index] = false
-            saveValidationReducer({...validationReducer})
+            validation[index] = false
+            saveValueInputs({ validation: [...validation] })
+            valueForm[index] = { ...valueForm[index], [input]: value }
+            saveValueInputs({ valueForm: [...valueForm] });
         }
     }
 
     render() {
 
         const { touched, error, value } = this.state;
-
-        this.saveValue()
 
         return (
             <Grid cols={this.props.cols} style={this.props.style}>
@@ -109,12 +99,12 @@ export class InputWithOutReduxForm extends Component {
                             this.props.label ? <label htmlFor={this.props.name}>{this.props.label}</label> : ''
                         )}
                     <input
+                        {...this.props.input}
                         className='form-control'
                         name={this.props.name}
                         type={this.props.type}
-                        value={value}
+                        value={this.props.value}
                         placeholder={this.props.placeholder}
-                        readOnly={this.props.readOnly}
                         disabled={this.props.disabled}
                         onChange={this.inputChange.bind(this)}
                     />

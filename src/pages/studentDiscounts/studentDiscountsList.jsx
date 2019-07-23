@@ -26,7 +26,7 @@ class StudentDiscountsList extends Component {
      * Pré requisitos para que tenha o controle das validações e de imediato cria o modelo de envio do desconto no reducer para que seja enviado para o RM 
      * @param {*} student 
      */
-    onParamsReducer(student) {
+    onParamsReducer(students) {
 
         /** Array para guardar os alunos em que o usuario selecionou é identificado de acordo com o índice */
         let arrayCheckbox = []
@@ -40,7 +40,7 @@ class StudentDiscountsList extends Component {
         /** Modelo que deverá ser enviado para o RM */
         let discountModel = [];
 
-        Object.values(student).map((student, index) => {
+        Object.values(students).map((student, index) => {
             arrayCheckbox[index] = false
             arrayScholarshipSelected[index] = {}
             validationInputAndSelect[index] = false
@@ -65,14 +65,14 @@ class StudentDiscountsList extends Component {
                 active: 0
             }
         })
-
-        let params = {
+        
+        const params = {
             arrayCheckbox: arrayCheckbox,
             arrayScholarshipSelected: arrayScholarshipSelected,
             validationInputAndSelect: validationInputAndSelect,
             discountModel: discountModel
         }
-
+        
         this.props.saveValuesParams(params);
 
     }
@@ -162,10 +162,11 @@ class StudentDiscountsList extends Component {
         let { typePage } = this.props
 
         const studentsList = this.props.studentsList ? this.props.studentsList : {};
-        
+
         if(selectRaForm.length > 0 ) {
             return (
                 Object.values(studentsList).map((student, index) => (
+                    
                     <div key={student.dados.ra} className="container-fluid space-panel">
                         <div className="panel panel-info student-panel">
                             <div className="panel-heading text text-center">
@@ -186,7 +187,7 @@ class StudentDiscountsList extends Component {
                                             }
                                         />
                                     </Grid>
-                                    <Grid cols='4'>{student.dados.ra} | {student.dados.aluno}</Grid>
+                                    <Grid cols='4'>{index} {student.dados.ra} | {student.dados.aluno}</Grid>
                                     { typePage == "studentDiscountsRM" ? 
                                         <Grid cols='1'><span className='badge'>{student.bolsas_locais.length > 0 ? 'PENDENTE' : ''}</span></Grid>
                                         :

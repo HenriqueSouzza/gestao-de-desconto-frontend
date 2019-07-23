@@ -17,9 +17,9 @@ export class InputWithOutReduxForm extends Component {
         this.state = {
             touched: false,
             error: false,
-            value: this.props.value,
-            valueForm: this.props.arrValue,
-            validation: this.props.validationArray
+            // value: this.props.value,
+            // valueForm: this.props.arrValue,
+            // validation: this.props.validationArray
         }
 
     }
@@ -45,8 +45,8 @@ export class InputWithOutReduxForm extends Component {
      * @param {*} value 
      */
     validation(validates, input, value) {
-        let { saveValueInputs, index } = this.props;
-        let { validation, valueForm } = this.state;
+        let { saveValueInputs, index, arrValue, validationArray } = this.props;
+        // let { validation, valueForm } = this.state;
 
         let result = [];
         let i;
@@ -61,10 +61,10 @@ export class InputWithOutReduxForm extends Component {
                         value: value
                     }
                 });
-                validation[index] = true
-                saveValueInputs({ validation: [...validation] })
-                valueForm[index] = { ...valueForm[index], [input]: '' }
-                saveValueInputs({ valueForm: [...valueForm] })
+                validationArray[index] = true
+                saveValueInputs({ validationArray: [...validationArray] })
+                arrValue[index] = { ...arrValue[index], [input]: '' }
+                saveValueInputs({ arrValue: [...arrValue] })
                 break;
             }
             this.setState({
@@ -75,16 +75,16 @@ export class InputWithOutReduxForm extends Component {
                     value: value
                 }
             });
-            validation[index] = false
-            saveValueInputs({ validation: [...validation] })
-            valueForm[index] = { ...valueForm[index], [input]: value }
-            saveValueInputs({ valueForm: [...valueForm] });
+            validationArray[index] = false
+            saveValueInputs({ validationArray: [...validationArray] })
+            arrValue[index] = { ...arrValue[index], [input]: value }
+            saveValueInputs({ arrValue: [...arrValue] });
         }
     }
 
     render() {
 
-        const { touched, error, value } = this.state;
+        const { touched, error } = this.state;
 
         return (
             <Grid cols={this.props.cols} style={this.props.style}>

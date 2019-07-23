@@ -15,9 +15,9 @@ export class SelectLabelWithOutReduxForm extends Component {
         this.state = {
             touched: false,
             error: '',
-            value: this.props.arrSelected,
-            arrDataStundent: this.props.arrValue,
-            validationReducer: this.props.validationArray
+            // value: this.props.arrSelected,
+            // arrDataStundent: this.props.arrValue,
+            // validationReducer: this.props.validationArray
         }
     }
 
@@ -25,13 +25,13 @@ export class SelectLabelWithOutReduxForm extends Component {
     selectChange(event){
         const { value } = event.target;
 
-        const { index, saveValueInputs, scholarshipList, validate } = this.props;
+        const { index, saveValueInputs, scholarshipList, validate, arrValue, arrSelected } = this.props;
 
         let i;
         
-        let array = this.state.value;
+        let array = arrSelected;
 
-        let arrayStudents = this.state.arrDataStundent;
+        let arrayStudents = arrValue;
         
         if(value){
             for(i in scholarshipList) {
@@ -62,8 +62,8 @@ export class SelectLabelWithOutReduxForm extends Component {
      * @param {*} value 
      */
     validation(validates, index, value) {
-        let { saveValueInputs } = this.props;
-        let { validationReducer } = this.state;
+        let { saveValueInputs, validationArray } = this.props;
+        // let { validationReducer } = this.state;
 
         let result = [];
         let i;
@@ -76,8 +76,8 @@ export class SelectLabelWithOutReduxForm extends Component {
                     touched: true,
                     // value: value
                 });
-                validationReducer[index] = true
-                saveValueInputs({validation: [...validationReducer]})
+                validationArray[index] = true
+                saveValueInputs({validation: [...validationArray]})
                 break;
             }
             this.setState({
@@ -86,8 +86,8 @@ export class SelectLabelWithOutReduxForm extends Component {
                 // value: value
             });
             
-            validationReducer[index] = false
-            saveValueInputs({validation: [...validationReducer]})
+            validationArray[index] = false
+            saveValueInputs({validation: [...validationArray]})
         }
     }
 

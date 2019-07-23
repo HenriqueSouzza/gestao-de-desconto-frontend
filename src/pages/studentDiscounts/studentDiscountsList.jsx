@@ -187,7 +187,7 @@ class StudentDiscountsList extends Component {
                                             }
                                         />
                                     </Grid>
-                                    <Grid cols='4'>{index} {student.dados.ra} | {student.dados.aluno}</Grid>
+                                    <Grid cols='4'>{student.dados.ra} | {student.dados.aluno}</Grid>
                                     { typePage == "studentDiscountsRM" ? 
                                         <Grid cols='1'><span className='badge'>{student.bolsas_locais.length > 0 ? 'PENDENTE' : ''}</span></Grid>
                                         :

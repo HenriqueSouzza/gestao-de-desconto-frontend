@@ -21,12 +21,10 @@ class StudentDiscountsForm extends Component {
     constructor(props){
         super(props)
     }
-
+    
     componentDidMount(){
         
-        if(this.props.establishment.course.length == 0){
-            this.props.getCourse();
-        }
+        this.props.getCourse();
         this.props.resetReducerForm();
     }
 

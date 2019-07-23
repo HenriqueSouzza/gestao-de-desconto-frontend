@@ -278,8 +278,8 @@ class StudentDiscountsList extends Component {
                                                 ))}
                                                 {/************** Apresenta os inputs para preenchimento ***************************************/}
 
-                                                {/* { typePage == "studentDiscounts" && student.dados.tipo_aluno === 'CALOURO' ? this.onInput(index) : ''} */}
-                                                { typePage == "studentDiscounts" ? this.onInput(index) : ''}
+                                                { typePage == "studentDiscounts" && student.dados.tipo_aluno === 'CALOURO' ? this.onInput(index) : ''}
+                                                {/* { typePage == "studentDiscounts" ? this.onInput(index) : ''} */}
                                             </td>
                                         </tr>
                                     </tbody>

@@ -448,7 +448,7 @@ class StudentDiscountsRm extends Component {
          * Usuários que podem ter acesso de diretor para conceder desconto no RM
          */
         let userPermission = [ "renata.ferreira@cnec.br", "wander.costa@cnec.br", "nadielle.miranda@cnec.br", "caio.oliveira@cnec.br", "henrique.souza@cnec.br", 
-        "0019.deboraferreira@cnec.br" ]
+        "0019.deboraferreira@cnec.br", "0044.fernandomalheiros@cnec.br" ]
         
         /**
          * Busca os dados do usuario que está no localstorage
@@ -605,5 +605,3 @@ const mapDispatchToProps = dispatch => bindActionCreators({ getList, getCourse, 
  * para incluir o que foi mapeado no estado(mapStateToProps) e o que foi mapeado nas actions(mapDispatchToProps)
  */
 export default connect(mapStateToProps, mapDispatchToProps)(StudentDiscountsRm);
-
-

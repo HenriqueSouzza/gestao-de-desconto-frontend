@@ -8,7 +8,7 @@ import _ from 'lodash';
 import { toastr } from 'react-redux-toastr';
 import { USER_KEY } from "../../config/consts";
 
-import { getList, create, saveForm, saveCheckedForm, saveArrayInInsert, storeDiscount, saveScholarshipDiscount, saveValidationDiscount, resetReducer, deleteDiscountLocal } from './studentDiscountsActions';
+import { getList, create, saveForm, saveCheckedForm, saveArrayInInsert, storeDiscount, saveScholarshipDiscount, saveValidationDiscount, deleteDiscountLocal } from './studentDiscountsActions';
 
 
 import { getCourse } from '../establishment/establishmentActions';
@@ -36,16 +36,6 @@ class StudentDiscountsRm extends Component {
         document.title = "SPCOM | Descontos Comerciais | Conceder desconto no RM";
     }
     
-    /**
-     * {componentDidMount()} método do ciclo de vida do react "indicar que antes de carregar o component ele será chamado"
-     * Lista todos os curso existentes para aquela unidade
-     */
-    componentDidMount() {
-        this.props.getCourse();
-        this.props.resetReducer();
-    }
-
-
     mergeStudentCancel(studentSelected){
 
         /* lista de alunos */
@@ -458,7 +448,7 @@ class StudentDiscountsRm extends Component {
          * Usuários que podem ter acesso de diretor para conceder desconto no RM
          */
         let userPermission = [ "renata.ferreira@cnec.br", "wander.costa@cnec.br", "nadielle.miranda@cnec.br", "caio.oliveira@cnec.br", "henrique.souza@cnec.br", 
-        "0019.deboraferreira@cnec.br" ]
+        "0019.deboraferreira@cnec.br", "0044.fernandomalheiros@cnec.br" ]
         
         /**
          * Busca os dados do usuario que está no localstorage
@@ -608,12 +598,10 @@ const mapStateToProps = state => ({
  */
 
 
-const mapDispatchToProps = dispatch => bindActionCreators({ getList, getCourse, create, saveForm, saveCheckedForm, saveArrayInInsert, storeDiscount, saveScholarshipDiscount, saveValidationDiscount, resetReducer, deleteDiscountLocal }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ getList, getCourse, create, saveForm, saveCheckedForm, saveArrayInInsert, storeDiscount, saveScholarshipDiscount, saveValidationDiscount, deleteDiscountLocal }, dispatch);
 
 /**
  * <b>connect</b> utiliza o padrão decorator da ES para que ele possa incluir dentro das propriedades desse component 
  * para incluir o que foi mapeado no estado(mapStateToProps) e o que foi mapeado nas actions(mapDispatchToProps)
  */
 export default connect(mapStateToProps, mapDispatchToProps)(StudentDiscountsRm);
-
-

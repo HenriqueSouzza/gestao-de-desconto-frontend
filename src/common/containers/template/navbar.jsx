@@ -1,13 +1,9 @@
 import React, { Component } from 'react';
-
 import { bindActionCreators } from 'redux';
-
 import { connect } from 'react-redux';
 
 import { logout } from '../../../pages/auth/authActions';
-
 import { alterEstablishment } from '../../../pages/establishment/establishmentActions';
-
 import { ESTABLISHMENT_DATA } from '../../../config/consts';
 
 class Navbar extends Component {
@@ -39,6 +35,7 @@ class Navbar extends Component {
     render() {
         const { user } = this.props.auth;
 
+
         const establishmentLocal = JSON.parse(localStorage.getItem(ESTABLISHMENT_DATA)) ? JSON.parse(localStorage.getItem(ESTABLISHMENT_DATA)) : ''
         
         /** Nome da Filial ou polo */
@@ -61,7 +58,7 @@ class Navbar extends Component {
                         </a>
                     </li>
                     <li className={`dropdown user user-menu`}>
-                        <a href={`/#/`}
+                        <a href={`/#`}
                             onClick={() => this.changeAlterEstablisment()}
                             className="dropdown-toggle">
                             <i className="fa fa-university"></i>

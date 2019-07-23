@@ -19,19 +19,19 @@ export class CheckboxWithOutReduxForm extends Component {
         }
     }
 
-    checkboxClick(event){
-            
-        const { checked } = event.target;
-
-        const { index } = this.props;
+    checkboxClick(checked){
         
         let array = this.state.value
+        
+        let { index, saveValueInputs } = this.props;
 
         array[index] = checked
-        
-        this.setState({
-            value: array
-        })
+
+        saveValueInputs({selectRaForm: array})
+
+        // this.setState({
+        //     value: array
+        // })
 
     }
     
@@ -72,9 +72,7 @@ export class CheckboxWithOutReduxForm extends Component {
 
         const { touched, error } = this.state;
 
-        const { id, name, label, value, saveChecked } = this.props;
-
-        saveChecked(this.state.value)
+        const { id, name, label } = this.props;
 
         return (
             <Grid cols={this.props.cols} style={this.props.style}>
@@ -92,10 +90,9 @@ export class CheckboxWithOutReduxForm extends Component {
                         id={id}
                         className=''
                         name={name}
-                        value={value}
                         label={label}
                         disabled={this.props.disabled}
-                        onClick={(e) => this.checkboxClick(e)}
+                        onChange={(checked) => this.checkboxClick(checked)}
                     />
                     {touched && error && <span className="help-block">{error}</span>}
                 </div>

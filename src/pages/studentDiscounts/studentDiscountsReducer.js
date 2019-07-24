@@ -55,32 +55,6 @@ export default (state = INITIAL_STATE, action) => {
                 return {...state}
             }
 
-        // case type.STUDENT_DISCOUNTS_LOCAL_FETCHED:
-        //     return {...state, list: getListTransform(action.payload.response.data)}
-
-
-
-
-        /********************************** REFATORAR ***************************************/
-
-        // case type.STUDENT_DISCOUNTS_SET_FORM:
-        //     return { ...state, discounts: action.payload || INITIAL_STATE.list }
-
-        // case type.STUDENT_DISCOUNTS_SAVE_VALUE_INPUT:
-        //     return { ...state, valueForm: action.payload || INITIAL_STATE.list }
-
-        // case type.STUDENT_DISCOUNTS_SAVE_CHECKED_FORM:
-        //     return { ...state, selectRaForm: action.payload || INITIAL_STATE.list }
-
-        // case type.STUDENT_DISCOUNTS_SAVE_SCHOLARSHIP_FORM:
-        //     return { ...state, scholarshipSelectedForm: action.payload || INITIAL_STATE.list }
-
-        // case type.STUDENT_DISCOUNTS_SAVE_VALIDATION_FORM:
-        //     return { ...state, validation: action.payload || INITIAL_STATE.list }
-
-        /************************************************************************************/
-
-
         case type.STUDENT_DISCOUNTS_GET_PROFIT:
             return { ...state, profit: getListTransform(action.payload.data) || INITIAL_STATE.list }
 

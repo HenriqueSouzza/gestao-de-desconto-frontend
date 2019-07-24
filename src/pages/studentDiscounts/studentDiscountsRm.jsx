@@ -10,13 +10,8 @@ import { USER_KEY } from "../../config/consts";
 import { storeDiscount } from './studentDiscountsActions';
 
 import ContentHeader from '../../common/components/template/contentHeader';
-import Content from '../../common/components/template/content';
 import StudentDiscountsForm from './studentDiscountsForm/studentDiscountsForm';
 import StudentDiscountsList from './studentDiscountsList';
-
-import Row from '../../common/components/layout/row';
-import Grid from '../../common/components/layout/grid';
-
 
 
 class StudentDiscountsRm extends Component {

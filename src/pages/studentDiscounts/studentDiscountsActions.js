@@ -207,102 +207,6 @@ export const storeDiscount = (values, params, typePage) => {
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-export function saveValidationDiscount(array) {
-
-    return dispatch => {
-        dispatch([
-            {
-                type: type.STUDENT_DISCOUNTS_SAVE_VALIDATION_FORM,
-                payload: array
-            }
-        ])
-    }
-}
-
-export function saveScholarshipDiscount(array) {
-
-    return dispatch => {
-        dispatch([
-            {
-                type: type.STUDENT_DISCOUNTS_SAVE_SCHOLARSHIP_FORM,
-                payload: array
-            }
-        ])
-    }
-}
-
-export function saveCheckedForm(array) {
-
-    return dispatch => {
-        dispatch([
-            {
-                type: type.STUDENT_DISCOUNTS_SAVE_CHECKED_FORM,
-                payload: array
-            }
-        ])
-    }
-
-}
-
-
-export function saveForm(array) {
-
-    return dispatch => {
-        dispatch([
-            {
-                type: type.STUDENT_DISCOUNTS_SAVE_VALUE_INPUT,
-                payload: array
-            }
-        ])
-    }
-}
-
-export function saveArrayInInsert(array) {
-
-    return dispatch => {
-        dispatch([
-            {
-                type: type.STUDENT_DISCOUNTS_SET_FORM,
-                payload: array
-            }
-        ])
-    }
-}
-
-
-
-
-
 /**
  * @param {*} values 
  */
@@ -355,6 +259,7 @@ export const deleteDiscountLocal = (values) => {
             })
     }
 }
+
 
 /**
  * @param {*} values (valores dos formulários)

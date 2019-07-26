@@ -10,6 +10,7 @@ const INITIAL_STATE = {
     establishmentUser: [],
     branchUser: [],
     establishmentPeriod: [],
+    courseType: [],
     modality: [{ value: "P", name: "Presencial" }, { value: "D", name: "Ensino à distância" }],
     list: [],
     selected: localStorage.getItem(ESTABLISHMENT_DATA) != undefined ? true : false,
@@ -33,6 +34,8 @@ export default (state = INITIAL_STATE, action) => {
         case type.ESTABLISHMENT_SAVE:
             localStorage.setItem(ESTABLISHMENT_DATA, JSON.stringify(action.payload));
             return { ...state, loading: false, selected: true }
+        case type.ESTABLISHMENT_COURSE_TYPE:
+            return { ...state, courseType:action.payload.data.response.content.Resultado, loading: false}
         case type.ESTABLISHMENT_COURSE_FETCHED:
             return { ...state, course: action.payload.data.response.content.Resultado || INITIAL_STATE.course, loading: false, selected: true }
         default:

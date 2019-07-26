@@ -7,7 +7,7 @@ import { toastr } from 'react-redux-toastr';
 import _ from 'lodash';
 
 import { USER_KEY } from "../../config/consts";
-import { storeDiscount } from './studentDiscountsActions';
+import { storeDiscount, deleteDiscountLocal } from './studentDiscountsActions';
 
 import ContentHeader from '../../common/components/template/contentHeader';
 import StudentDiscountsForm from './studentDiscountsForm/studentDiscountsForm';
@@ -74,18 +74,33 @@ class StudentDiscountsRm extends Component {
      * Recebe como parametro 'e' para fazer o preventDefault para não recarregar a pagina após o click;
      */
     onCancel = (e) => {
-        e.preventDefault();
-        const { selectRaForm } = this.props.students;
+        
+        const { selectRaForm, valueForm, validation, paramsFormSelected } = this.props.students;
+        
+        if (selectRaForm.indexOf(true) != -1) {
 
-        let id = this.mergeStudentCancel(selectRaForm);
+            const value = this.mergeData(selectRaForm, valueForm, validation)
 
-        if (id.length > 0) {
-            const discounts = { discounts: id }
-            this.props.deleteDiscountLocal(discounts);
-        } else {
-            toastr.error('Erro', '(D005) Por favor selecione algum aluno');
+            const discounts = { discounts: value }
+
+            this.props.deleteDiscountLocal(discounts, paramsFormSelected, 'studentDiscountsRm');
+
+        }else{
+
+            toastr.error('Error', 'Por favor, selecione um estudante para conceder o desconto na caixinha do lado da matrícula')
+
         }
 
+        // let id = this.mergeStudentCancel(selectRaForm);
+        
+        // if (id.length > 0) {
+        //     const discounts = { discounts: id }
+        //     this.props.deleteDiscountLocal(discounts);
+        // } else {
+        //     toastr.error('Erro', '(D005) Por favor selecione algum aluno');
+        // }
+        
+        e.preventDefault();
     }
 
     /**
@@ -134,9 +149,9 @@ class StudentDiscountsRm extends Component {
                                             <div className={`col-md-5`}>
                                                 <button className={`btn btn-success btn-block`} type="submit">Conceder desconto no RM</button>
                                             </div>
-                                            {/* <div className={`col-md-5`}>
+                                            <div className={`col-md-5`}>
                                                 <button className={`btn btn-danger btn-block`} onClick={this.onCancel.bind(this)}> Não conceder desconto</button>
-                                            </div> */}
+                                            </div>
                                         </div>
                                     </div>
                                     {/* </Grid> */}
@@ -186,7 +201,7 @@ const mapStateToProps = state => ({ students: state.students, establishment: sta
  * e o component seja renderizado novamente para refletir o estado atual
  * @param {*} dispatch 
  */
-const mapDispatchToProps = dispatch => bindActionCreators({ storeDiscount }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ storeDiscount, deleteDiscountLocal }, dispatch);
 
 /**
  * <b>connect</b> utiliza o padrão decorator da ES para que ele possa incluir dentro das propriedades desse component 

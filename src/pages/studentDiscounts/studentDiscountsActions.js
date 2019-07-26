@@ -174,9 +174,18 @@ export const storeDiscount = (values, params, typePage) => {
     let errorCount = 0;
 
     return dispatch => {
+        dispatch({
+            type: type.STUDENT_DISCOUNTS_LOAD,
+            payload: true
+        })
         axios.post(`${URL_SAVE}/students`, values)
             .then(response => {
 
+                dispatch({
+                    type: type.STUDENT_DISCOUNTS_LOAD,
+                    payload: false
+                })
+                
                 /** Quando violar alguma regra, ele retorna success 200 com erro e é retornando os erros em uma array **/
                 for (let key in response.data) {
                     if (response.data[key].erro) {
@@ -198,6 +207,11 @@ export const storeDiscount = (values, params, typePage) => {
 
             })
             .catch(error => {
+
+                dispatch({
+                    type: type.STUDENT_DISCOUNTS_LOAD,
+                    payload: false
+                })
 
                 if (error.response.status == 500) {
                     toastr.error('Erro', 'Ops ! Houve uma indisponibilidade em nosso servidor, por favor tente novamente, caso persista esse error, entrar em contato com a TI (ti_desenvolvimento@cnec.br)');
@@ -239,18 +253,40 @@ export function getProfit(params = []) {
 }
 
 
-export const deleteDiscountLocal = (values) => {
-
+export const deleteDiscountLocal = (values, params, typePage) => {
+    let errorCount = 0;
+    
     return (dispatch) => {
+        dispatch({
+            type: type.STUDENT_DISCOUNTS_LOAD,
+            payload: true
+        })
         axios.post(`${URL_SAVE}/reject`, values)
             .then((response) => {
 
-                //dispatch do redux multi
-                dispatch([
-                    getList(),
-                ]);
+                dispatch({
+                    type: type.STUDENT_DISCOUNTS_LOAD,
+                    payload: false
+                })
 
-                toastr.success('Sucesso', 'Todos os descontos foram removidos com sucesso.');
+                /** Quando violar alguma regra, ele retorna success 200 com erro e é retornando os erros em uma array **/
+                for (let key in response.data) {
+                    if (response.data[key].erro) {
+                        errorCount++;
+                        toastr.error('Erro', `${key} com problemas: ${response.data[key].erro}`);
+                    }
+                }
+
+                /** Se não houver nenhum erro ele retorna Sucesso*/
+                if (errorCount == 0) {
+                    toastr.success('Sucesso', 'Todos os descontos foram inseridos com sucesso.');
+                }
+
+                if(typePage == 'studentDiscounts'){
+                    dispatch([getList(params), getSchoolarship(params)])
+                }else if(typePage == 'studentDiscountsRm'){
+                    dispatch([getListLocal(params), getSchoolarship(params)])
+                }
 
             }).catch((e) => {
 

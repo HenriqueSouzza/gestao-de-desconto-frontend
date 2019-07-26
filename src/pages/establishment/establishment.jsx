@@ -3,12 +3,12 @@ import "./establishment.css";
 import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { reduxForm, Form, Field } from "redux-form";
+import { reduxForm, Form, Field, reset } from "redux-form";
 import { CircularProgress } from "react-md";
 import { toastr } from 'react-redux-toastr';
 
 import { FORM_RULES } from "../../helpers/validations";
-import { USER_KEY, ESTABLISHMENT_DATA } from "../../config/consts";
+import { USER_KEY } from "../../config/consts";
 import { logout } from '../auth/authActions';
 import App from "../../main/app";
 
@@ -16,7 +16,7 @@ import Messages from "../../common/components/messages/messages";
 import Select from "../../common/components/form/selectLabel";
 import If from "../../common/components/operator/if";
 
-import { saveEstablishment, getEstablishmentsPeriod, getEstablishmentsUser, getBranchesUser } from "./establishmentActions";
+import { saveEstablishment, getEstablishmentsPeriod, getEstablishmentsUser, getBranchesUser, getCourseTypeEstablishment } from "./establishmentActions";
 
 class Establishment extends Component {
   /**
@@ -29,6 +29,10 @@ class Establishment extends Component {
 
     document.title = "Escolha filial | Período letivo";
 
+    this.state={
+      modality: this.props.establishment.modality,
+      valueDefault: ''
+    }
   }
 
   /**
@@ -53,13 +57,15 @@ class Establishment extends Component {
 
     let nameFilial = ''
 
+    const nameCourseType = this.props.establishment.courseType.filter(index => index.CODTIPOCURSO == values.courseType ? index.NIVEL_ENSINO : '')
+
     if (this.props.establishment.establishmentPeriod.length > 0) {
       if (values.modality == 'D') {
         nameFilial = this.searchBranchOrEstablishment(this.props.establishment.branchUser, values.branch, values.modality);
       } else {
         nameFilial = this.searchBranchOrEstablishment(this.props.establishment.establishmentUser, values.establishment, values.modality);
       }
-      const value = { ...values, nameEstablishment: nameFilial }
+      const value = { ...values, nameEstablishment: nameFilial, nameCourseType: nameCourseType[0].NIVEL_ENSINO }
       this.props.saveEstablishment(value);
     } else {
       toastr.error('Error', 'Unidade fora do periodo de concessão')
@@ -98,19 +104,61 @@ class Establishment extends Component {
     }
   }
 
+  /**
+   * 
+   */
+  establishmentSelected = (codEstablishment) => {
+    this.props.reset('establishment')
+    if(codEstablishment != ''){
+      this.props.getCourseTypeEstablishment(codEstablishment)
+    }
+  }
 
-  modalitySelected = (codModality, codEstablishment) => {
+  /**
+   * 
+   */
+  filterModality = (codEstablishment, codCourseType) => {
 
-    if (codModality != '' && codEstablishment != '') {
+    if(codEstablishment != 169 && codCourseType == '3'){
+      const modality = this.state.modality.filter(index => index.value == 'P' ? [index] : '')
+      this.setState({
+        modality: modality
+      })
+    }else{
+      this.setState({
+        modality: this.props.establishment.modality
+      })
+    }
+
+  }
+
+  /**
+   * 
+   */
+  courseTypeSelected = (codCourseType) => {
+
+    const { establishment } = this.props.stateForm.values
+
+    let codEstablishment = establishment ? establishment : ''
+
+    if(codCourseType != '' && codEstablishment != ''){
+      this.filterModality(codEstablishment, codCourseType)
+    }
+  }
+
+  /**
+   * 
+   */
+  valueSelected = (codModality, codEstablishment, codCourseType) => {
+
+    if (codModality != '' && codEstablishment != '' && codCourseType != '') {
       if (codModality == 'D' && codEstablishment == 169) {
         const user = JSON.parse(localStorage.getItem(USER_KEY)).user;
         this.props.getBranchesUser(user.email);
-        this.props.getEstablishmentsPeriod(codEstablishment, codModality);
-      } else if (codModality == 'P' && codEstablishment == 169) {
-        this.props.getEstablishmentsPeriod(codEstablishment, codModality);
+        this.props.getEstablishmentsPeriod(codEstablishment, codModality, codCourseType);
+      }else{
+        this.props.getEstablishmentsPeriod(codEstablishment, codModality, codCourseType);
       }
-    } else if (codEstablishment != '' && codEstablishment != 169) {
-      this.props.getEstablishmentsPeriod(codEstablishment, codModality);
     }
 
   }
@@ -148,6 +196,20 @@ class Establishment extends Component {
         }];
       }
 
+      let courseTypeList = []
+
+      if (establishment.courseType.length > 0) {
+        courseTypeList = establishment.courseType.map(item => ({
+          value: item.CODTIPOCURSO,
+          label: item.NIVEL_ENSINO
+        }))
+      } else {
+        courseTypeList = [{
+          value: establishment.courseType.CODTIPOCURSO,
+          label: establishment.courseType.NIVEL_ENSINO
+        }];
+      }
+
       let branchList = []
 
       if (establishment.branchUser.length > 0) {
@@ -171,11 +233,11 @@ class Establishment extends Component {
         }))
       }
 
-      const modalityList = establishment.modality.map(item => ({
+      let modalityList = this.state.modality.map(item => ({
         value: item.value,
         label: item.name
       }));
-
+      
       return (
         <div className="gradient-wrapper">
           <div>
@@ -183,27 +245,42 @@ class Establishment extends Component {
               <div className="panel panel-heading">
                 <h1> <b>Escolha</b> sua filial</h1>
               </div>
-              <div className="panel panel-body">
+              <div className="login-box-body">
                 <Field
                   component={Select}
                   name="establishment"
                   label="Unidade:"
                   options={establishmentList}
-                  onChange={(e) => this.modalitySelected("", e.target.value)}
+                  onChange={(e) => this.establishmentSelected(e.target.value)}
                   cols={establishment.loading && fieldActive == "" ? "10 10 10 10" : '12 12 12 12'}
                   validate={[FORM_RULES.required]}
                   readOnly={establishment.loading}
                 />
                 {establishment.loading && fieldActive == "" ? <CircularProgress id="establishment" /> : ''}
               </div>
-              <If test={valuesForm != "" && valuesForm.establishment != undefined && valuesForm.establishment == 169}>
+              <If test={valuesForm != "" && valuesForm.establishment != undefined}>
+                <div className="login-box-body">
+                  <Field
+                    component={Select}
+                    name="courseType"
+                    label="Nível de ensino:"
+                    options={courseTypeList}
+                    onChange={(e) => this.courseTypeSelected(e.target.value)}
+                    cols={establishment.loading && fieldActive == "establishment" ? "10 10 10 10" : '12 12 12 12'}
+                    validate={[FORM_RULES.required]}
+                    readOnly={establishment.loading}
+                  />
+                  {establishment.loading && fieldActive == "establishment" ? <CircularProgress id="establishment" /> : ''}
+                </div>
+              </If>
+              <If test={valuesForm.establishment != undefined && valuesForm.courseType != undefined && valuesForm != '' && valuesForm.courseType != ''}>
                 <div className="login-box-body">
                   <Field
                     component={Select}
                     name="modality"
                     label="Modalidade:"
                     options={modalityList}
-                    onChange={(e) => this.modalitySelected(e.target.value, valuesForm.establishment)}
+                    onChange={(e) => this.valueSelected(e.target.value, valuesForm.establishment, valuesForm.courseType)}
                     cols="12 12 12 12"
                     validate={[FORM_RULES.required]}
                     readOnly={establishment.loading}
@@ -224,7 +301,8 @@ class Establishment extends Component {
                   {establishment.loading ? <CircularProgress id="establishment" /> : ''}
                 </div>
               </If>
-              <If test={valuesForm.establishment != undefined || valuesForm.modality == "D" || valuesForm.modality == "P"}>
+              {/* <If test={valuesForm.establishment != undefined || valuesForm.modality == "D" || valuesForm.modality == "P"}> */}
+              <If test={valuesForm.establishment != undefined && valuesForm.courseType != undefined && valuesForm.modality != undefined && valuesForm.modality != '' }>
                 <div className="login-box-body">
                   <Field
                     component={Select}
@@ -285,7 +363,7 @@ const mapStateToProps = state => ({ establishment: state.establishment, stateFor
  * @param {*} dispatch
  */
 
-const mapDispatchToProps = dispatch => bindActionCreators({ saveEstablishment, getEstablishmentsPeriod, getEstablishmentsUser, getBranchesUser, logout }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ saveEstablishment, getEstablishmentsPeriod, getEstablishmentsUser, getBranchesUser, logout, getCourseTypeEstablishment, reset }, dispatch);
 
 /**
  * <b>connect</b> utiliza o padrão decorator da ES para que ele possa incluir dentro das propriedades desse component

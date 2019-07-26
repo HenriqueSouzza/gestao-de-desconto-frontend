@@ -38,6 +38,8 @@ class Navbar extends Component {
 
         const establishmentLocal = JSON.parse(localStorage.getItem(ESTABLISHMENT_DATA)) ? JSON.parse(localStorage.getItem(ESTABLISHMENT_DATA)) : ''
         
+        const courseType = establishmentLocal.values.nameCourseType
+
         /** Nome da Filial ou polo */
         const establishment = establishmentLocal.values.nameEstablishment 
         
@@ -50,6 +52,11 @@ class Navbar extends Component {
                     <li className={`dropdown offset-1`}>
                         <a className="">
                             <span className="hidden-xs">{PeriodLetivo}</span>
+                        </a>
+                    </li>
+                    <li className={`dropdown offset-1`}>
+                        <a className="">
+                            <span className="hidden-xs">{courseType}</span>
                         </a>
                     </li>
                     <li className={`dropdown offset-1`}>

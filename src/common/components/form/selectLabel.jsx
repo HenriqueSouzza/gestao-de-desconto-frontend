@@ -59,8 +59,5 @@ export default class SelectLabel extends Component {
                 </div>
             </Grid>
         )
-
-
-
     }
 }

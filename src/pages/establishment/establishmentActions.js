@@ -64,8 +64,6 @@ export function getBranchesUser(email) {
         }
     }
 
-    // const response = axios.post(URL, values);
-
     return dispatch => {
         dispatch({
             type: type.ESTABLISHMENT_LOAD,
@@ -87,18 +85,60 @@ export function getBranchesUser(email) {
 }
 
 /**
+ * Action creator para trazer os niveis de ensino de acordo com a filial passada
+ * @param {*} codFilial 
+ */
+export function getCourseTypeEstablishment(codEstablishment){
+
+    const values = {
+        "name": "WEB013",
+        "parameters": {
+            "codfilial": codEstablishment
+        }
+    }
+
+    return dispatch => {
+        dispatch({
+            type: type.ESTABLISHMENT_LOAD,
+            payload: true
+        })
+        axios.post(URL, values)
+            .then(response => {
+                dispatch({
+                    type: type.ESTABLISHMENT_COURSE_TYPE,
+                    payload: response
+                })
+                
+            }).catch(error => {
+                console.log(error)
+                // if(error.response.status == 500){
+                //     toastr.error.error('Error', "Ops ! Houve um problema em nosso servido. Por favor, atualize a página com apertando CTRL + R")
+                //     console.log(error.response)
+                // }
+                dispatch({
+                    type: type.ESTABLISHMENT_LOAD,
+                    payload: false
+                })
+            })
+    }
+
+}
+
+
+/**
  * <b>getEstablishmentsPeriod</b> Action creator responsável por buscar os periodo letivos 
  * referente de acordo com a unidade e a modalidade de ensino passada
  * @param {*} Codfilial 
  * @param {*} Modality 
  */
-export function getEstablishmentsPeriod(Codfilial, Modality) {
+export function getEstablishmentsPeriod(Codfilial, Modality, courseType) {
 
     const ModalityPreview = Codfilial == 169 ? Modality : "P"
 
     const values = {
         codfilial: Codfilial,
-        modality: ModalityPreview
+        modality: ModalityPreview,
+        coursetype: courseType
     }
 
     return dispatch => {
@@ -139,7 +179,7 @@ export function getCourse() {
         name: "WEB002",
         parameters: {
             codfilial: dataLocalStorage.values.establishment,
-            codtipocurso: 3,
+            codtipocurso: dataLocalStorage.values.courseType,
             codperlet: dataLocalStorage.values.period,
             modalidade: modality,
             codpolo: dataLocalStorage.values.branch ? dataLocalStorage.values.branch : '-1'

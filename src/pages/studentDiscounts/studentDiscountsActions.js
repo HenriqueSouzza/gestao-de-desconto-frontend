@@ -115,7 +115,7 @@ export function getSchoolarship(params = []) {
     const values = {
         codFilial: dataLocalStorage.values.establishment,
         codpolo: dataLocalStorage.values.branch,
-        modality: dataLocalStorage.values.establishment == 169 ? dataLocalStorage.values.modality : "P",
+        modality: dataLocalStorage.values.modality,
         codPerlet: dataLocalStorage.values.period,
         codCurso: params.course ? params.course : params
     }

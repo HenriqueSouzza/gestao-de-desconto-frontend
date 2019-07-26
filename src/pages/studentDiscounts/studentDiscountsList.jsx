@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 
-import { saveValuesParams, saveValueInputs } from './studentDiscountsActions';
+import { saveValuesParams, saveValueInputs, deleteDiscountLocal } from './studentDiscountsActions';
 
 import Row from '../../common/components/layout/row';
 import Grid from '../../common/components/layout/grid';
@@ -77,13 +77,27 @@ class StudentDiscountsList extends Component {
 
     }
 
+    /**
+     * 
+     * @param {*} studentData 
+     */
+    removeDiscount(studentData){
+        const { paramsFormSelected } = this.props.students
+
+        const discounts = [{ id: studentData.ID }]
+
+        const value = { discounts : discounts }
+
+        this.props.deleteDiscountLocal(value, paramsFormSelected, 'studentDiscounts')
+    }
+
     onInput(index) {
 
         let { validation, scholarshipSelectedForm, valueForm, scholarship } = this.props.students
 
         return (
             <Row>
-                <div className="col-sm-5 text-center">
+                <div className="col-sm-4 text-center">
                     <SelectLabelWithOutReduxForm
                         name={`select`}
                         index={index}
@@ -213,10 +227,11 @@ class StudentDiscountsList extends Component {
                                             </td>
                                             <td className='success'>
                                                 <Row className="hidden-xs">
-                                                    <label className="col-sm-5 col-md-5 col-lg-5 text-center">Desconto atual</label>
+                                                    <label className="col-sm-4 col-md-4 col-lg-4 text-center">Desconto atual</label>
                                                     <label className="col-sm-3 col-md-3 col-lg-3 text-center">Percentual</label>
                                                     <label className="col-sm-2 col-md-2 col-lg-2 text-center">P. Inicial</label>
                                                     <label className="col-sm-2 col-md-2 col-lg-2 text-center">P. Final</label>
+                                                    <label className="col-sm-1 col-md-1 col-lg-1 text-center">Ações</label>
                                                 </Row>
                                             </td>
                                         </tr>
@@ -246,7 +261,7 @@ class StudentDiscountsList extends Component {
                                                 {/*********** Bolsas que o aluno já recebeu no semestre, consulta vinda do RM  **********************/}
                                                 {student.bolsas_atuais.map((studentAfter, i) => (
                                                     <Row key={i + 100000}>
-                                                        <div className="col-sm-5 text-center">
+                                                        <div className="col-sm-4 text-center">
                                                             <div>{studentAfter.BOLSA}</div>
                                                         </div>
                                                         <div className="col-sm-3 text-center">
@@ -263,7 +278,7 @@ class StudentDiscountsList extends Component {
                                                 {/*********** Bolsas pendentes de validações, consulta vinda da nossa base de dados Gestao de descontos  **********************/}
                                                 {student.bolsas_locais.map((studentAfter, i) => (
                                                     <Row key={i + 1000000}>
-                                                        <div className="col-sm-5 text-center">
+                                                        <div className="col-sm-4 text-center">
                                                             <div><div className="badge">NOVO</div>{studentAfter.BOLSA}</div>
                                                         </div>
                                                         <div className="col-sm-3 text-center">
@@ -275,6 +290,13 @@ class StudentDiscountsList extends Component {
                                                         <div className="col-sm-2 text-center">
                                                             <div>{studentAfter.PARCELAFINAL}</div>
                                                         </div>
+                                                        {typePage == "studentDiscounts" ? 
+                                                            <div className="col-sm-1 text-center">
+                                                                <button type="button" onClick={() => this.removeDiscount(studentAfter)} className="btn btn-danger">
+                                                                    <i className="fa fa-trash"></i>
+                                                                </button>
+                                                            </div>
+                                                        : '' }
                                                     </Row>
                                                 ))}
                                                 {/************** Apresenta os inputs para preenchimento ***************************************/}
@@ -315,7 +337,7 @@ const mapStateToProps = state => ({ students: state.students });
 * e o component seja renderizado novamente para refletir o estado atual
 * @param {*} dispatch
 */
-const mapDispatchToProps = dispatch => bindActionCreators({ saveValuesParams, saveValueInputs }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ saveValuesParams, saveValueInputs, deleteDiscountLocal }, dispatch);
 
 /**
 * <b>connect</b> utiliza o padrão decorator da ES para que ele possa incluir dentro das propriedades desse component 

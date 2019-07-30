@@ -204,14 +204,15 @@ export const storeDiscount = (values, params, typePage) => {
                 }else if(typePage == 'studentDiscountsRm'){
                     dispatch([getListLocal(params), getSchoolarship(params)])
                 }
-
+                
             })
             .catch(error => {
-
-                dispatch({
-                    type: type.STUDENT_DISCOUNTS_LOAD,
-                    payload: false
-                })
+                
+                if(typePage == 'studentDiscounts'){
+                    dispatch([getList(params), getSchoolarship(params)])
+                }else if(typePage == 'studentDiscountsRm'){
+                    dispatch([getListLocal(params), getSchoolarship(params)])
+                }
 
                 if (error.response.status == 500) {
                     toastr.error('Erro', 'Ops ! Houve uma indisponibilidade em nosso servidor, por favor tente novamente, caso persista esse error, entrar em contato com a TI (ti_desenvolvimento@cnec.br)');
@@ -287,10 +288,17 @@ export const deleteDiscountLocal = (values, params, typePage) => {
                 }else if(typePage == 'studentDiscountsRm'){
                     dispatch([getListLocal(params), getSchoolarship(params)])
                 }
+                
+            }).catch((error) => {
+                
+                console.log(error.response)
 
-            }).catch((e) => {
-
-                toastr.error('Erro', '(D005) Por favor selecione algum aluno');
+                if(typePage == 'studentDiscounts'){
+                    dispatch([getList(params), getSchoolarship(params)])
+                }else if(typePage == 'studentDiscountsRm'){
+                    dispatch([getListLocal(params), getSchoolarship(params)])
+                }
+                // toastr.error('Erro', '(D005) Por favor selecione algum aluno');
 
             })
     }

@@ -15,8 +15,8 @@ export class SelectLabelWithOutReduxForm extends Component {
         this.state = {
             touched: false,
             error: '',
-            // value: this.props.arrSelected,
-            // arrDataStundent: this.props.arrValue,
+            valueForm: this.props.arrValue,
+            // valueForm: this.props.arrSelected,
             // validationReducer: this.props.validationArray
         }
     }
@@ -31,7 +31,7 @@ export class SelectLabelWithOutReduxForm extends Component {
         
         let array = arrSelected;
 
-        let arrayStudents = arrValue;
+        let arrayStudents = this.state.valueForm;
         
         if(value){
             for(i in scholarshipList) {
@@ -118,7 +118,7 @@ export class SelectLabelWithOutReduxForm extends Component {
                         ) : (
                             this.props.label ? <label htmlFor={this.props.name}>{this.props.label}</label> : ''
                             )}
-                    <select name={name} className="form-control" onChange={this.selectChange.bind(this)}>
+                    <select name={name} className="form-control" onChange={this.selectChange.bind(this)} >
                         <option value="">--------------</option>
                         {scholarships.map( scholarship => (
                             <option key={scholarship.value} selected={scholarship.value == value} value={scholarship.value}>{scholarship.label}</option>

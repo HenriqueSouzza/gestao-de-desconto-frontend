@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { reduxForm, Form } from 'redux-form';
 import _ from 'lodash';
 
 import { saveValuesParams, saveValueInputs, deleteDiscountLocal } from './studentDiscountsActions';
@@ -107,7 +108,7 @@ class StudentDiscountsList extends Component {
                         validationArray={validation}
                         scholarshipList={scholarship}
                         validate={[FORM_RULES.required]}
-                        value={''}
+                        value={this.props.value}
                     />
                 </div>
                 <div className="col-sm-3 text-center">
@@ -320,7 +321,7 @@ class StudentDiscountsList extends Component {
 
 
 
-// StudentDiscounts = reduxForm({ form: 'studentDiscounts' })(StudentDiscounts);
+// StudentDiscountsList = reduxForm({ form: 'studentDiscounts' })(StudentDiscountsList);
 
 /**
 * <b>mapStateToProps</b> Mapeia o estado para as propriedades

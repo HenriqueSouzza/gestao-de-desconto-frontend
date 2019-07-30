@@ -6,7 +6,7 @@ import { CircularProgress } from 'react-md';
 import { reduxForm, Form } from 'redux-form';
 import _ from 'lodash';
 
-import { storeDiscount } from './studentDiscountsActions';
+import { storeDiscount, saveValuesParams, saveValueInputs, deleteDiscountLocal } from './studentDiscountsActions';
 
 import ContentHeader from '../../common/components/template/contentHeader';
 import StudentDiscountsForm from './studentDiscountsForm/studentDiscountsForm'
@@ -31,19 +31,19 @@ class StudentDiscounts extends Component {
 
         let value = []
 
-        for (let i = 0; i < studentValidation.length; i ++){
+        for (let i = 0; i < studentData.length; i ++){
             if(studentSelected[i]){
-                if(studentData[i].value == '' || studentData[i].first_installment == ''  || studentData[i].last_installment == '' ){
-                    toastr.error('Error', 'Os aluno que foram selecionados para conceder desconto estão com os campos em brancos ou apresentando erros')
-                } else {
-                    if (!studentValidation[i]){
-                        value.push(studentData[i])
-                    }
+                if(studentData[i].value == '' || studentData[i].first_installment == '' || studentData[i].last_installment == '' || studentValidation[i]){
+                    toastr.error('Error', 'Os campos do aluno ' + studentData[i].ra + ' selecionados estão incorretos ou em branco')
+                    return false;
+                }else{
+                    value.push(studentData[i])
                 }
             }
         }
         
         return value;
+
     }
     
     /**
@@ -53,13 +53,18 @@ class StudentDiscounts extends Component {
         
         const { selectRaForm, valueForm, validation, paramsFormSelected } = this.props.students
         
-        if(selectRaForm.indexOf(true) != -1){
         
-            const value = this.mergeData(selectRaForm, valueForm, validation)
+        if(selectRaForm.indexOf(true) != -1){
             
-            const discounts = { discounts: value };
-    
-            this.props.storeDiscount(discounts, paramsFormSelected, 'studentDiscounts');
+            const value = this.mergeData(selectRaForm, valueForm, validation)
+
+            if(value){
+
+                const discounts = { discounts: value };
+                
+                this.props.storeDiscount(discounts, paramsFormSelected, 'studentDiscounts');
+                
+            }
 
         } else {
             toastr.error('Error', 'Por favor, selecione um estudante para conceder o desconto na caixinha do lado da matrícula')
@@ -92,7 +97,7 @@ class StudentDiscounts extends Component {
                 { 
                     (Object.keys(studentList).length > 0 && !students.loading) ?
                         <Form role='form' onSubmit={(e) => this.onSubmit(e)} noValidate>
-                                <StudentDiscountsList typePage={`studentDiscounts`} studentsList={studentList} />
+                                <StudentDiscountsList typePage={`studentDiscounts`} studentsList={studentList} saveValuesParams={saveValuesParams} saveValueInputs={saveValueInputs} deleteDiscountLocal={deleteDiscountLocal} />
                                 <div className="discount-footer">
                                     <div className={`container`}>
                                         <div className={`row justify-content-center`}>
@@ -137,7 +142,7 @@ const mapStateToProps = state => ({ students: state.students });
  * e o component seja renderizado novamente para refletir o estado atual
  * @param {*} dispatch 
  */
-const mapDispatchToProps = dispatch => bindActionCreators({ storeDiscount }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ storeDiscount, saveValuesParams, saveValueInputs, deleteDiscountLocal }, dispatch);
 
 /**
  * <b>connect</b> utiliza o padrão decorator da ES para que ele possa incluir dentro das propriedades desse component 

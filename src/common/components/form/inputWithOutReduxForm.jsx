@@ -17,8 +17,8 @@ export class InputWithOutReduxForm extends Component {
         this.state = {
             touched: false,
             error: false,
+            valueForm: this.props.arrValue,
             // value: this.props.value,
-            // valueForm: this.props.arrValue,
             // validation: this.props.validationArray
         }
 
@@ -28,13 +28,15 @@ export class InputWithOutReduxForm extends Component {
      * @param {*} event 
      */
     inputChange(event) {
-        const { validate } = this.props;
+        const { validate, index, saveValueInputs } = this.props;
 
         const { name, value } = event.target;
+        
+        // let valueForm = this.state.valueForm
+            
+        // valueForm[index] = { ...valueForm[index], [name]: value }
 
-        this.setState({
-            value: value
-        })
+        // saveValueInputs({ valueForm: [...valueForm] })
 
         this.validation(validate, name, value);
     }
@@ -45,40 +47,40 @@ export class InputWithOutReduxForm extends Component {
      * @param {*} value 
      */
     validation(validates, input, value) {
-        let { saveValueInputs, index, arrValue, validationArray } = this.props;
-        // let { validation, valueForm } = this.state;
-
+        let { saveValueInputs, index, validationArray } = this.props;
+        let { valueForm } = this.state;
         let result = [];
         let i;
+
         for (i in validates) {
             result[i] = validates[i](value);
             if (!_.isUndefined(result[i])) {
                 this.setState({
                     error: result[i],
                     touched: true,
-                    field: {
-                        name: input,
-                        value: value
-                    }
+                    // field: {
+                    //     name: input,
+                    //     value: value
+                    // }
                 });
                 validationArray[index] = true
                 saveValueInputs({ validationArray: [...validationArray] })
-                arrValue[index] = { ...arrValue[index], [input]: '' }
-                saveValueInputs({ arrValue: [...arrValue] })
+                valueForm[index] = { ...valueForm[index], [input]: '' }
+                saveValueInputs({ valueForm: [...valueForm] })
                 break;
             }
             this.setState({
                 error: false,
                 touched: false,
-                field: {
-                    name: input,
-                    value: value
-                }
+                // field: {
+                //     name: input,
+                //     value: value
+                // }
             });
             validationArray[index] = false
             saveValueInputs({ validationArray: [...validationArray] })
-            arrValue[index] = { ...arrValue[index], [input]: value }
-            saveValueInputs({ arrValue: [...arrValue] });
+            valueForm[index] = { ...valueForm[index], [input]: value }
+            saveValueInputs({ valueForm: [...valueForm] });
         }
     }
 

@@ -124,7 +124,9 @@ class StudentDiscountsRm extends Component {
             "caio.oliveira@cnec.br", 
             "henrique.souza@cnec.br",
             "0019.deboraferreira@cnec.br",
-            "0044.fernandomalheiros@cnec.br"
+            "0044.fernandomalheiros@cnec.br",
+            "2009.barbaraemerik@cnec.br",
+            "2009.helensales@cnec.br"
         ]
         
         /** Busca os dados do usuario que está no localstorage */

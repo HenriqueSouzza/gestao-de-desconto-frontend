@@ -60,7 +60,7 @@ class StudentDiscountsList extends Component {
                 contract: student.dados.codContrato,
                 habilitation: student.dados.idhabilitacaofilial,
                 modality_major: student.dados.modalidade == 'PRESENCIAL' ? 'P' : 'D',
-                course_type: 3,
+                course_type: student.dados.tipo_curso,
                 detail: 'sem detalhes',
                 send_rm: false,
                 active: 0
